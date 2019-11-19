@@ -24,9 +24,9 @@
 ///  |__ CommunicationProblem
 ///
 class ServiceException implements Exception {
-  /// The exception messsage
+  /// The exception messsage.
   String message;
 
-  /// Constructor
+  /// Constructor.
   ServiceException(this.message);
 }

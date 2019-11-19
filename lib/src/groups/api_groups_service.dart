@@ -1,34 +1,36 @@
 import 'package:http/http.dart' show Response;
+
 import '../base_service.dart';
 import 'groups_service.dart';
 
-/// API implementation of groups service
+/// API implementation of groups service.
 class ApiGroupsService extends BaseService implements GroupsService {
-  /// Constructor
-  ApiGroupsService(String accessKey) : super(accessKey);
+  /// Constructor.
+  ApiGroupsService(String accessKey, {int timeout, List<String> features})
+      : super(accessKey, timeout: timeout, features: features);
 
   @override
   Future<Response> addContacts(String groupId, List<String> contactIds) =>
       get('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
 
   @override
-  Future<Response> createGroup(String name, {Map<String, dynamic> parameters}) {
+  Future<Response> create(String name, {Map<String, dynamic> parameters}) {
     parameters['name'] = name;
     return post('/groups', body: parameters);
   }
 
   @override
-  Future<Response> deleteGroup(String id) => delete('/groups/$id');
-
-  @override
-  Future<Response> listGroups({int limit, int offset}) =>
+  Future<Response> list({int limit, int offset}) =>
       get('/groups', body: {'limit': limit, 'offset': offset});
 
   @override
-  Future<Response> readGroup(String id) => get('/groups/$id');
+  Future<Response> read(String id) => get('/groups/$id');
 
   @override
-  Future<Response> updateGroup(String id, String name,
+  Future<Response> remove(String id) => delete('/groups/$id');
+
+  @override
+  Future<Response> update(String id, String name,
       {Map<String, dynamic> parameters}) {
     parameters['name'] = name;
     return patch('/groups/$id', body: parameters);

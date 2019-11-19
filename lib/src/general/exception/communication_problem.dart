@@ -4,6 +4,6 @@ import 'service_exception.dart';
 /// service call. This usually means that there was some sort of networking
 /// problem.
 class CommunicationProblem extends ServiceException {
-  /// Constructor
+  /// Constructor.
   CommunicationProblem(message) : super(message);
 }

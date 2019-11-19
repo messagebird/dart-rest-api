@@ -6,27 +6,25 @@ import 'package:yaml/yaml.dart';
 
 import 'general/exception/communication_problem.dart';
 
-/// Base service
+/// Base service.
 abstract class BaseService {
-  /// The endpoint for voice messages
+  /// The endpoint for voice messages.
   static const voiceEndpoint = 'voice.messagebird.com';
 
-  /// The endpoint for conversations
+  /// The endpoint for conversations.
   static String conversationsEndpoint = 'conversations.messagebird.com';
 
   final BaseClient _client = Client();
   final String _accessKey;
   final int _timeout;
-  final List<String> _features;
   final Map<String, String> _pubspec =
       Map.castFrom(loadYaml(File('./pubspec.yaml').readAsStringSync()));
 
-  /// Constructor
-  BaseService(this._accessKey, {timeout = 5000, List<String> features})
-      : _timeout = timeout,
-        _features = features {
-    if (_features != null &&
-        _features.contains('ENDABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX')) {
+  /// Constructor.
+  BaseService(this._accessKey, {int timeout = 5000, List<String> features})
+      : _timeout = (timeout == null) ? 5000 : timeout {
+    if (features?.contains('ENDABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
+        false) {
       conversationsEndpoint = 'whatsapp-sandbox.messagebird.com';
     }
   }

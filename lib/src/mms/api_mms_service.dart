@@ -3,13 +3,14 @@ import 'package:http/http.dart' show Response;
 import '../base_service.dart';
 import 'mms_service.dart';
 
-/// API implementation of mms service
+/// API implementation of mms service.
 class ApiMmsService extends BaseService implements MmsService {
-  /// Constructor
-  ApiMmsService(String accessKey) : super(accessKey);
+  /// Constructor.
+  ApiMmsService(String accessKey, {int timeout, List<String> features})
+      : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> createMmsMessage(Map<String, dynamic> parameters) {
+  Future<Response> create(Map<String, dynamic> parameters) {
     if (parameters['recipients'] is List<String>) {
       parameters['recipients'] = List.from(parameters['recipients']).join(',');
     }
@@ -17,12 +18,12 @@ class ApiMmsService extends BaseService implements MmsService {
   }
 
   @override
-  Future<Response> listMmsMessages({int limit, int offset}) =>
+  Future<Response> list({int limit, int offset}) =>
       get('/mms', body: {'limit': limit, 'offset': offset});
 
   @override
-  Future<Response> readMmsMessage(String id) => get('/mms/$id');
+  Future<Response> read(String id) => get('/mms/$id');
 
   @override
-  Future<Response> deleteMmsMessage(String id) => delete('/mms/$id');
+  Future<Response> remove(String id) => delete('/mms/$id');
 }

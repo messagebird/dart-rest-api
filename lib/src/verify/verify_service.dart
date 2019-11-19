@@ -1,16 +1,16 @@
 import 'package:http/http.dart' show Response;
 
-/// Verify service interface
+/// Verify service interface.
 abstract class VerifyService {
-  /// Get verification code details
-  Future<Response> readCode(String id);
+  /// Send a verification code.
+  Future<Response> create(int recipient, Map<String, dynamic> parameters);
 
-  /// Send a verification code
-  Future<Response> createCode(int recipient, Map<String, dynamic> parameters);
+  /// Get verification code details.
+  Future<Response> read(String id);
 
-  /// Delete a verification code
-  Future<Response> deleteCode(String id);
+  /// Removes a verification code.
+  Future<Response> remove(String id);
 
-  /// Verify a verification code
-  Future<Response> verifyCode(String id, String token);
+  /// Verify a verification code.
+  Future<Response> verify(String id, String token);
 }
