@@ -1,91 +1,57 @@
-import 'package:messagebird_dart/src/base_service.dart';
-
+import 'package:http/http.dart' show Response;
+import '../base_service.dart';
 import 'conversations_service.dart';
 
+/// API implementation of conversations service
 class ApiConversationsService extends BaseService
     implements ConversationsService {
+  /// Constructor
   ApiConversationsService(String accessKey) : super(accessKey);
 
   @override
-  String getEndpoint() {
-    return BaseService.CONVERSATIONS_ENDPOINT;
-  }
+  String getEndpoint() => BaseService.conversationsEndpoint;
 
   @override
-  Future<void> send(Map<String, dynamic> params) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'POST',
-      'path': '/v1/send',
-      'params': params
-    });
-  }
+  Future<Response> sendMesssage(Map<String, dynamic> parameters) =>
+      post('/v1/send',
+          hostname: BaseService.conversationsEndpoint, body: parameters);
 
   @override
-  Future<void> start(Map<String, dynamic> params) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'POST',
-      'path': '/v1/conversations/start',
-      'params': params
-    });
-  }
+  Future<Response> startConversation(Map<String, dynamic> parameters) =>
+      post('/v1/conversations/start',
+          hostname: BaseService.conversationsEndpoint, body: parameters);
 
   @override
-  Future<Object> list(int limit, int offset) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'GET',
-      'path': '/v1/conversations',
-      'params': {'limit': limit, 'offset': offset}
-    });
-  }
+  Future<Response> listConversations(int limit, int offset) =>
+      get('/v1/conversations',
+          hostname: BaseService.conversationsEndpoint,
+          body: {'limit': limit, 'offset': offset});
 
   @override
-  Future<Object> listMessages(String contactId, int limit, int offset) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'GET',
-      'path': '/v1/conversations/$contactId/messages',
-      'params': {'limit': limit, 'offset': offset}
-    });
-  }
+  Future<Response> listMessages(String contactId, {int limit, int offset}) =>
+      get('/v1/conversations/$contactId/messages',
+          hostname: BaseService.conversationsEndpoint,
+          body: {'limit': limit, 'offset': offset});
 
   @override
-  Future<Object> read(String id) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'GET',
-      'path': '/v1/conversations/$id',
-    });
-  }
+  Future<Response> readConversation(String id) => get(
+        '/v1/conversations/$id',
+        hostname: BaseService.conversationsEndpoint,
+      );
 
   @override
-  Future<Object> readMessage(String id) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'GET',
-      'path': '/v1/messages/$id',
-    });
-  }
+  Future<Response> readMessage(String id) => get(
+        '/v1/messages/$id',
+        hostname: BaseService.conversationsEndpoint,
+      );
 
   @override
-  Future<void> reply(String id, Object params) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'POST',
-      'path': '/v1/conversations/$id/messages',
-      'params': params
-    });
-  }
+  Future<Response> reply(String id, Map<String, String> parameters) =>
+      post('/v1/conversations/$id/messages',
+          hostname: BaseService.conversationsEndpoint, body: parameters);
 
   @override
-  Future<void> update(String id, String params) {
-    return httpRequest({
-      'hostname': BaseService.CONVERSATIONS_ENDPOINT,
-      'method': 'PATCH',
-      'path': '/v1/conversations/$id',
-      'params': params
-    });
-  }
+  Future<Response> updateConversation(String id, String parameters) =>
+      patch('/v1/conversations/$id',
+          hostname: BaseService.conversationsEndpoint, body: parameters);
 }
