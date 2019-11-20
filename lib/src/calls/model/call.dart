@@ -1,29 +1,29 @@
-/// Class encapsulating a call object.
+/// Class encapsulating a [Call] object.
 class Call {
-  /// The unique ID of the call.
+  /// The unique ID of the [Call].
   final String id;
 
-  /// The status of the call. Possible values: `queued`, `starting`, `ongoing`,
-  /// `ended`.
+  /// The status of the [Call]. Possible values: `queued`, `starting`,
+  /// `ongoing`, `ended`.
   final Status status;
 
-  /// The source number of the call, without leading `+`, ommited if not
+  /// The source number of the [Call], without leading `+`, ommited if not
   /// available
   final String source;
 
-  /// The destination number of the call, without leading `+`, ommited if not
+  /// The destination number of the [Call], without leading `+`, ommited if not
   /// available
   final String destination;
 
-  /// The date-time the call was created, in RFC 3339 format
+  /// The date-time the [Call] was created, in RFC 3339 format
   /// (e.g. `2017-03-06T13:34:14Z`).
   final DateTime createdAt;
 
-  /// The date-time the call was last updated, in RFC 3339 format
+  /// The date-time the [Call] was last updated, in RFC 3339 format
   /// (e.g. `2017-03-06T13:34:14Z`).
   final DateTime updatedAt;
 
-  /// The date-time the call ended, in RFC 3339 format
+  /// The date-time the [Call] ended, in RFC 3339 format
   /// (e.g. `2017-03-06T13:34:14Z`).
   final DateTime endedAt;
 
@@ -37,7 +37,7 @@ class Call {
       this.updatedAt,
       this.endedAt});
 
-  /// Construct a call object from a [json] object.
+  /// Construct a [Call] object from a [json] object.
   factory Call.fromJson(Map<String, dynamic> json) {
     if (json == null) {
       return null;
@@ -54,26 +54,23 @@ class Call {
         endedAt: DateTime.parse(json['endedAt'].toString()));
   }
 
-  /// Get a list of calls from a [json] object
-  static List<Call> fromJsonList(Object json) {
-    if (json == null) {
-      return null;
-    }
-    return (json as List).map((j) => Call.fromJson(j)).toList();
-  }
+  /// Get a list of [Call] objects from a [json] object
+  static List<Call> fromJsonList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Call.fromJson(j)).toList();
 }
 
-/// Enumeration of call statusses.
+/// Enumeration of [Call] statusses.
 enum Status {
-  /// Call is queued.
+  /// [Call] is queued.
   queued,
 
-  /// Call is starting.
+  /// [Call] is starting.
   starting,
 
-  /// Call is ongoing.
+  /// [Call] is ongoing.
   ongoing,
 
-  /// Call has ended.
+  /// [Call] has ended.
   ended
 }

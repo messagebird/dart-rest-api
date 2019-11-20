@@ -1,42 +1,60 @@
-import 'package:http/http.dart' show Response;
+import 'dart:convert';
 
 import '../base_service.dart';
 import 'contacts_service.dart';
+import 'model/contact.dart';
+import 'model/contacts.dart';
+import 'model/groups.dart';
+import 'model/messages.dart';
 
-/// API implementation of contacts service.
+/// API implementation of [ContactsService].
 class ApiContactsService extends BaseService implements ContactsService {
   /// Constructor.
   ApiContactsService(String accessKey, {int timeout, List<String> features})
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(String phoneNumber,
-      {Map<String, dynamic> parameters}) {
+  Future<Contact> create(String phoneNumber,
+      {Map<String, dynamic> parameters}) async {
     parameters['msisdn'] = phoneNumber;
-    return post('/contacts', body: parameters);
+    final response = await post('/contacts', body: parameters);
+    return Future.value(Contact.fromJson(json.decode(response.body)));
   }
 
   @override
-  Future<Response> list({int limit, int offset}) =>
-      get('/contacts', body: {'limit': limit, 'offset': offset});
+  Future<Contacts> list({int limit, int offset}) async {
+    final response =
+        await get('/contacts', body: {'limit': limit, 'offset': offset});
+    return Future.value(Contacts.fromJson(json.decode(response.body)));
+  }
 
   @override
-  Future<Response> listGroups(String contactId, {int limit, int offset}) =>
-      get('/contacts/$contactId/groups',
-          body: {'limit': limit, 'offset': offset});
+  Future<Groups> listGroups(String contactId, {int limit, int offset}) async {
+    final response = await get('/contacts/$contactId/groups',
+        body: {'limit': limit, 'offset': offset});
+    return Future.value(Groups.fromJson(json.decode(response.body)));
+  }
 
   @override
-  Future<Response> listMessages(String contactId, {int limit, int offset}) =>
-      get('/contacts/$contactId/messages',
-          body: {'limit': limit, 'offset': offset});
+  Future<Messages> listMessages(String contactId,
+      {int limit, int offset}) async {
+    final response = await get('/contacts/$contactId/messages',
+        body: {'limit': limit, 'offset': offset});
+    return Future.value(Messages.fromJson(json.decode(response.body)));
+  }
 
   @override
-  Future<Response> read(String id) => get('/contacts/$id');
+  Future<Contact> read(String id) async {
+    final response = await get('/contacts/$id');
+    return Future.value(Contact.fromJson(json.decode(response.body)));
+  }
 
   @override
-  Future<Response> remove(String id) => delete('/contacts/$id');
+  Future<void> remove(String id) => delete('/contacts/$id');
 
   @override
-  Future<Response> update(int id, {Map<String, dynamic> parameters}) =>
-      patch('/contacts/$id', body: parameters);
+  Future<Contact> update(int id, {Map<String, dynamic> parameters}) async {
+    final response = await patch('/contacts/$id', body: parameters);
+    return Future.value(Contact.fromJson(json.decode(response.body)));
+  }
 }

@@ -3,15 +3,15 @@ import 'model/calls.dart';
 
 /// Calls service interface.
 abstract class CallsService {
-  /// Create a call.
+  /// Create a [Call].
   Future<Call> create(Map<String, dynamic> parameters);
 
-  /// List calls.
+  /// List [Calls].
   Future<Calls> list();
 
-  /// Read a call.
+  /// Read a [Call].
   Future<Call> read(int callId);
 
-  /// Remove a call.
+  /// Remove a [Call].
   Future<void> remove(int callId);
 }

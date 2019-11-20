@@ -1,6 +1,6 @@
 import 'step.dart';
 
-/// Class encapsulating a list of steps.
+/// Class encapsulating a list of [Steps].
 class Steps {
   /// Listing of all [steps].
   final List<Step> steps;
@@ -8,11 +8,7 @@ class Steps {
   /// Constructor.
   Steps({this.steps});
 
-  /// Construct a step object from a [json] object.
-  factory Steps.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    return Steps(steps: Step.fromJsonList(json['data']));
-  }
+  /// Construct a [Steps] object from a [json] object.
+  factory Steps.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : Steps(steps: Step.fromJsonList(json['data']));
 }

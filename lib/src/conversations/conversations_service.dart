@@ -1,5 +1,8 @@
 import 'package:http/http.dart' show Response;
 
+import 'model/message.dart';
+import 'model/message_response.dart';
+
 /// Conversations service interface.
 abstract class ConversationsService {
   /// Gets the API endpoint.
@@ -27,7 +30,7 @@ abstract class ConversationsService {
   /// number). If an active conversation already exists for the recipient,
   /// this conversation will be resumed. If an active conversation does not
   /// exist, a new one will be created.
-  Future<Response> send(Map<String, dynamic> parameters);
+  Future<MessageResponse> send(Message message);
 
   /// Starts a new conversation from a channel-specific user identifier,
   /// such as a phone number, and sends a first message. If an active

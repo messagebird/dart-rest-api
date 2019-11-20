@@ -1,23 +1,23 @@
 import 'step.dart';
 
-/// Class encapsulating a call flow object.
+/// Class encapsulating a [Callflow] object.
 class Callflow {
-  /// The unique ID of the call flow.
+  /// The unique ID of the [Callflow].
   final String id;
 
-  /// The title of the call flow.
+  /// The title of the [Callflow].
   final String title;
 
-  /// Says whether a full call recording is enabled on this call flow, the
+  /// Says whether a full call recording is enabled on this [Callflow], the
   /// default value for this attribute is `false`.
   final bool record;
 
-  /// An array of step objects. The sequence of the array items describe the
+  /// A list of [Step] objects. The sequence of the list items describe the
   /// order of execution, where the first item will be executed first, than
   /// the second, etcetera.
   final List<Step> steps;
 
-  /// The `default` attribute says whether the call flow will be used when no
+  /// The `default` attribute says whether the [Callflow] will be used when no
   /// call flow was found for an inbound number. Only one default call flow is
   /// allowed.
   ///
@@ -26,11 +26,11 @@ class Callflow {
   /// the name `isDefault` is used here.
   final bool isDefault;
 
-  /// The date-time the call flow was created, in RFC 3339 format
+  /// The date-time the [Callflow] was created, in RFC 3339 format
   /// (e.g. `2017-03-06T13:34:14Z`).
   final DateTime createdAt;
 
-  /// The date-time the call flow was last updated, in RFC 3339 format
+  /// The date-time the [Callflow] was last updated, in RFC 3339 format
   /// (e.g. `2017-03-06T13:34:14Z`).
   final DateTime updatedAt;
 
@@ -44,26 +44,20 @@ class Callflow {
       this.createdAt,
       this.updatedAt});
 
-  /// Construct a call flow object from a [json] object.
-  factory Callflow.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    return Callflow(
-        id: json['id'].toString(),
-        title: json['title'].toString(),
-        record: json['record'] == 'true',
-        steps: Step.fromJsonList(json['steps']),
-        isDefault: json['default'] == 'true',
-        createdAt: DateTime.parse(json['createdAt'].toString()),
-        updatedAt: DateTime.parse(json['updatedAt'].toString()));
-  }
+  /// Construct a [Callflow] object from a [json] object.
+  factory Callflow.fromJson(Map<String, dynamic> json) => json == null
+      ? null
+      : Callflow(
+          id: json['id'].toString(),
+          title: json['title'].toString(),
+          record: json['record'] == 'true',
+          steps: Step.fromJsonList(json['steps']),
+          isDefault: json['default'] == 'true',
+          createdAt: DateTime.parse(json['createdAt'].toString()),
+          updatedAt: DateTime.parse(json['updatedAt'].toString()));
 
-  /// Get a list of call flows from a [json] object.
-  static List<Callflow> fromJsonList(Object json) {
-    if (json == null) {
-      return null;
-    }
-    return (json as List).map((j) => Callflow.fromJson(j)).toList();
-  }
+  /// Get a list of [Callflow] objects from a [json] object.
+  static List<Callflow> fromJsonList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Callflow.fromJson(j)).toList();
 }

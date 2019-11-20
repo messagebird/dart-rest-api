@@ -1,10 +1,12 @@
 import 'dart:async' show Future;
+import 'dart:convert';
 import 'dart:io' show File, Platform;
 
 import 'package:http/http.dart' show Response, Client, BaseClient;
 import 'package:yaml/yaml.dart';
 
 import 'general/exception/communication_problem.dart';
+import 'general/model/api_error.dart';
 
 /// Base service.
 abstract class BaseService {
@@ -38,13 +40,18 @@ abstract class BaseService {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
-      return _client
+      return Future.value(_client
           .delete(
             _getUrl(path, hostname: hostname),
             headers: headers,
           )
-          .timeout(Duration(milliseconds: _timeout));
+          .timeout(Duration(milliseconds: _timeout))
+          .then(_handleResponse));
+    } on ApiError {
+      // Problem with handling the response
+      rethrow;
     } on Exception catch (e) {
+      // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
@@ -56,7 +63,7 @@ abstract class BaseService {
   Future<Response> get(String path,
       {String hostname, Map<String, dynamic> body}) {
     try {
-      return _client
+      return Future.value(_client
           .get(
               _getUrl(
                   '$path'
@@ -64,8 +71,13 @@ abstract class BaseService {
                   '${(body != null) ? _createQuery(body) : ''}',
                   hostname: hostname),
               headers: _getHeaders())
-          .timeout(Duration(milliseconds: _timeout));
+          .timeout(Duration(milliseconds: _timeout))
+          .then(_handleResponse));
+    } on ApiError {
+      // Problem with handling the response
+      rethrow;
     } on Exception catch (e) {
+      // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
@@ -78,14 +90,19 @@ abstract class BaseService {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
-      return await _client
+      return Future.value(_client
           .patch(
             _getUrl(path, hostname: 'hostname'),
             headers: headers,
             body: (body is Map) ? _createBody(body) : body.toString(),
           )
-          .timeout(Duration(milliseconds: _timeout));
+          .timeout(Duration(milliseconds: _timeout))
+          .then(_handleResponse));
+    } on ApiError {
+      // Problem with handling the response
+      rethrow;
     } on Exception catch (e) {
+      // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
@@ -99,11 +116,16 @@ abstract class BaseService {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
-      return _client
+      return Future.value(_client
           .post(_getUrl(path, hostname: hostname),
               headers: headers, body: _createBody(body))
-          .timeout(Duration(milliseconds: _timeout));
+          .timeout(Duration(milliseconds: _timeout))
+          .then(_handleResponse));
+    } on ApiError {
+      // Problem with handling the response
+      rethrow;
     } on Exception catch (e) {
+      // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
@@ -117,14 +139,19 @@ abstract class BaseService {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
-      return _client
+      return Future.value(_client
           .put(
             _getUrl('path', hostname: 'hostname'),
             headers: headers,
             body: _createBody(body),
           )
-          .timeout(Duration(milliseconds: _timeout));
+          .timeout(Duration(milliseconds: _timeout))
+          .then(_handleResponse));
+    } on ApiError {
+      // Problem with handling the response
+      rethrow;
     } on Exception catch (e) {
+      // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
@@ -182,5 +209,13 @@ abstract class BaseService {
       newHostname = 'https://rest.messagebird.com';
     }
     return newHostname + path;
+  }
+
+  Response _handleResponse(Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return response;
+    } else {
+      throw ApiError.fromJson(json.decode(response.body));
+    }
   }
 }

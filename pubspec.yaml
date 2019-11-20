@@ -1,6 +1,6 @@
 name: messagebird_dart
 description: This repository contains an unofficial Dart client for MessageBird's REST API
-version: 0.2.0
+version: 0.3.0
 homepage: https://git.dev.drillster.com/drillster/messagebird_dart
 author: Luc van der Zandt <luc@drillster.com>
 

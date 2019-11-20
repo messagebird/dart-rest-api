@@ -1,18 +1,14 @@
-import 'package:messagebird_dart/src/calls/model/call.dart';
+import 'call.dart';
 
-/// Class encapsulating a list of callflows.
+/// Class encapsulating a list of [Calls].
 class Calls {
-  /// Listing of all [calls].
+  /// Listing of all [Calls].
   final List<Call> calls;
 
   /// Constructor.
   Calls({this.calls});
 
-  /// Construct a step object from a [json] object.
-  factory Calls.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    return Calls(calls: Call.fromJsonList(json['data']));
-  }
+  /// Construct a [Calls] object from a [json] object.
+  factory Calls.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : Calls(calls: Call.fromJsonList(json['data']));
 }

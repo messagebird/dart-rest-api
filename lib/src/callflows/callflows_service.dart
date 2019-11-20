@@ -3,20 +3,20 @@ import 'model/callflows.dart';
 
 /// Callflows service interface.
 abstract class CallflowsService {
-  /// Creates a new call flow, parameters are manditory.
+  /// Creates a new [Callflow], parameters are manditory.
   Future<Callflow> create(Map<String, dynamic> parameters);
 
-  /// Lists existing call flows.
+  /// Lists existing [Callflows].
   Future<Callflows> list(int page, int perpage);
 
-  /// Get a call flow.
+  /// Get a [Callflow].
   Future<Callflow> read(String flowId);
 
-  /// Removes an existing call flow. The Future completes with an error if
+  /// Removes an existing [Callflow]. The Future completes with an error if
   /// applicable, but the data will never contain anything meaningful as the
   /// API returns an empty response for successful deletes.
   Future<void> remove(String flowId);
 
-  /// Updates an existing call flow. Parameters are required.
+  /// Updates an existing [Callflow]. Parameters are required.
   Future<Callflow> update(String flowId, Map<String, dynamic> parameters);
 }

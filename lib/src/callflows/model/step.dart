@@ -1,4 +1,4 @@
-/// Class encapsulating a step object.
+/// Class encapsulating a [Step] object.
 class Step {
   /// The unique (within the call flow) identifier of the step.
   final String id;
@@ -14,36 +14,29 @@ class Step {
   /// Constructor.
   Step({this.id, this.action, this.options});
 
-  /// Construct a step object from a [json] object.
-  factory Step.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
+  /// Construct a [Step] object from a [json] object.
+  factory Step.fromJson(Map<String, dynamic> json) => json == null
+      ? null
+      : Step(
+          id: json['id'].toString(),
+          action: Action.values.firstWhere(
+              (action) => action.toString() == 'Action.${json['action']}',
+              orElse: () => null),
+          options: json['options'] == null
+              ? null
+              : Map.from(json['options']).map<Option, Object>((key, value) =>
+                  MapEntry(
+                      Option.values
+                          .firstWhere((o) => o.toString() == 'Option.$key'),
+                      value)));
 
-    return Step(
-        id: json['id'].toString(),
-        action: Action.values.firstWhere(
-            (action) => action.toString() == 'Action.${json['action']}',
-            orElse: () => null),
-        options: json['options'] == null
-            ? null
-            : Map.from(json['options']).map<Option, Object>((key, value) =>
-                MapEntry(
-                    Option.values
-                        .firstWhere((o) => o.toString() == 'Option.$key'),
-                    value)));
-  }
-
-  /// Get a list of steps from a [json] object
-  static List<Step> fromJsonList(Object json) {
-    if (json == null) {
-      return null;
-    }
-    return (json as List).map((j) => Step.fromJson(j)).toList();
-  }
+  /// Get a list of [Step] objects from a [json] object
+  static List<Step> fromJsonList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Step.fromJson(j)).toList();
 }
 
-/// Enumeration of step actions.
+/// Enumeration of [Step] actions.
 enum Action {
   /// Transfer the call.
   transfer,
@@ -70,7 +63,7 @@ enum Action {
   hangup,
 }
 
-/// Enumeration of step options.
+/// Enumeration of [Step] options.
 enum Option {
   /// The destination (E.164 formatted number, SIP URI or Client URI) to
   /// transfer a call to. E.g. `31612345678`, `sip:foobar@example.com`, or

@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' show Response;
 
 import '../base_service.dart';
 import 'conversations_service.dart';
+import 'model/message.dart';
+import 'model/message_response.dart';
 
-/// API implementation of conversations service.
+/// API implementation of [ConversationsService].
 class ApiConversationsService extends BaseService
     implements ConversationsService {
   /// Constructor.
@@ -43,8 +47,11 @@ class ApiConversationsService extends BaseService
           hostname: BaseService.conversationsEndpoint, body: parameters);
 
   @override
-  Future<Response> send(Map<String, dynamic> parameters) => post('/v1/send',
-      hostname: BaseService.conversationsEndpoint, body: parameters);
+  Future<MessageResponse> send(Message message) async {
+    final response = await post('/v1/send',
+        hostname: BaseService.conversationsEndpoint, body: message.toJson());
+    return Future.value(MessageResponse.fromJson(json.decode(response.body)));
+  }
 
   @override
   Future<Response> start(Map<String, dynamic> parameters) =>
