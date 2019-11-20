@@ -1,7 +1,11 @@
-import 'package:http/http.dart' show Response;
+import 'dart:convert';
+
+import 'package:messagebird_dart/src/general/model/api_error.dart';
 
 import '../base_service.dart';
 import 'calls_service.dart';
+import 'model/call.dart';
+import 'model/calls.dart';
 
 /// API implementation of callflows service.
 class ApiCallsService extends BaseService implements CallsService {
@@ -10,17 +14,49 @@ class ApiCallsService extends BaseService implements CallsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(Map<String, dynamic> parameters) =>
-      post('/calls', hostname: BaseService.voiceEndpoint, body: parameters);
+  Future<Call> create(Map<String, dynamic> parameters) async {
+    final response = await post('/calls',
+        hostname: BaseService.voiceEndpoint, body: parameters);
+    if (response.statusCode == 201) {
+      return Future.value(Call.fromJson(json.decode(response.body)));
+    } else {
+      final ApiError error = ApiError.fromJson(json.decode(response.body));
+      throw Exception(error.code);
+    }
+  }
 
   @override
-  Future<Response> list() => get('/calls', hostname: BaseService.voiceEndpoint);
+  Future<Calls> list() async {
+    final response = await get('/calls', hostname: BaseService.voiceEndpoint);
+    if (response.statusCode == 200) {
+      return Future.value(Calls.fromJson(json.decode(response.body)));
+    } else {
+      final ApiError error = ApiError.fromJson(json.decode(response.body));
+      throw Exception(error.code);
+    }
+  }
 
   @override
-  Future<Response> read(int callId) =>
-      get('/calls/$callId', hostname: BaseService.voiceEndpoint);
+  Future<Call> read(int callId) async {
+    final response =
+        await get('/calls/$callId', hostname: BaseService.voiceEndpoint);
+    if (response.statusCode == 200) {
+      return Future.value(Call.fromJson(json.decode(response.body)));
+    } else {
+      final ApiError error = ApiError.fromJson(json.decode(response.body));
+      throw Exception(error.code);
+    }
+  }
 
   @override
-  Future<Response> remove(int callId) =>
-      delete('/calls/$callId', hostname: BaseService.voiceEndpoint);
+  Future<void> remove(int callId) async {
+    final response =
+        await delete('/calls/$callId', hostname: BaseService.voiceEndpoint);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      final ApiError error = ApiError.fromJson(json.decode(response.body));
+      throw Exception(error.code);
+    }
+  }
 }

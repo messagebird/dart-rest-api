@@ -1,16 +1,17 @@
-import 'package:http/http.dart' show Response;
+import 'model/call.dart';
+import 'model/calls.dart';
 
 /// Calls service interface.
 abstract class CallsService {
   /// Create a call.
-  Future<Response> create(Map<String, dynamic> parameters);
+  Future<Call> create(Map<String, dynamic> parameters);
 
   /// List calls.
-  Future<Response> list();
+  Future<Calls> list();
 
   /// Read a call.
-  Future<Response> read(int callId);
+  Future<Call> read(int callId);
 
   /// Remove a call.
-  Future<Response> remove(int callId);
+  Future<void> remove(int callId);
 }

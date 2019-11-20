@@ -74,11 +74,11 @@ abstract class BaseService {
   /// The parameter [hostname] is optional and defaults back to
   /// 'rest.messagebird.com'. The parameter [body] is also optional and can
   /// contain body parameters.
-  Future<Response> patch(String path, {String hostname, Object body}) {
+  Future<Response> patch(String path, {String hostname, Object body}) async {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
-      return _client
+      return await _client
           .patch(
             _getUrl(path, hostname: 'hostname'),
             headers: headers,
@@ -166,20 +166,21 @@ abstract class BaseService {
   }
 
   String _getUrl(String path, {String hostname}) {
-    String _hostname;
+    String newHostname;
     if (path == null) {
       throw ArgumentError('Argument "path" cannot be null');
     }
     if (hostname != null) {
-      if (!hostname.startsWith('https://') && !hostname.startsWith('http://')) {
-        _hostname = 'https://$hostname';
-      }
-      if (hostname.endsWith('/')) {
-        _hostname = hostname.substring(0, hostname.length - 1);
+      newHostname =
+          (!hostname.startsWith('https://') && !hostname.startsWith('http://'))
+              ? 'https://$hostname'
+              : hostname;
+      if (newHostname.endsWith('/')) {
+        newHostname = newHostname.substring(0, newHostname.length - 1);
       }
     } else {
-      _hostname = 'https://rest.messagebird.com';
+      newHostname = 'https://rest.messagebird.com';
     }
-    return _hostname + path;
+    return newHostname + path;
   }
 }

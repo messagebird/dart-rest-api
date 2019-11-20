@@ -12,3 +12,8 @@ doc/api/
 
 # MessageBird credentials
 test_resources
+
+# VScode directory
+.vscode
+
+**/.DS_Store
