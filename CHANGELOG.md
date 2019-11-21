@@ -1,3 +1,7 @@
+## 0.4.0
+- Updated model for conversations
+- Initial model for messages
+
 ## 0.3.0
 - Added model for contacts
 - Initial model for conversations

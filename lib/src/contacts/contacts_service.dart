@@ -1,5 +1,4 @@
 import 'model/contact.dart';
-import 'model/contacts.dart';
 import 'model/groups.dart';
 import 'model/messages.dart';
 
@@ -8,9 +7,9 @@ abstract class ContactsService {
   /// Create a new [Contact]. [parameters] is optional.
   Future<Contact> create(String phoneNumber, {Map<String, dynamic> parameters});
 
-  /// Lists existing [Contacts]. Pagination is optional. If a [limit] is set, an
-  /// [offset] is also required.
-  Future<Contacts> list({int limit, int offset});
+  /// Lists existing [Contact] objects. Pagination is optional. If a [limit] is
+  /// set, an [offset] is also required.
+  Future<List<Contact>> list({int limit, int offset});
 
   /// Lists the [Groups] a contact is part of.
   Future<Groups> listGroups(String contactId, {int limit, int offset});
@@ -26,6 +25,6 @@ abstract class ContactsService {
   /// API returns an empty response for successful deletes.
   Future<void> remove(String id);
 
-  /// Updates an existing [Contact]. [parameters] is optional.
-  Future<Contact> update(int id, {Map<String, dynamic> parameters});
+  /// Updates an existing [Contact]. parameters are optional.
+  Future<Contact> update(Contact contact);
 }

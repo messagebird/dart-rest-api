@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'groups.dart';
 import 'messages.dart';
 
@@ -64,4 +66,16 @@ class Contact {
   static List<Contact> fromJsonList(Object json) => json == null
       ? null
       : List.from(json).map((j) => Contact.fromJson(j)).toList();
+
+  /// Get a json object representing the [Contact]
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'href': href,
+        'msisdn': msisdn,
+        'firstName': firstName,
+        'lastName': lastName,
+        'custom': json.encode(custom),
+        'groups': groups.toJson(),
+        'messages': messages.toJson(),
+      };
 }

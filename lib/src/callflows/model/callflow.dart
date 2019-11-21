@@ -53,11 +53,38 @@ class Callflow {
           record: json['record'] == 'true',
           steps: Step.fromJsonList(json['steps']),
           isDefault: json['default'] == 'true',
-          createdAt: DateTime.parse(json['createdAt'].toString()),
-          updatedAt: DateTime.parse(json['updatedAt'].toString()));
+          createdAt: DateTime.parse(json['createdAt']),
+          updatedAt: DateTime.parse(json['updatedAt']));
 
   /// Get a list of [Callflow] objects from a [json] object.
   static List<Callflow> fromJsonList(Object json) => json == null
       ? null
       : List.from(json).map((j) => Callflow.fromJson(j)).toList();
+
+  /// Get a json object representing the [Callflow]
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {};
+    if (id != null) {
+      json.addAll({'id': id});
+    }
+    if (title != null) {
+      json.addAll({'title': title});
+    }
+    if (record != null) {
+      json.addAll({'record': record});
+    }
+    if (steps != null) {
+      json.addAll({'steps': steps.map((step) => step.toJson()).toList()});
+    }
+    if (isDefault != null) {
+      json.addAll({'default': isDefault});
+    }
+    if (createdAt != null) {
+      json.addAll({'createdAt': createdAt.toString()});
+    }
+    if (updatedAt != null) {
+      json.addAll({'updatedAt': updatedAt.toString()});
+    }
+    return json;
+  }
 }

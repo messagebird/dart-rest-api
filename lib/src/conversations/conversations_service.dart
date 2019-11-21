@@ -1,6 +1,7 @@
 import 'package:http/http.dart' show Response;
 
-import 'model/message.dart';
+import 'model/conversation.dart';
+import 'model/conversation_message.dart';
 import 'model/message_response.dart';
 
 /// Conversations service interface.
@@ -14,13 +15,14 @@ abstract class ConversationsService {
   Future<Response> list(int limit, int offset);
 
   /// Lists the messages for a contact.
-  Future<Response> listMessages(String contactId, {int limit, int offset});
+  Future<List<ConversationMessage>> listMessages(String contactId,
+      {int limit, int offset});
 
   /// Retrieves a single conversation.
-  Future<Response> read(String id);
+  Future<Conversation> read(String id);
 
   /// View a message
-  Future<Response> readMessage(String id);
+  Future<ConversationMessage> readMessage(String id);
 
   /// Adds a new message to an existing conversation and sends it to the
   /// contact that you're in conversation with.
@@ -30,7 +32,7 @@ abstract class ConversationsService {
   /// number). If an active conversation already exists for the recipient,
   /// this conversation will be resumed. If an active conversation does not
   /// exist, a new one will be created.
-  Future<MessageResponse> send(Message message);
+  Future<MessageResponse> send(ConversationMessage message);
 
   /// Starts a new conversation from a channel-specific user identifier,
   /// such as a phone number, and sends a first message. If an active
@@ -39,5 +41,5 @@ abstract class ConversationsService {
   Future<Response> start(Map<String, dynamic> parameters);
 
   /// Update Conversation Status.
-  Future<Response> update(String id, String parameters);
+  Future<Conversation> update(String id, ConversationStatus status);
 }

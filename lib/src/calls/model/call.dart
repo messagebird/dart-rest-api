@@ -5,7 +5,7 @@ class Call {
 
   /// The status of the [Call]. Possible values: `queued`, `starting`,
   /// `ongoing`, `ended`.
-  final Status status;
+  final CallStatus status;
 
   /// The source number of the [Call], without leading `+`, ommited if not
   /// available
@@ -44,8 +44,8 @@ class Call {
     }
     return Call(
         id: json['id'].toString(),
-        status: Status.values.firstWhere(
-            (status) => status.toString() == 'Status.${json['status']}',
+        status: CallStatus.values.firstWhere(
+            (status) => status.toString() == 'CallStatus.${json['status']}',
             orElse: () => null),
         source: json['source'].toString(),
         destination: json['destination'].toString(),
@@ -58,10 +58,21 @@ class Call {
   static List<Call> fromJsonList(Object json) => json == null
       ? null
       : List.from(json).map((j) => Call.fromJson(j)).toList();
+
+  /// Get a json object representing the [Call]
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'status': status,
+        'source': source,
+        'destination': destination,
+        'createdAt': createdAt.toString(),
+        'updatedAt': updatedAt.toString(),
+        'endedAt': endedAt.toString()
+      };
 }
 
-/// Enumeration of [Call] statusses.
-enum Status {
+/// Enumeration of [CallStatus] statusses.
+enum CallStatus {
   /// [Call] is queued.
   queued,
 

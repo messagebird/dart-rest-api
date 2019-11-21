@@ -1,10 +1,10 @@
-import 'package:http/http.dart' show Response;
+import 'model/message.dart';
 
 /// Message service interface.
 abstract class MessagesService {
   /// Sends a text message.
-  Future<Response> create(Map<String, dynamic> parameters);
+  Future<Message> create(Message message);
 
   /// Get a text message.
-  Future<Response> read(String id);
+  Future<Message> read(String id);
 }

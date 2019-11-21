@@ -3,7 +3,6 @@ import 'dart:convert';
 import '../base_service.dart';
 import 'callflows_service.dart';
 import 'model/callflow.dart';
-import 'model/callflows.dart';
 
 /// API implementation of [CallflowsService].
 class ApiCallflowsService extends BaseService implements CallflowsService {
@@ -12,36 +11,36 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Callflow> create(Map<String, dynamic> parameters) async {
+  Future<Callflow> create(Callflow callflow) async {
     final response = await post('/call-flows',
-        hostname: BaseService.voiceEndpoint, body: parameters);
-    return Future.value(Callflow.fromJson(json.decode(response.body)));
+        hostname: BaseService.voiceEndpoint, body: callflow.toJson());
+    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Callflows> list(int page, int perpage) async {
+  Future<List<Callflow>> list(int page, int perpage) async {
     final response = await get('/call-flows',
         hostname: BaseService.voiceEndpoint,
         body: {'page': page, 'perpage': perpage});
-    return Future.value(Callflows.fromJson(json.decode(response.body)));
+    return Future.value(
+        Callflow.fromJsonList(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Callflow> read(String flowId) async {
+  Future<Callflow> read(String id) async {
     final response =
-        await get('/call-flows/$flowId', hostname: BaseService.voiceEndpoint);
-    return Future.value(Callflow.fromJson(json.decode(response.body)));
+        await get('/call-flows/$id', hostname: BaseService.voiceEndpoint);
+    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<void> remove(String flowId) =>
-      delete('/call-flows/$flowId', hostname: BaseService.voiceEndpoint);
+  Future<void> remove(String id) =>
+      delete('/call-flows/$id', hostname: BaseService.voiceEndpoint);
 
   @override
-  Future<Callflow> update(
-      String flowId, Map<String, dynamic> parameters) async {
-    final response = await put('/call-flows',
-        hostname: BaseService.voiceEndpoint, body: parameters);
-    return Future.value(Callflow.fromJson(json.decode(response.body)));
+  Future<Callflow> update(Callflow callflow) async {
+    final response = await put('/call-flows/${callflow.id}',
+        hostname: BaseService.voiceEndpoint, body: callflow.toJson());
+    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
   }
 }

@@ -13,4 +13,7 @@ class Groups {
   factory Groups.fromJson(Map<String, dynamic> json) => (json == null)
       ? null
       : Groups(totalCount: json['totalCount'], href: json['href']);
+
+  /// Get a json object representing the [Groups]
+  Map<String, dynamic> toJson() => {'totalCount': totalCount, 'href': href};
 }

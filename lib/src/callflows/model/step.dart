@@ -34,6 +34,24 @@ class Step {
   static List<Step> fromJsonList(Object json) => json == null
       ? null
       : List.from(json).map((j) => Step.fromJson(j)).toList();
+
+  /// Get a json object representing the [Step]
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {};
+    if (id != null) {
+      json.addAll({'id': id});
+    }
+    if (action != null) {
+      json.addAll({'action': action.toString().replaceAll('Action.', '')});
+    }
+    if (options != null) {
+      json.addAll({
+        'options': options.map<String, String>((option, value) =>
+            MapEntry(option.toString().replaceAll('Option.', ''), value))
+      });
+    }
+    return json;
+  }
 }
 
 /// Enumeration of [Step] actions.

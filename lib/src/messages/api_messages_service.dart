@@ -1,7 +1,8 @@
-import 'package:http/http.dart' show Response;
+import 'dart:convert';
 
 import '../base_service.dart';
 import 'messages_service.dart';
+import 'model/message.dart';
 
 /// API implementation of messages service.
 class ApiMessagesService extends BaseService implements MessagesService {
@@ -10,14 +11,15 @@ class ApiMessagesService extends BaseService implements MessagesService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(Map<String, dynamic> parameters) {
-    if (parameters['recipients'] is List<String>) {
-      parameters['recipients'] =
-          List.castFrom(parameters['recipients']).join(',');
-    }
-    return post('/messages', body: parameters);
+  Future<Message> create(Message message) async {
+    final response = await post('/messages', body: message.toJson());
+    return Future.value(Message.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Response> read(String id) => get('/messages/$id');
+  Future<Message> read(String id) async {
+    final response = await get('/v1/messages/$id',
+        hostname: BaseService.conversationsEndpoint);
+    return Future.value(Message.fromJson(json.decode(response.body)['data']));
+  }
 }

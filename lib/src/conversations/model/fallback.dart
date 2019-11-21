@@ -14,6 +14,7 @@ class Fallback {
   /// Constructor.
   Fallback({this.from, this.after});
 
+  /// Construct a [Fallback] object from a [json] object.
   factory Fallback.fromJson(Map<String, dynamic> json) =>
       json == null ? null : Fallback(from: json['from'], after: json['after']);
 }

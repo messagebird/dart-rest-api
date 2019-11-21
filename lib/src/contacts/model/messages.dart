@@ -13,4 +13,7 @@ class Messages {
   factory Messages.fromJson(Map<String, dynamic> json) => (json == null)
       ? null
       : Messages(totalCount: json['totalCount'], href: json['href']);
+
+  /// Get a json object representing the [Messages]
+  Map<String, dynamic> toJson() => {'totalCount': totalCount, 'href': href};
 }

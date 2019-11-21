@@ -3,7 +3,6 @@ import 'dart:convert';
 import '../base_service.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
-import 'model/calls.dart';
 
 /// API implementation of [CallsService].
 class ApiCallsService extends BaseService implements CallsService {
@@ -12,26 +11,26 @@ class ApiCallsService extends BaseService implements CallsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Call> create(Map<String, dynamic> parameters) async {
+  Future<Call> create(Call call) async {
     final response = await post('/calls',
-        hostname: BaseService.voiceEndpoint, body: parameters);
-    return Future.value(Call.fromJson(json.decode(response.body)));
+        hostname: BaseService.voiceEndpoint, body: call.toJson());
+    return Future.value(Call.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Calls> list() async {
+  Future<List<Call>> list() async {
     final response = await get('/calls', hostname: BaseService.voiceEndpoint);
-    return Future.value(Calls.fromJson(json.decode(response.body)));
+    return Future.value(Call.fromJsonList(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Call> read(int callId) async {
+  Future<Call> read(int id) async {
     final response =
-        await get('/calls/$callId', hostname: BaseService.voiceEndpoint);
-    return Future.value(Call.fromJson(json.decode(response.body)));
+        await get('/calls/$id', hostname: BaseService.voiceEndpoint);
+    return Future.value(Call.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<void> remove(int callId) =>
-      delete('/calls/$callId', hostname: BaseService.voiceEndpoint);
+  Future<void> remove(int id) =>
+      delete('/calls/$id', hostname: BaseService.voiceEndpoint);
 }

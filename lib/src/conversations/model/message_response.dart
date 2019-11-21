@@ -6,8 +6,9 @@ class MessageResponse {
   /// message.
   String id;
 
-  /// The [Status] of the message. It will be initially set to `accepted`.
-  Status status;
+  /// The [MessageStatus] of the message. It will be initially set to
+  /// `accepted`.
+  MessageStatus status;
 
   /// An object of the form `{"id": <uuid>}`. Will be present only if a fallback
   /// was passed in your request.
@@ -16,20 +17,21 @@ class MessageResponse {
   /// Constructor
   MessageResponse({this.id, this.status, this.fallback});
 
+  /// Construct a [MessageResponse] object from a [json] object.
   factory MessageResponse.fromJson(Map<String, dynamic> json) => json == null
       ? null
       : MessageResponse(
           id: json['id'],
-          status: Status.values.firstWhere(
+          status: MessageStatus.values.firstWhere(
               (status) => status.toString() == 'Status.${json['action']}',
-              orElse: () => Status.accepted),
+              orElse: () => MessageStatus.accepted),
           fallback: json['fallback'] == null
               ? null
               : Fallback.fromJson(json['fallback']));
 }
 
 /// Enumeration of message statusses.
-enum Status {
+enum MessageStatus {
   /// The message has been accepted.
   accepted,
 
