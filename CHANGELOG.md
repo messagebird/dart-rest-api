@@ -1,3 +1,9 @@
+## 0.5.0
+- Added model for conversations
+- Added model for groups
+- Added model for messages
+- Added test setup
+
 ## 0.4.0
 - Updated model for conversations
 - Initial model for messages

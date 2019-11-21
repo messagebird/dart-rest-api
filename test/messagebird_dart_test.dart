@@ -26,7 +26,7 @@ void main() {
     setUp(() async {
       balanceService = ApiBalanceService(credentials['test']);
     });
-    test('Gets balance', () async {
+    test('Balance getter', () async {
       expect(await balanceService.read(), isA<Balance>());
     });
   });
@@ -34,32 +34,11 @@ void main() {
   group('callflows', () {
     Callflow callflow;
     Callflow callflowFromJson;
-    String source;
 
     setUp(() async {
       callflowsService = ApiCallflowsService(credentials['test']);
-
-      source = '''{
-          "data": [
-            {
-              "id": "de3ed163-d5fc-45f4-b8c4-7eea7458c635",
-              "title": "Forward call to 31612345678",
-              "record": false,
-              "steps": [
-                {
-                  "id": "2fa1383e-6f21-4e6f-8c36-0920c3d0730b"
-                }
-              ],
-              "default": false,
-              "createdAt": "2017-03-06T14:52:22Z",
-              "updatedAt": "2017-03-06T14:52:22Z"
-            }
-          ],
-          "_links": {
-            "self": "/call-flows/de3ed163-d5fc-45f4-b8c4-7eea7458c635"
-          }
-        }''';
-
+      callflowFromJson = Callflow.fromJsonList(json.decode(
+          File('test_resources/callflow.json').readAsStringSync())['data'])[0];
       callflow = Callflow(
           id: 'de3ed163-d5fc-45f4-b8c4-7eea7458c635',
           title: 'Forward call to 31612345678',
@@ -67,16 +46,14 @@ void main() {
           steps: [
             Step(
                 id: '2fa1383e-6f21-4e6f-8c36-0920c3d0730b',
-                action: Action.transfer,
-                options: {Option.destination: '31612345678'})
+                action: StepAction.transfer,
+                options: {StepOption.destination: '31612345678'})
           ],
           createdAt: DateTime.parse('2017-03-06T14:52:22Z'),
           updatedAt: DateTime.parse('2017-03-06T14:52:22Z'));
     });
 
-    test('Deserialize callflows from json', () {
-      callflowFromJson = Callflow.fromJsonList(json.decode(source)['data'])[0];
-
+    test('Callflow deserialization', () {
       expect(callflow.id, equals(callflowFromJson.id));
       expect(callflow.title, equals(callflowFromJson.title));
       expect(callflow.record, equals(callflowFromJson.record));
@@ -85,17 +62,14 @@ void main() {
       expect(callflow.updatedAt, equals(callflowFromJson.updatedAt));
     });
 
-    test('Serialize callflows to json objects', () {
-      callflowFromJson = Callflow.fromJsonList(json.decode(source)['data'])[0];
+    test('Callflow serialization', () {
       final Map<String, dynamic> serialized = callflowFromJson.toJson();
 
-      expect(serialized['id'], equals(json.decode(source)['data'][0]['id']));
+      expect(serialized['id'], equals(callflowFromJson.id));
+      expect(serialized['title'], equals(callflowFromJson.title));
+      expect(serialized['record'], equals(callflowFromJson.record));
       expect(
-          serialized['title'], equals(json.decode(source)['data'][0]['title']));
-      expect(serialized['record'],
-          equals(json.decode(source)['data'][0]['record']));
-      expect(serialized['steps'][0]['id'],
-          equals(json.decode(source)['data'][0]['steps'][0]['id']));
+          serialized['steps'][0]['id'], equals(callflowFromJson.steps[0].id));
     });
   });
 
@@ -103,7 +77,7 @@ void main() {
     setUp(() async {
       conversationsService = ApiConversationsService(credentials['test']);
     });
-    test('Endpoint is set', () {
+    test('Endpoint getter', () {
       expect(conversationsService.getEndpoint(), isA<String>());
     });
   });

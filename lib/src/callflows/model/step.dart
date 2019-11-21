@@ -3,13 +3,13 @@ class Step {
   /// The unique (within the call flow) identifier of the step.
   final String id;
 
-  /// The name of the VoIP action. Possible values: `transfer`, `say`, `play`,
-  /// `pause`, `record`, `fetchCallFlow`, `sendKeys`, `hangup`.
-  final Action action;
+  /// The name of the VoIP action. See [StepAction] for allowed values.
+  final StepAction action;
 
   /// Contains zero or more key-value pairs, where the key is the identifier of
-  /// the option and value is the option value. See [Option] for allowed values.
-  final Map<Option, Object> options;
+  /// the option and value is the option value. See [StepOption] for allowed
+  /// values.
+  final Map<StepOption, Object> options;
 
   /// Constructor.
   Step({this.id, this.action, this.options});
@@ -19,15 +19,15 @@ class Step {
       ? null
       : Step(
           id: json['id'].toString(),
-          action: Action.values.firstWhere(
-              (action) => action.toString() == 'Action.${json['action']}',
+          action: StepAction.values.firstWhere(
+              (action) => action.toString() == 'StepAction.${json['action']}',
               orElse: () => null),
           options: json['options'] == null
               ? null
-              : Map.from(json['options']).map<Option, Object>((key, value) =>
-                  MapEntry(
-                      Option.values
-                          .firstWhere((o) => o.toString() == 'Option.$key'),
+              : Map.from(json['options']).map<StepOption, Object>(
+                  (key, value) => MapEntry(
+                      StepOption.values
+                          .firstWhere((o) => o.toString() == 'StepOption.$key'),
                       value)));
 
   /// Get a list of [Step] objects from a [json] object
@@ -55,7 +55,7 @@ class Step {
 }
 
 /// Enumeration of [Step] actions.
-enum Action {
+enum StepAction {
   /// Transfer the call.
   transfer,
 
@@ -82,7 +82,7 @@ enum Action {
 }
 
 /// Enumeration of [Step] options.
-enum Option {
+enum StepOption {
   /// The destination (E.164 formatted number, SIP URI or Client URI) to
   /// transfer a call to. E.g. `31612345678`, `sip:foobar@example.com`, or
   /// `client:name_of_client`. The Client URI is in early access at this moment

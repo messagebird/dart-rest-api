@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'groups.dart';
 import 'messages.dart';
 
@@ -60,7 +58,9 @@ class Contact {
           lastName: json['lastName'].toString(),
           custom: List<String>.from(json['custom']),
           groups: Groups.fromJson(json['groups']),
-        );
+          messages: Messages.fromJson(json['messages']),
+          createdDatetime: DateTime.parse(json['createdDatetime'].toString()),
+          updatedDatetime: DateTime.parse(json['updatedDatetime'].toString()));
 
   /// Get a list of [Contact] objects from a [json] object
   static List<Contact> fromJsonList(Object json) => json == null
@@ -74,8 +74,10 @@ class Contact {
         'msisdn': msisdn,
         'firstName': firstName,
         'lastName': lastName,
-        'custom': json.encode(custom),
+        'custom': custom,
         'groups': groups.toJson(),
         'messages': messages.toJson(),
+        'createdDatetime': createdDatetime.toIso8601String(),
+        'updatedDatetime': createdDatetime.toIso8601String()
       };
 }

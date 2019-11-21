@@ -1,5 +1,5 @@
-/// Class encapsulating a [Messages] object.
-class Messages {
+/// Class encapsulating a [Contacts] object.
+class Contacts {
   /// The total count of messages sent to contact.
   int totalCount;
 
@@ -7,15 +7,15 @@ class Messages {
   String href;
 
   /// Constructor.
-  Messages({this.totalCount, this.href});
+  Contacts({this.totalCount, this.href});
 
-  /// Construct a [Messages] object from a [json] object.
-  factory Messages.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct a [Contacts] object from a [json] object.
+  factory Contacts.fromJson(Map<String, dynamic> json) => (json == null)
       ? null
-      : Messages(
+      : Contacts(
           totalCount: int.parse(json['totalCount']),
           href: json['href'].toString());
 
-  /// Get a json object representing the [Messages]
+  /// Get a json object representing the [Contacts]
   Map<String, dynamic> toJson() => {'totalCount': totalCount, 'href': href};
 }

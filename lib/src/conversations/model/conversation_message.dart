@@ -27,7 +27,7 @@ class ConversationMessage extends Message {
   /// Construct a [ConversationMessage] object from a [json] object.
   factory ConversationMessage.fromJson(Map<String, dynamic> json) {
     final MessageType type = MessageType.values.firstWhere(
-        (status) => status.toString() == 'Status.${json['action']}',
+        (type) => type.toString() == 'MessageType.${json['type']}',
         orElse: () => null);
 
     return json == null
@@ -50,12 +50,12 @@ class ConversationMessage extends Message {
   /// Get a json object representing the [ConversationMessage]
   @override
   Map<String, dynamic> toJson() => {
-        'to': to,
-        'from': from,
-        'type': type,
-        'content': content,
-        'reportUrl': reportUrl,
-        'fallback': fallback,
+        'to': to.toString(),
+        'from': from.toString(),
+        'type': type.toString().replaceAll('MessageType.', ''),
+        'content': content.toJson(),
+        'reportUrl': reportUrl.toString(),
+        'fallback': fallback.toJson(),
         'source': source
       };
 }

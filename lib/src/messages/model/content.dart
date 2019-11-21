@@ -99,10 +99,7 @@ class LocationContent extends Content {
   LocationContent(this.location);
 
   @override
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    return null;
-  }
+  Map<String, dynamic> toJson() => location.toJson();
 }
 
 /// Class encapsulating a location.

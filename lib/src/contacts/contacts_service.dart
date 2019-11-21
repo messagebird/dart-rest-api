@@ -4,8 +4,8 @@ import 'model/messages.dart';
 
 /// Contacts service interface.
 abstract class ContactsService {
-  /// Create a new [Contact]. [parameters] is optional.
-  Future<Contact> create(String phoneNumber, {Map<String, dynamic> parameters});
+  /// Create a new [Contact]. Parameters are optional.
+  Future<Contact> create(Contact contact);
 
   /// Lists existing [Contact] objects. Pagination is optional. If a [limit] is
   /// set, an [offset] is also required.

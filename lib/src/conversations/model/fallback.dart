@@ -12,9 +12,18 @@ class Fallback {
   String after;
 
   /// Constructor.
-  Fallback({this.from, this.after});
+  Fallback(this.from, {this.after});
 
   /// Construct a [Fallback] object from a [json] object.
   factory Fallback.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : Fallback(from: json['from'], after: json['after']);
+      json == null ? null : Fallback(json['from'], after: json['after']);
+
+  /// Get a json object representing the [Fallback]
+  Map<String, String> toJson() {
+    final Map<String, String> json = {'from': from.toString()};
+    if (after != null) {
+      json.addAll({'after': after.toString()});
+    }
+    return json;
+  }
 }

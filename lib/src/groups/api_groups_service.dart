@@ -1,7 +1,8 @@
-import 'package:http/http.dart' show Response;
+import 'dart:convert';
 
 import '../base_service.dart';
 import 'groups_service.dart';
+import 'model/group.dart';
 
 /// API implementation of groups service.
 class ApiGroupsService extends BaseService implements GroupsService {
@@ -10,30 +11,43 @@ class ApiGroupsService extends BaseService implements GroupsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> addContacts(String groupId, List<String> contactIds) =>
-      get('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
-
-  @override
-  Future<Response> create(String name, {Map<String, dynamic> parameters}) {
-    parameters['name'] = name;
-    return post('/groups', body: parameters);
+  Future<void> addContacts(String groupId, List<String> contactIds) async {
+    await put('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
+    return Future.value();
   }
 
   @override
-  Future<Response> list({int limit, int offset}) =>
-      get('/groups', body: {'limit': limit, 'offset': offset});
+  Future<void> removeContacts(String groupId, List<String> contactIds) async {
+    await remove('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
+    return Future.value();
+  }
 
   @override
-  Future<Response> read(String id) => get('/groups/$id');
+  Future<Group> create(Group group) async {
+    final response = await post('/groups', body: group.toJson());
+    return Future.value(Group.fromJson(json.decode(response.body)['data']));
+  }
 
   @override
-  Future<Response> remove(String id) => delete('/groups/$id');
+  Future<List<Group>> list({int limit, int offset}) async {
+    final response =
+        await get('/groups', body: {'limit': limit, 'offset': offset});
+    return Future.value(Group.fromJsonList(json.decode(response.body)['data']));
+  }
 
   @override
-  Future<Response> update(String id, String name,
-      {Map<String, dynamic> parameters}) {
-    parameters['name'] = name;
-    return patch('/groups/$id', body: parameters);
+  Future<Group> read(String id) async {
+    final response = await get('/groups/$id');
+    return Future.value(Group.fromJson(json.decode(response.body)['data']));
+  }
+
+  @override
+  Future<void> remove(String id) => delete('/groups/$id');
+
+  @override
+  Future<Group> update(String id, {Group group}) async {
+    final response = await patch('/groups/$id', body: group.toJson());
+    return Future.value(Group.fromJson(json.decode(response.body)['data']));
   }
 
   String _getAddContactsQueryString(List<String> contactIds) {

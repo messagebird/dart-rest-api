@@ -3,8 +3,7 @@ class Call {
   /// The unique ID of the [Call].
   final String id;
 
-  /// The status of the [Call]. Possible values: `queued`, `starting`,
-  /// `ongoing`, `ended`.
+  /// The status of the [Call]. See [CallStatus] for allowed values.
   final CallStatus status;
 
   /// The source number of the [Call], without leading `+`, ommited if not
@@ -66,8 +65,8 @@ class Call {
         'source': source,
         'destination': destination,
         'createdAt': createdAt.toString(),
-        'updatedAt': updatedAt.toString(),
-        'endedAt': endedAt.toString()
+        'updatedAt': updatedAt.toIso8601String(),
+        'endedAt': endedAt.toIso8601String()
       };
 }
 

@@ -13,10 +13,8 @@ class ApiContactsService extends BaseService implements ContactsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Contact> create(String phoneNumber,
-      {Map<String, dynamic> parameters}) async {
-    parameters['msisdn'] = phoneNumber;
-    final response = await post('/contacts', body: parameters);
+  Future<Contact> create(Contact contact) async {
+    final response = await post('/contacts', body: contact.toJson());
     return Future.value(Contact.fromJson(json.decode(response.body)['data']));
   }
 
@@ -29,15 +27,16 @@ class ApiContactsService extends BaseService implements ContactsService {
   }
 
   @override
-  Future<Groups> listGroups(String id, {int limit, int offset}) async {
-    final response = await get('/contacts/$id/groups',
+  Future<Groups> listGroups(String contactId, {int limit, int offset}) async {
+    final response = await get('/contacts/$contactId/groups',
         body: {'limit': limit, 'offset': offset});
     return Future.value(Groups.fromJson(json.decode(response.body)['data']));
   }
 
   @override
-  Future<Messages> listMessages(String id, {int limit, int offset}) async {
-    final response = await get('/contacts/$id/messages',
+  Future<Messages> listMessages(String contactId,
+      {int limit, int offset}) async {
+    final response = await get('/contacts/$contactId/messages',
         body: {'limit': limit, 'offset': offset});
     return Future.value(Messages.fromJson(json.decode(response.body)['data']));
   }

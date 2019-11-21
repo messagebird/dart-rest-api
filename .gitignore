@@ -11,7 +11,7 @@ build/
 doc/api/
 
 # MessageBird credentials
-test_resources
+test_resources/keys.json
 
 # VScode directory
 .vscode

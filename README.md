@@ -25,8 +25,8 @@ import package:messagebird-dart/messagebird-dart.dart
 Then, send API request using the following approach.
 ```dart
 // Example: get balance
-BalanceService balanceService = ApiBalanceService(/*YOUR_KEY_HERE*/);
-balanceService.read().then((balance) => print('My balance is ${balance.body['amount']}'));
+final BalanceService balanceService = ApiBalanceService(/*YOUR_KEY_HERE*/);
+balanceService.read().then((balance) => print('My balance is ${balance.amount}'));
 ```
 
 ## Conversations Whatsapp Sandbox
