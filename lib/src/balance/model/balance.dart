@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Balance] object.
 class Balance {
   /// The payment method. Possible values are `prepaid` and `postpaid`.
@@ -13,13 +15,22 @@ class Balance {
   final double amount;
 
   /// Constructor.
-  Balance({this.payment, this.type, this.amount});
+  Balance({
+    this.payment,
+    this.type,
+    this.amount,
+  });
 
-  /// Construct a balance object from a json object.
-  factory Balance.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [Balance] object from a json [String].
+  factory Balance.fromJson(String source) =>
+      Balance.fromMap(json.decode(source));
+
+  /// Construct a [Balance] object from a [Map].
+  factory Balance.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Balance(
-          payment: json['payment'].toString(),
-          type: json['type'].toString(),
-          amount: double.parse(json['amount'].toString()));
+          payment: map['payment'],
+          type: map['type'],
+          amount: double.parse(map['amount'].toString()),
+        );
 }

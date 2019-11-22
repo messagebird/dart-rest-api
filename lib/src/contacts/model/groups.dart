@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Groups] object.
 class Groups {
   /// The total count of groups that contact belongs to.
@@ -7,15 +9,29 @@ class Groups {
   String href;
 
   /// Constructor.
-  Groups({this.totalCount, this.href});
+  Groups({
+    this.totalCount,
+    this.href,
+  });
 
-  /// Construct a [Groups] object from a [json] object.
-  factory Groups.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct an [Groups] object from a json [String].
+  factory Groups.fromJson(String source) =>
+      Groups.fromMap(json.decode(source)['data']);
+
+  /// Construct a [Groups] object from a [Map].
+  factory Groups.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Groups(
-          totalCount: int.parse(json['totalCount']),
-          href: json['href'].toString());
+          totalCount: map['totalCount'],
+          href: map['href'],
+        );
 
-  /// Get a json object representing the [Groups]
-  Map<String, dynamic> toJson() => {'totalCount': totalCount, 'href': href};
+  /// Get a json [String] representing the [Groups].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'totalCount': totalCount,
+        'href': href,
+      };
 }

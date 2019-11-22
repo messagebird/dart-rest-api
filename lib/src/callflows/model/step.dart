@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Step] object.
 class Step {
   /// The unique (within the call flow) identifier of the step.
@@ -12,46 +14,41 @@ class Step {
   final Map<StepOption, Object> options;
 
   /// Constructor.
-  Step({this.id, this.action, this.options});
+  Step({
+    this.id,
+    this.action,
+    this.options,
+  });
 
-  /// Construct a [Step] object from a [json] object.
-  factory Step.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [Step] object from a json [String].
+  factory Step.fromJson(String source) => Step.fromMap(json.decode(source));
+
+  /// Construct a [Step] object from a [Map].
+  factory Step.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Step(
-          id: json['id'].toString(),
+          id: map['id'],
           action: StepAction.values.firstWhere(
-              (action) => action.toString() == 'StepAction.${json['action']}',
+              (action) => action.toString() == 'StepAction.${map['action']}',
               orElse: () => null),
-          options: json['options'] == null
+          options: map['options'] == null
               ? null
-              : Map.from(json['options']).map<StepOption, Object>(
-                  (key, value) => MapEntry(
+              : Map.from(map['options']).map<StepOption, Object>((key, value) =>
+                  MapEntry(
                       StepOption.values
                           .firstWhere((o) => o.toString() == 'StepOption.$key'),
                       value)));
 
-  /// Get a list of [Step] objects from a [json] object
-  static List<Step> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Step.fromJson(j)).toList();
+  /// Get a json [String] representing the [Step].
+  String toJson() => json.encode(toMap());
 
-  /// Get a json object representing the [Step]
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {};
-    if (id != null) {
-      json.addAll({'id': id});
-    }
-    if (action != null) {
-      json.addAll({'action': action.toString().replaceAll('Action.', '')});
-    }
-    if (options != null) {
-      json.addAll({
-        'options': options.map<String, String>((option, value) =>
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'action': action?.toString()?.replaceAll('Action.', ''),
+        'options': options?.map<String, String>((option, value) =>
             MapEntry(option.toString().replaceAll('Option.', ''), value))
-      });
-    }
-    return json;
-  }
+      };
 }
 
 /// Enumeration of [Step] actions.

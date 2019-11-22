@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../base_service.dart';
 import 'callflows_service.dart';
 import 'model/callflow.dart';
@@ -13,8 +11,8 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
   @override
   Future<Callflow> create(Callflow callflow) async {
     final response = await post('/call-flows',
-        hostname: BaseService.voiceEndpoint, body: callflow.toJson());
-    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
+        hostname: BaseService.voiceEndpoint, body: callflow.toMap());
+    return Future.value(Callflow.fromJson(response.body));
   }
 
   @override
@@ -22,15 +20,14 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
     final response = await get('/call-flows',
         hostname: BaseService.voiceEndpoint,
         body: {'page': page, 'perpage': perpage});
-    return Future.value(
-        Callflow.fromJsonList(json.decode(response.body)['data']));
+    return Future.value(Callflow.fromList(response.body));
   }
 
   @override
   Future<Callflow> read(String id) async {
     final response =
         await get('/call-flows/$id', hostname: BaseService.voiceEndpoint);
-    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
+    return Future.value(Callflow.fromJson(response.body));
   }
 
   @override
@@ -40,7 +37,7 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
   @override
   Future<Callflow> update(Callflow callflow) async {
     final response = await put('/call-flows/${callflow.id}',
-        hostname: BaseService.voiceEndpoint, body: callflow.toJson());
-    return Future.value(Callflow.fromJson(json.decode(response.body)['data']));
+        hostname: BaseService.voiceEndpoint, body: callflow.toMap());
+    return Future.value(Callflow.fromJson(response.body));
   }
 }

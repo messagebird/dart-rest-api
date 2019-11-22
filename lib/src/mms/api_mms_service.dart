@@ -1,4 +1,4 @@
-import 'package:http/http.dart' show Response;
+import 'package:messagebird_dart/src/mms/model/mms_message.dart';
 
 import '../base_service.dart';
 import 'mms_service.dart';
@@ -10,20 +10,24 @@ class ApiMmsService extends BaseService implements MmsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(Map<String, dynamic> parameters) {
-    if (parameters['recipients'] is List<String>) {
-      parameters['recipients'] = List.from(parameters['recipients']).join(',');
-    }
-    return post('/mms', body: parameters);
+  Future<MmsMessage> create(MmsMessage message) async {
+    final response = await post('/mms', body: message.toMap());
+    return Future.value(MmsMessage.fromJson(response.body));
   }
 
   @override
-  Future<Response> list({int limit, int offset}) =>
-      get('/mms', body: {'limit': limit, 'offset': offset});
+  Future<List<MmsMessage>> list({int limit, int offset}) async {
+    final response =
+        await get('/mms', body: {'limit': limit, 'offset': offset});
+    return Future.value(MmsMessage.fromList(response.body));
+  }
 
   @override
-  Future<Response> read(String id) => get('/mms/$id');
+  Future<MmsMessage> read(String id) async {
+    final response = await get('/mms/$id');
+    return Future.value(MmsMessage.fromJson(response.body));
+  }
 
   @override
-  Future<Response> remove(String id) => delete('/mms/$id');
+  Future<void> remove(String id) => delete('/mms/$id');
 }

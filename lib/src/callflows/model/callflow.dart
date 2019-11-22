@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'step.dart';
 
 /// Class encapsulating a [Callflow] object.
@@ -35,56 +37,52 @@ class Callflow {
   final DateTime updatedAt;
 
   /// Constructor.
-  Callflow(
-      {this.id,
-      this.title,
-      this.record,
-      this.steps,
-      this.isDefault,
-      this.createdAt,
-      this.updatedAt});
+  Callflow({
+    this.id,
+    this.title,
+    this.record,
+    this.steps,
+    this.isDefault,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-  /// Construct a [Callflow] object from a [json] object.
-  factory Callflow.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [Callflow] object from a json [String].
+  factory Callflow.fromJson(String source) =>
+      Callflow.fromMap(json.decode(source));
+
+  /// Construct a [Callflow] object from a [Map].
+  factory Callflow.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Callflow(
-          id: json['id'].toString(),
-          title: json['title'].toString(),
-          record: json['record'] == 'true',
-          steps: Step.fromJsonList(json['steps']),
-          isDefault: json['default'] == 'true',
-          createdAt: DateTime.parse(json['createdAt']),
-          updatedAt: DateTime.parse(json['updatedAt']));
+          id: map['id'],
+          title: map['title'],
+          record: map['record'],
+          steps:
+              List<Step>.from(map['steps']?.map((step) => Step.fromMap(step))),
+          isDefault: map['isDefault'],
+          createdAt: DateTime.parse(map['createdAt']),
+          updatedAt: DateTime.parse(map['updatedAt']),
+        );
 
-  /// Get a list of [Callflow] objects from a [json] object.
-  static List<Callflow> fromJsonList(Object json) => json == null
+  /// Get a json [String] representing the [Callflow].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'title': title,
+        'record': record,
+        'steps': List<dynamic>.from(steps.map((step) => step.toMap())),
+        'isDefault': isDefault,
+        'createdAt': createdAt.millisecondsSinceEpoch,
+        'updatedAt': updatedAt.millisecondsSinceEpoch,
+      };
+
+  /// Get a list of [Callflow] objects from a [json] source.
+  static List<Callflow> fromList(String source) => source == null
       ? null
-      : List.from(json).map((j) => Callflow.fromJson(j)).toList();
-
-  /// Get a json object representing the [Callflow]
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {};
-    if (id != null) {
-      json.addAll({'id': id});
-    }
-    if (title != null) {
-      json.addAll({'title': title});
-    }
-    if (record != null) {
-      json.addAll({'record': record});
-    }
-    if (steps != null) {
-      json.addAll({'steps': steps.map((step) => step.toJson()).toList()});
-    }
-    if (isDefault != null) {
-      json.addAll({'default': isDefault});
-    }
-    if (createdAt != null) {
-      json.addAll({'createdAt': createdAt.toString()});
-    }
-    if (updatedAt != null) {
-      json.addAll({'updatedAt': updatedAt.toString()});
-    }
-    return json;
-  }
+      : List.from(json.decode(source)['data'])
+          .map((j) => Callflow.fromMap(j))
+          .toList();
 }

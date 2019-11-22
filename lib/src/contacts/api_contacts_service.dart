@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../base_service.dart';
 import 'contacts_service.dart';
 import 'model/contact.dart';
@@ -14,23 +12,22 @@ class ApiContactsService extends BaseService implements ContactsService {
 
   @override
   Future<Contact> create(Contact contact) async {
-    final response = await post('/contacts', body: contact.toJson());
-    return Future.value(Contact.fromJson(json.decode(response.body)['data']));
+    final response = await post('/contacts', body: contact.toMap());
+    return Future.value(Contact.fromJson(response.body));
   }
 
   @override
   Future<List<Contact>> list({int limit, int offset}) async {
     final response =
         await get('/contacts', body: {'limit': limit, 'offset': offset});
-    return Future.value(
-        Contact.fromJsonList(json.decode(response.body)['data']));
+    return Future.value(Contact.fromJsonList(response.body));
   }
 
   @override
   Future<Groups> listGroups(String contactId, {int limit, int offset}) async {
     final response = await get('/contacts/$contactId/groups',
         body: {'limit': limit, 'offset': offset});
-    return Future.value(Groups.fromJson(json.decode(response.body)['data']));
+    return Future.value(Groups.fromJson(response.body));
   }
 
   @override
@@ -38,13 +35,13 @@ class ApiContactsService extends BaseService implements ContactsService {
       {int limit, int offset}) async {
     final response = await get('/contacts/$contactId/messages',
         body: {'limit': limit, 'offset': offset});
-    return Future.value(Messages.fromJson(json.decode(response.body)['data']));
+    return Future.value(Messages.fromJson(response.body));
   }
 
   @override
   Future<Contact> read(String id) async {
     final response = await get('/contacts/$id');
-    return Future.value(Contact.fromJson(json.decode(response.body)['data']));
+    return Future.value(Contact.fromJson(response.body));
   }
 
   @override
@@ -53,7 +50,7 @@ class ApiContactsService extends BaseService implements ContactsService {
   @override
   Future<Contact> update(Contact contact) async {
     final response =
-        await patch('/contacts/${contact.id}', body: contact.toJson());
-    return Future.value(Contact.fromJson(json.decode(response.body)['data']));
+        await patch('/contacts/${contact.id}', body: contact.toMap());
+    return Future.value(Contact.fromJson(response.body));
   }
 }

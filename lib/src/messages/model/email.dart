@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'content.dart';
 
 /// Class encapsulating an [Email] object.
@@ -45,46 +47,35 @@ class Email extends Content {
   /// The URL for delivery of status reports for the message. Must use https.
   String reportUrl;
 
-  /// Constructor.
-  Email(this.to, this.from, this.subject, this.content,
-      {this.id,
-      this.replyTo,
-      this.returnPath,
-      this.headers,
-      this.attachments,
-      this.tracking,
-      this.reportUrl});
-
-  /// Construct an [Email] object from a [json] object.
-  factory Email.fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : Email(
-          Recipient.fromJsonList(json['to']),
-          Recipient.fromJson(json['from']),
-          json['subject'].toString(),
-          EmailContent.fromJson(json['content']),
-          id: json['id'].toString(),
-          replyTo: json['replyTo'].toString(),
-          returnPath: json['returnPath'].toString(),
-          headers: Map<String, String>.from(json['headers']),
-          attachments: Attachment.fromJsonList(json['attachments']),
-          tracking: Tracking.fromJson(json['tracking']),
-          reportUrl: json['reportUrl'].toString());
+  /// Constructor
+  Email({
+    this.id,
+    this.to,
+    this.from,
+    this.subject,
+    this.replyTo,
+    this.headers,
+    this.attachments,
+    this.tracking,
+    this.reportUrl,
+  });
 
   @override
-  Map<String, dynamic> toJson() => {
-        'to': to.map((recipient) => recipient.toJson()),
-        'from': from.toJson(),
-        'subject': subject,
-        'content': content.toJson(),
+  Map<String, dynamic> toMap() => {
         'id': id,
+        'to': List<dynamic>.from(to.map((recipient) => recipient.toMap())),
+        'from': from.toMap(),
+        'subject': subject,
         'replyTo': replyTo,
-        'returnPath': returnPath,
         'headers': headers,
-        'attachments': attachments.map((attachment) => attachment.toJson()),
-        'tracking': tracking.toJson(),
-        'reportUrl': reportUrl
+        'attachments': List<dynamic>.from(
+            attachments.map((attachment) => attachment.toMap())),
+        'tracking': tracking.toMap(),
+        'reportUrl': reportUrl,
       };
+
+  @override
+  String toJson() => json.encode(toMap());
 }
 
 /// The [EmailContent] object represents the content to be included as the body
@@ -97,26 +88,19 @@ class EmailContent extends Content {
   String text;
 
   /// Constructor.
-  EmailContent({this.html, this.text});
+  EmailContent({
+    this.html,
+    this.text,
+  });
 
-  /// Construct an [EmailContent] object from a [json] object.
-  factory EmailContent.fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : EmailContent(
-          html: json['html'].toString(), text: json['text'].toString());
-
-  /// Get a json object representing the [EmailContent]
   @override
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {};
-    if (html != null) {
-      json.addAll({'html': html});
-    }
-    if (text != null) {
-      json.addAll({'text': text});
-    }
-    return json;
-  }
+  Map<String, dynamic> toMap() => {
+        'html': html,
+        'text': text,
+      };
+
+  @override
+  String toJson() => json.encode(toMap());
 }
 
 /// Class encapsulating a [Recipient] object.
@@ -139,25 +123,34 @@ class Recipient {
   List<String> variables;
 
   /// Constructor.
-  Recipient(this.email, this.name, this.variables);
+  Recipient({
+    this.email,
+    this.name,
+    this.variables,
+  });
 
-  /// Construct a [Recipient] object from a [json] object.
-  factory Recipient.fromJson(Map<String, dynamic> json) => json == null
-      ? null
-      : Recipient(json['email'].toString(), json['name'],
-          List<String>.from(json['custom']));
-
-  /// Get a list of [Recipient] objects from a [json] object
-  static List<Recipient> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Recipient.fromJson(j)).toList();
-
-  /// Get a json object representing the [Recipient]
-  Map<String, dynamic> toJson() => {
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'email': email,
         'name': name,
-        'variables': variables,
+        'variables': List<String>.from(variables.map((variable) => variable)),
       };
+
+  /// Construct a [Recipient] object from a [Map].
+  factory Recipient.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Recipient(
+          email: map['email'],
+          name: map['name'],
+          variables: List<String>.from(map['variables']),
+        );
+
+  /// Get a json [String] representing the [Recipient].
+  String toJson() => json.encode(toMap());
+
+  /// Construct an [Recipient] object from a json [String].
+  factory Recipient.fromJson(String source) =>
+      Recipient.fromMap(json.decode(source));
 }
 
 /// Class encapsulating an [Attachment] object.
@@ -177,25 +170,39 @@ class Attachment {
   String data;
 
   /// Constructor.
-  Attachment(this.name, this.type, this.data);
+  Attachment({
+    this.name,
+    this.type,
+    this.data,
+  });
 
-  /// Construct a [Attachment] object from a [json] object.
-  factory Attachment.fromJson(Map<String, String> json) => json == null
-      ? null
-      : Attachment(json['name'].toString(), json['type'].toString(),
-          json['data'].toString());
-
-  /// Get a list of [Attachment] objects from a [json] object
-  static List<Attachment> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Attachment.fromJson(j)).toList();
-
-  /// Get a json object representing the [Attachment]
-  Map<String, dynamic> toJson() => {
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'name': name,
         'type': type,
         'data': data,
       };
+
+  /// Construct an [Attachment] object from a [Map].
+  factory Attachment.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Attachment(
+          name: map['name'],
+          type: map['type'],
+          data: map['data'],
+        );
+
+  /// Get a json [String] representing the [Attachment].
+  String toJson() => json.encode(toMap());
+
+  /// Construct an [Attachment] object from a json [String].
+  factory Attachment.fromJson(String source) =>
+      Attachment.fromMap(json.decode(source));
+
+  /// Get a list of [Attachment] objects from a [json] object
+  static List<Attachment> fromList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Attachment.fromJson(j)).toList();
 }
 
 /// Class encapsulating a [Tracking] object.
@@ -207,16 +214,29 @@ class Tracking {
   bool click;
 
   /// Constructor.
-  Tracking({this.open = true, this.click = true});
+  Tracking({
+    this.open,
+    this.click,
+  });
 
-  /// Construct a [Tracking] object from a [json] object.
-  factory Tracking.fromJson(Map<String, String> json) => json == null
-      ? null
-      : Tracking(open: json['open'] == 'true', click: json['click'] == 'true');
-
-  /// Get a json object representing the [Tracking]
-  Map<String, dynamic> toJson() => {
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'open': open,
         'click': click,
       };
+
+  /// Construct a [Tracking] object from a [Map].
+  factory Tracking.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Tracking(
+          open: map['open'],
+          click: map['click'],
+        );
+
+  /// Get a json [String] representing the [Tracking] object.
+  String toJson() => json.encode(toMap());
+
+  /// Construct a [Tracking] object from a json [String].
+  factory Tracking.fromJson(String source) =>
+      Tracking.fromMap(json.decode(source));
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'groups.dart';
 import 'messages.dart';
 
@@ -47,28 +49,30 @@ class Contact {
       this.createdDatetime,
       this.updatedDatetime});
 
-  /// Construct a [Contact] object from a [json] object.
-  factory Contact.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct a [Contact] object from a json [String].
+  factory Contact.fromJson(String source) =>
+      Contact.fromMap(json.decode(source)['data']);
+
+  /// Construct a [Contact] object from a [Map].
+  factory Contact.fromMap(Map<String, dynamic> map) => (map == null)
       ? null
       : Contact(
-          id: json['id'].toString(),
-          href: json['href'].toString(),
-          msisdn: json['msisdn'].toString(),
-          firstName: json['firstName'].toString(),
-          lastName: json['lastName'].toString(),
-          custom: List<String>.from(json['custom']),
-          groups: Groups.fromJson(json['groups']),
-          messages: Messages.fromJson(json['messages']),
-          createdDatetime: DateTime.parse(json['createdDatetime'].toString()),
-          updatedDatetime: DateTime.parse(json['updatedDatetime'].toString()));
+          id: map['id'].toString(),
+          href: map['href'].toString(),
+          msisdn: map['msisdn'].toString(),
+          firstName: map['firstName'].toString(),
+          lastName: map['lastName'].toString(),
+          custom: List<String>.from(map['custom']),
+          groups: Groups.fromJson(map['groups']),
+          messages: Messages.fromJson(map['messages']),
+          createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
+          updatedDatetime: DateTime.parse(map['updatedDatetime'].toString()));
 
-  /// Get a list of [Contact] objects from a [json] object
-  static List<Contact> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Contact.fromJson(j)).toList();
+  /// Get a json [String] representing the [Contact].
+  String toJson() => json.encode(toMap());
 
-  /// Get a json object representing the [Contact]
-  Map<String, dynamic> toJson() => {
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'id': id,
         'href': href,
         'msisdn': msisdn,
@@ -80,4 +84,11 @@ class Contact {
         'createdDatetime': createdDatetime.toIso8601String(),
         'updatedDatetime': createdDatetime.toIso8601String()
       };
+
+  /// Get a list of [Contact] objects from a [json] String
+  static List<Contact> fromJsonList(String source) => source == null
+      ? null
+      : List.from(json.decode(source)['data'])
+          .map((j) => Contact.fromJson(j))
+          .toList();
 }

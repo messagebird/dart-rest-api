@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Call] object.
 class Call {
   /// The unique ID of the [Call].
@@ -27,47 +29,52 @@ class Call {
   final DateTime endedAt;
 
   /// Constructor.
-  Call(
-      {this.id,
-      this.status,
-      this.source,
-      this.destination,
-      this.createdAt,
-      this.updatedAt,
-      this.endedAt});
+  Call({
+    this.id,
+    this.status,
+    this.source,
+    this.destination,
+    this.createdAt,
+    this.updatedAt,
+    this.endedAt,
+  });
 
-  /// Construct a [Call] object from a [json] object.
-  factory Call.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    return Call(
-        id: json['id'].toString(),
-        status: CallStatus.values.firstWhere(
-            (status) => status.toString() == 'CallStatus.${json['status']}',
-            orElse: () => null),
-        source: json['source'].toString(),
-        destination: json['destination'].toString(),
-        createdAt: DateTime.parse(json['createdAt'].toString()),
-        updatedAt: DateTime.parse(json['updatedAt'].toString()),
-        endedAt: DateTime.parse(json['endedAt'].toString()));
-  }
+  /// Construct a [Call] object from a json [String].
+  factory Call.fromJson(String source) => Call.fromMap(json.decode(source));
 
-  /// Get a list of [Call] objects from a [json] object
-  static List<Call> fromJsonList(Object json) => json == null
+  /// Construct a [Call] object from a [Map].
+  factory Call.fromMap(Map<String, dynamic> map) => map == null
       ? null
-      : List.from(json).map((j) => Call.fromJson(j)).toList();
+      : Call(
+          id: map['id'],
+          status: CallStatus.values.firstWhere(
+              (status) => status.toString() == 'CallStatus.${map['status']}',
+              orElse: () => null),
+          source: map['source'],
+          destination: map['destination'],
+          createdAt: DateTime.parse(map['createdAt']),
+          updatedAt: DateTime.parse(map['updatedAt']),
+          endedAt: DateTime.parse(map['endedAt']),
+        );
 
-  /// Get a json object representing the [Call]
-  Map<String, dynamic> toJson() => {
+  /// Get a json [String] representing the [Call].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'id': id,
-        'status': status,
+        'status': status.toString().replaceAll('CallStatus.', ''),
         'source': source,
         'destination': destination,
-        'createdAt': createdAt.toString(),
-        'updatedAt': updatedAt.toIso8601String(),
-        'endedAt': endedAt.toIso8601String()
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        'endedAt': endedAt,
       };
+
+  /// Get a list of [Call] objects from a [json] object
+  static List<Call> fromList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Call.fromJson(j)).toList();
 }
 
 /// Enumeration of [CallStatus] statusses.

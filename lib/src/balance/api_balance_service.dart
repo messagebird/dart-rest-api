@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:messagebird_dart/src/balance/model/balance.dart';
 
 import '../base_service.dart';
@@ -14,6 +12,6 @@ class ApiBalanceService extends BaseService implements BalanceService {
   @override
   Future<Balance> read() async {
     final response = await get('/balance');
-    return Future.value(Balance.fromJson(json.decode(response.body)));
+    return Future.value(Balance.fromJson(response.body));
   }
 }

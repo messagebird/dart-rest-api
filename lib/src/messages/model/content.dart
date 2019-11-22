@@ -1,8 +1,31 @@
+import 'dart:convert';
+
 import 'email.dart';
 import 'message.dart';
 
+/// Class encapsulating audio content.
+class AudioContent extends Content {
+  /// Required for type `audio`.
+  Media audio;
+
+  /// Constructor.
+  AudioContent(this.audio);
+
+  @override
+  String toJson() => audio.toJson();
+
+  @override
+  Map<String, dynamic> toMap() => audio.toMap();
+}
+
 /// Class encapsulating a [Content] object.
 abstract class Content {
+  /// Get a json [String] representing the [Content]
+  String toJson();
+
+  /// Get a [Map] representing the [Content]
+  Map<String, dynamic> toMap();
+
   /// Get a [Content] from [json] object based on [type].
   static Content get(MessageType type, Map<String, dynamic> json) {
     switch (type) {
@@ -25,57 +48,42 @@ abstract class Content {
         return null;
     }
   }
-
-  /// Get a json object representing the [Content]
-  Map<String, dynamic> toJson();
 }
 
-/// Class encapsulating text content.
-class TextContent extends Content {
-  /// Required for type `text`. The plain-text content of the message.
-  String text;
+/// Class encapsulating the currency.
+class Currency {
+  /// Required. ISO 4217 currency code.
+  String currencyCode;
+
+  /// Required. Total amount together with cents as a float, multiplied by 1000.
+  double amount;
 
   /// Constructor.
-  TextContent(this.text);
+  Currency({
+    this.currencyCode,
+    this.amount,
+  });
 
-  @override
-  Map<String, dynamic> toJson() => {'text': text.toString()};
-}
+  /// Construct a [Currency] object from a json [String].
+  factory Currency.fromJson(String source) =>
+      Currency.fromMap(json.decode(source));
 
-/// Class encapsulating image content.
-class ImageContent extends Content {
-  /// Required for type `image`.
-  Media image;
+  /// Construct a [Currency] object from a [Map].
+  factory Currency.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Currency(
+          currencyCode: map['currencyCode'],
+          amount: map['amount'],
+        );
 
-  /// Constructor.
-  ImageContent(this.image);
+  /// Get a json [String] representing the [Currency] object.
+  String toJson() => json.encode(toMap());
 
-  @override
-  Map<String, dynamic> toJson() => image.toJson();
-}
-
-/// Class encapsulating audio content.
-class AudioContent extends Content {
-  /// Required for type `audio`.
-  Media audio;
-
-  /// Constructor.
-  AudioContent(this.audio);
-
-  @override
-  Map<String, dynamic> toJson() => audio.toJson();
-}
-
-/// Class encapsulating video content.
-class VideoContent extends Content {
-  /// Required for type `video`.
-  Media video;
-
-  /// Constructor.
-  VideoContent(this.video);
-
-  @override
-  Map<String, dynamic> toJson() => video.toJson();
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'currencyCode': currencyCode,
+        'amount': amount,
+      };
 }
 
 /// Class encapsulating file content.
@@ -87,39 +95,10 @@ class FileContent extends Content {
   FileContent(this.file);
 
   @override
-  Map<String, dynamic> toJson() => file.toJson();
-}
-
-/// Class encapsulating location content.
-class LocationContent extends Content {
-  /// Required for type `location`.
-  Location location;
-
-  /// Constructor.
-  LocationContent(this.location);
+  String toJson() => file.toJson();
 
   @override
-  Map<String, dynamic> toJson() => location.toJson();
-}
-
-/// Class encapsulating a location.
-class Location {
-  /// The latitude coordinates of the location.
-  double latitude;
-
-  /// The longitude coordinates of the location.
-  double longitude;
-
-  /// Constructor.
-  Location(this.latitude, this.longitude);
-
-  /// Construct a [Location] object from a [json] object.
-  factory Location.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : Location(json['latitude'], json['longitude']);
-
-  /// Get a json object representing the [Location]
-  Map<String, dynamic> toJson() =>
-      {'latitude': latitude, 'longitude': longitude};
+  Map<String, dynamic> toMap() => file.toMap();
 }
 
 /// Class encapsulating a highly structured message (HSM).
@@ -140,24 +119,38 @@ class HSMContent extends Content {
   /// Required.
   List<HSMLocalizableParameters> parameters;
 
-  /// Constructor.
-  HSMContent(this.namespace, this.templateName, this.language, this.parameters);
+  /// Constructor
+  HSMContent({
+    this.namespace,
+    this.templateName,
+    this.language,
+    this.parameters,
+  });
 
-  /// Construct a [HSMContent] object from a [json] object.
-  factory HSMContent.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct an [HSMContent] object from a json [String].
+  factory HSMContent.fromJson(String source) =>
+      HSMContent.fromMap(json.decode(source));
+
+  /// Construct a [HSMContent] object from a [Map].
+  factory HSMContent.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : HSMContent(
-          json['namespace'].toString(),
-          json['templateName'].toString(),
-          HSMLanguage.fromJson(json['language']),
-          HSMLocalizableParameters.fromJsonList(json['parameters']));
+          namespace: map['namespace'],
+          templateName: map['templateName'],
+          language: HSMLanguage.fromMap(map['language']),
+          parameters: HSMLocalizableParameters.fromList(map['parameters']),
+        );
 
   @override
-  Map<String, dynamic> toJson() => {
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() => {
         'namespace': namespace,
         'templateName': templateName,
-        'language': language.toJson(),
-        'parameters': parameters.map((parameter) => parameter.toJson()).toList()
+        'language': language.toMap(),
+        'parameters': List<dynamic>.from(
+            parameters.map((parameter) => parameter.toMap())),
       };
 }
 
@@ -175,15 +168,31 @@ class HSMLanguage {
   String code;
 
   /// Constructor.
-  HSMLanguage(this.policy, this.code);
+  HSMLanguage({
+    this.policy,
+    this.code,
+  });
 
-  /// Construct a [HSMLanguage] object from a [json] object.
-  factory HSMLanguage.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct an [HSMLanguage] object from a json [String].
+  factory HSMLanguage.fromJson(String source) =>
+      HSMLanguage.fromMap(json.decode(source));
+
+  /// Construct a [HSMLanguage] object from a [Map].
+  factory HSMLanguage.fromMap(Map<String, dynamic> map) => map == null
       ? null
-      : HSMLanguage(json['policy'].toString(), json['code'].toString());
+      : HSMLanguage(
+          policy: map['policy'],
+          code: map['code'],
+        );
 
-  /// Get a json object representing the [HSMLanguage]
-  Map<String, dynamic> toJson() => {'policy': policy, 'code': code};
+  /// Get a json [String] representing the [HSMLanguage].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'policy': policy,
+        'code': code,
+      };
 }
 
 /// Class encapsulating the localizable HSM parameters.
@@ -224,38 +233,89 @@ class HSMLocalizableParameters {
               currency: Currency.fromJson(json['currency']),
               dateTime: DateTime.parse(json['dateTime'].toString()));
 
-  /// Get a list of [HSMLocalizableParameters] objects from a [json] object
-  static List<HSMLocalizableParameters> fromJsonList(Object json) =>
-      json == null
-          ? null
-          : List.from(json)
-              .map((j) => HSMLocalizableParameters.fromJson(j))
-              .toList();
-
   /// Get a json object representing the [HSMLocalizableParameters]
   Map<String, dynamic> toJson() =>
       {'defaultValue': defaultValue, 'currency': currency.toJson()};
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'defaultValue': defaultValue,
+        'currency': currency.toMap(),
+        'dateTime': dateTime.millisecondsSinceEpoch,
+      };
+
+  /// Get a list of [HSMLocalizableParameters] objects from a [list] object
+  static List<HSMLocalizableParameters> fromList(Object list) => json == null
+      ? null
+      : List.from(list)
+          .map((j) => HSMLocalizableParameters.fromJson(j))
+          .toList();
 }
 
-/// Class encapsulating the currency.
-class Currency {
-  /// Required. ISO 4217 currency code.
-  String currencyCode;
-
-  /// Required. Total amount together with cents as a float, multiplied by 1000.
-  double amount;
+/// Class encapsulating image content.
+class ImageContent extends Content {
+  /// Required for type `image`.
+  Media image;
 
   /// Constructor.
-  Currency(this.currencyCode, this.amount);
+  ImageContent(this.image);
 
-  /// Construct a [Currency] object from a [json] object.
-  factory Currency.fromJson(Map<String, dynamic> json) => json == null
+  @override
+  String toJson() => image.toJson();
+
+  @override
+  Map<String, dynamic> toMap() => image.toMap();
+}
+
+/// Class encapsulating a location.
+class Location {
+  /// The latitude coordinates of the location.
+  double latitude;
+
+  /// The longitude coordinates of the location.
+  double longitude;
+
+  /// Constructor.
+  Location({
+    this.latitude,
+    this.longitude,
+  });
+
+  /// Construct an [Location] object from a json [String].
+  factory Location.fromJson(String source) =>
+      Location.fromMap(json.decode(source));
+
+  /// Construct a [Location] object from a [Map].
+  factory Location.fromMap(Map<String, dynamic> map) => map == null
       ? null
-      : Currency(json['currencyCode'].toString(), double.parse(json['amount']));
+      : Location(
+          latitude: map['latitude'],
+          longitude: map['longitude'],
+        );
 
-  /// Get a json object representing the [Currency]
-  Map<String, dynamic> toJson() =>
-      {'currencyCode': currencyCode, 'amount': amount};
+  /// Get a json [String] representing the [Location].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+}
+
+/// Class encapsulating location content.
+class LocationContent extends Content {
+  /// Required for type `location`.
+  Location location;
+
+  /// Constructor.
+  LocationContent(this.location);
+
+  @override
+  String toJson() => location.toJson();
+
+  @override
+  Map<String, dynamic> toMap() => location.toMap();
 }
 
 /// Class encapsulating a [Media] object.
@@ -267,22 +327,58 @@ class Media {
   String caption;
 
   /// Constructor.
-  Media(this.url, {this.caption});
+  Media({
+    this.url,
+    this.caption,
+  });
 
-  /// Construct a [Media] object from a [json] object.
-  factory Media.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct an [Media] object from a json [String].
+  factory Media.fromJson(String source) => Media.fromMap(json.decode(source));
+
+  /// Construct a [Media] object from a [Map].
+  factory Media.fromMap(Map<String, dynamic> map) => map == null
       ? null
-      : Media(json['url'].toString(), caption: json['caption'].toString());
+      : Media(
+          url: map['url'],
+          caption: map['caption'],
+        );
 
-  /// Get a json object representing the [Media]
-  Map<String, String> toJson() {
-    Map<String, String> json;
-    if (url != null) {
-      json.addAll({'url': url.toString()});
-    }
-    if (caption != null) {
-      json.addAll({'caption': caption.toString()});
-    }
-    return json;
-  }
+  /// Get a json [String] representing the [Media].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'url': url,
+        'caption': caption,
+      };
+}
+
+/// Class encapsulating text content.
+class TextContent extends Content {
+  /// Required for type `text`. The plain-text content of the message.
+  String text;
+
+  /// Constructor.
+  TextContent(this.text);
+
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() => {'text': text.toString()};
+}
+
+/// Class encapsulating video content.
+class VideoContent extends Content {
+  /// Required for type `video`.
+  Media video;
+
+  /// Constructor.
+  VideoContent(this.video);
+
+  @override
+  String toJson() => video.toJson();
+
+  @override
+  Map<String, dynamic> toMap() => video.toMap();
 }

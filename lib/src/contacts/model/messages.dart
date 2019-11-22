@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Messages] object.
 class Messages {
   /// The total count of messages sent to contact.
@@ -7,15 +9,29 @@ class Messages {
   String href;
 
   /// Constructor.
-  Messages({this.totalCount, this.href});
+  Messages({
+    this.totalCount,
+    this.href,
+  });
 
-  /// Construct a [Messages] object from a [json] object.
-  factory Messages.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct an [Messages] object from a json [String].
+  factory Messages.fromJson(String source) =>
+      Messages.fromMap(json.decode(source)['data']);
+
+  /// Construct a [Messages] object from a [Map].
+  factory Messages.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Messages(
-          totalCount: int.parse(json['totalCount']),
-          href: json['href'].toString());
+          totalCount: map['totalCount'],
+          href: map['href'],
+        );
 
-  /// Get a json object representing the [Messages]
-  Map<String, dynamic> toJson() => {'totalCount': totalCount, 'href': href};
+  /// Get a json [String] representing the [Messages].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'totalCount': totalCount,
+        'href': href,
+      };
 }

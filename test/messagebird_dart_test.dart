@@ -37,8 +37,8 @@ void main() {
 
     setUp(() async {
       callflowsService = ApiCallflowsService(credentials['test']);
-      callflowFromJson = Callflow.fromJsonList(json.decode(
-          File('test_resources/callflow.json').readAsStringSync())['data'])[0];
+      callflowFromJson = Callflow.fromJson(
+          File('test_resources/callflow.json').readAsStringSync());
       callflow = Callflow(
           id: 'de3ed163-d5fc-45f4-b8c4-7eea7458c635',
           title: 'Forward call to 31612345678',
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('Callflow serialization', () {
-      final Map<String, dynamic> serialized = callflowFromJson.toJson();
+      final Map<String, dynamic> serialized = callflowFromJson.toMap();
 
       expect(serialized['id'], equals(callflowFromJson.id));
       expect(serialized['title'], equals(callflowFromJson.title));

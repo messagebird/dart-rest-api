@@ -1,3 +1,5 @@
+/// An unofficial Dart client for MessageBird's REST API. Documentation can be
+/// found at: https://developers.messagebird.com.
 library messagebird_dart;
 
 export 'src/balance/api_balance_service.dart';
