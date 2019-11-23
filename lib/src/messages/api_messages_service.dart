@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../base_service.dart';
 import 'messages_service.dart';
 import 'model/message.dart';
@@ -12,14 +10,14 @@ class ApiMessagesService extends BaseService implements MessagesService {
 
   @override
   Future<Message> create(Message message) async {
-    final response = await post('/messages', body: message.toJson());
-    return Future.value(Message.fromJson(json.decode(response.body)['data']));
+    final response = await post('/messages', body: message.toMap());
+    return Future.value(Message.fromJson(response.body));
   }
 
   @override
   Future<Message> read(String id) async {
     final response = await get('/v1/messages/$id',
         hostname: BaseService.conversationsEndpoint);
-    return Future.value(Message.fromJson(json.decode(response.body)['data']));
+    return Future.value(Message.fromJson(response.body));
   }
 }

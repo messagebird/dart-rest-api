@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [MessagesCount] object.
 class MessagesCount {
   /// A link to the endpoint to retrieve messages of this conversation.
@@ -12,18 +14,39 @@ class MessagesCount {
   String lastMessageId;
 
   /// Constructor.
-  MessagesCount(this.href, this.totalCount, this.lastMessageId);
+  MessagesCount({
+    this.href,
+    this.totalCount,
+    this.lastMessageId,
+  });
 
-  /// Get a json object representing the [MessagesCount]
-  Map<String, dynamic> toJson() => {
-        'href': href,
-        'totalCount': totalCount.toString(),
-        'lastMessageId': lastMessageId
-      };
+  /// Construct a [MessagesCount] object from a json [String].
+  factory MessagesCount.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return MessagesCount.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
-  /// Construct a [MessagesCount] object from a [json] object.
-  factory MessagesCount.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct a [MessagesCount] object from a [Map].
+  factory MessagesCount.fromMap(Map<String, dynamic> map) => map == null
       ? null
-      : MessagesCount(json['href'].toString(), int.parse(json['totalCount']),
-          json['lastMessageId'].toString());
+      : MessagesCount(
+          href: map['href'].toString(),
+          totalCount: int.parse(map['totalCount'].toString()),
+          lastMessageId: map['lastMessageId'].toString(),
+        );
+
+  /// Get a json [String] representing the [MessagesCount].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'href': href,
+        'totalCount': totalCount,
+        'lastMessageId': lastMessageId,
+      };
 }

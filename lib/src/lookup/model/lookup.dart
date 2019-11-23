@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../hlr/model/hlr.dart';
 
 /// Class encapsulating a [Lookup] object.
@@ -25,28 +27,57 @@ class Lookup {
   Hlr hlr;
 
   /// Constructor.
-  Lookup(
-      {this.href,
-      this.countryCode,
-      this.countryPrefix,
-      this.phoneNumber,
-      this.type,
-      this.formats,
-      this.hlr});
+  Lookup({
+    this.href,
+    this.countryCode,
+    this.countryPrefix,
+    this.phoneNumber,
+    this.type,
+    this.formats,
+    this.hlr,
+  });
 
-  /// Construct an [Lookup] object from a [json] object.
-  factory Lookup.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [Lookup] object from a json [String].
+  factory Lookup.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Lookup.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
+
+  /// Construct a [Lookup] object from a [Map].
+  factory Lookup.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Lookup(
-          href: json['href'].toString(),
-          countryCode: json['countryCode'].toString(),
-          countryPrefix: int.parse(json['countryPrefix']),
-          phoneNumber: int.parse(json['phoneNumber']),
+          href: map['href'].toString(),
+          countryCode: map['countryCode'].toString(),
+          countryPrefix: int.parse(map['countryPrefix'].toString()),
+          phoneNumber: int.parse(map['phoneNumber'].toString()),
           type: LookupType.values.firstWhere(
-              (status) => status.toString() == 'LookupType.${json['status']}',
+              (status) =>
+                  status.toString() ==
+                  'LookupType.${map['type'].toString().replaceAll(' ', '_')}',
               orElse: () => LookupType.unknown),
-          formats: Map<String, String>.from(json['formats']),
-          hlr: Hlr.fromJson(json['hlr']));
+          formats: Map<String, String>.from(map['formats']),
+          hlr: Hlr.fromMap(map['hlr']),
+        );
+
+  /// Get a json [String] representing the [Lookup].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'href': href,
+        'countryCode': countryCode,
+        'countryPrefix': countryPrefix,
+        'phoneNumber': phoneNumber,
+        'type':
+            type.toString().replaceAll('LookupType.', '').replaceAll('_', ' '),
+        'formats': formats,
+        'hlr': hlr.toMap(),
+      };
 }
 
 /// Enumeration of [Lookup] types.

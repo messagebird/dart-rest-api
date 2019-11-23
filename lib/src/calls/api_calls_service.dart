@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../base_service.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
@@ -14,13 +12,13 @@ class ApiCallsService extends BaseService implements CallsService {
   Future<Call> create(Call call) async {
     final response = await post('/calls',
         hostname: BaseService.voiceEndpoint, body: call.toMap());
-    return Future.value(Call.fromJson(json.decode(response.body)['data']));
+    return Future.value(Call.fromJson(response.body));
   }
 
   @override
   Future<List<Call>> list() async {
     final response = await get('/calls', hostname: BaseService.voiceEndpoint);
-    return Future.value(Call.fromList(response.body));
+    return Future.value(Call.fromJsonList(response.body));
   }
 
   @override

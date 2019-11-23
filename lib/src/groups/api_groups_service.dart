@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../base_service.dart';
 import 'groups_service.dart';
 import 'model/group.dart';
@@ -24,21 +22,21 @@ class ApiGroupsService extends BaseService implements GroupsService {
 
   @override
   Future<Group> create(Group group) async {
-    final response = await post('/groups', body: group.toJson());
-    return Future.value(Group.fromJson(json.decode(response.body)['data']));
+    final response = await post('/groups', body: group.toMap());
+    return Future.value(Group.fromJson(response.body));
   }
 
   @override
   Future<List<Group>> list({int limit, int offset}) async {
     final response =
         await get('/groups', body: {'limit': limit, 'offset': offset});
-    return Future.value(Group.fromJsonList(json.decode(response.body)['data']));
+    return Future.value(Group.fromJsonList(response.body));
   }
 
   @override
   Future<Group> read(String id) async {
     final response = await get('/groups/$id');
-    return Future.value(Group.fromJson(json.decode(response.body)['data']));
+    return Future.value(Group.fromJson(response.body));
   }
 
   @override
@@ -46,8 +44,8 @@ class ApiGroupsService extends BaseService implements GroupsService {
 
   @override
   Future<Group> update(String id, {Group group}) async {
-    final response = await patch('/groups/$id', body: group.toJson());
-    return Future.value(Group.fromJson(json.decode(response.body)['data']));
+    final response = await patch('/groups/$id', body: group.toMap());
+    return Future.value(Group.fromJson(response.body));
   }
 
   String _getAddContactsQueryString(List<String> contactIds) {

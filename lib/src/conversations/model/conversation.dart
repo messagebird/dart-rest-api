@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:messagebird_dart/src/contacts/model/contact.dart';
 
 import 'channel.dart';
@@ -56,33 +58,71 @@ class Conversation {
   String lastUsedChannelId;
 
   /// Constructor.
-  Conversation(
-      this.id,
-      this.contact,
-      this.channels,
-      this.status,
-      this.messages,
-      this.createdDatetime,
-      this.updatedDatetime,
-      this.lastReceivedDatetime,
-      this.lastUsedChannelId);
+  Conversation({
+    this.id,
+    this.contact,
+    this.channels,
+    this.status,
+    this.messages,
+    this.createdDatetime,
+    this.updatedDatetime,
+    this.lastReceivedDatetime,
+    this.lastUsedChannelId,
+  });
 
-  /// Construct a [Conversation] object from a [json] object.
-  factory Conversation.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [Conversation] object from a json [String].
+  factory Conversation.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Conversation.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
+
+  /// Construct a [Conversation] object from a [Map].
+  factory Conversation.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Conversation(
-          json['id'].toString(),
-          Contact.fromJson(json['contact']),
-          Channel.fromJsonList(json['channels']),
-          ConversationStatus.values.firstWhere(
+          id: map['id'],
+          contact: Contact.fromMap(map['contact']),
+          channels: List<Channel>.from(
+              map['channels']?.map((channel) => Channel.fromMap(channel))),
+          status: ConversationStatus.values.firstWhere(
               (status) =>
-                  status.toString() == 'ConversationStatus.${json['status']}',
+                  status.toString() == 'ConversationStatus.${map['status']}',
               orElse: () => null),
-          MessagesCount.fromJson(json['messages']),
-          DateTime.parse(json['createdDatetime'].toString()),
-          DateTime.parse(json['updatedDatetime'].toString()),
-          DateTime.parse(json['lastReceivedDatetime'].toString()),
-          json['lastUsedChannelId'].toString());
+          messages: MessagesCount.fromMap(map['messages']),
+          createdDatetime: DateTime.parse(map['createdDatetime']),
+          updatedDatetime: DateTime.parse(map['updatedDatetime']),
+          lastReceivedDatetime: DateTime.parse(map['lastReceivedDatetime']),
+          lastUsedChannelId: map['lastUsedChannelId'],
+        );
+
+  /// Get a json [String] representing the [Conversation].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'contact': contact.toMap(),
+        'channels':
+            List<dynamic>.from(channels.map((channel) => channel.toMap())),
+        'status': status.toString().replaceAll('ConversationStatus.', ''),
+        'messages': messages.toMap(),
+        'createdDatetime': createdDatetime.toIso8601String(),
+        'updatedDatetime': updatedDatetime.toIso8601String(),
+        'lastReceivedDatetime': lastReceivedDatetime.toIso8601String(),
+        'lastUsedChannelId': lastUsedChannelId,
+      };
+
+  /// Get a list of [Conversation] objects from a json [String].
+  static List<Conversation> fromJsonList(String source) => source == null
+      ? null
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => Conversation.fromJson(j))
+          .toList();
 }
 
 /// Enumeration of [Conversation] statusses

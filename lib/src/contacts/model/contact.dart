@@ -50,8 +50,14 @@ class Contact {
       this.updatedDatetime});
 
   /// Construct a [Contact] object from a json [String].
-  factory Contact.fromJson(String source) =>
-      Contact.fromMap(json.decode(source)['data']);
+  factory Contact.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Contact.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Contact] object from a [Map].
   factory Contact.fromMap(Map<String, dynamic> map) => (map == null)
@@ -85,10 +91,10 @@ class Contact {
         'updatedDatetime': createdDatetime.toIso8601String()
       };
 
-  /// Get a list of [Contact] objects from a [json] String
+  /// Get a list of [Contact] objects from a json [String]
   static List<Contact> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'])
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
           .map((j) => Contact.fromJson(j))
           .toList();
 }

@@ -40,18 +40,25 @@ class Call {
   });
 
   /// Construct a [Call] object from a json [String].
-  factory Call.fromJson(String source) => Call.fromMap(json.decode(source));
+  factory Call.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Call.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Call] object from a [Map].
   factory Call.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Call(
-          id: map['id'],
+          id: map['id'].toString(),
           status: CallStatus.values.firstWhere(
               (status) => status.toString() == 'CallStatus.${map['status']}',
               orElse: () => null),
-          source: map['source'],
-          destination: map['destination'],
+          source: map['source'].toString(),
+          destination: map['destination'].toString(),
           createdAt: DateTime.parse(map['createdAt']),
           updatedAt: DateTime.parse(map['updatedAt']),
           endedAt: DateTime.parse(map['endedAt']),
@@ -66,15 +73,17 @@ class Call {
         'status': status.toString().replaceAll('CallStatus.', ''),
         'source': source,
         'destination': destination,
-        'createdAt': createdAt,
-        'updatedAt': updatedAt,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
         'endedAt': endedAt,
       };
 
-  /// Get a list of [Call] objects from a [json] object
-  static List<Call> fromList(Object json) => json == null
+  /// Get a list of [Call] objects from a json [String].
+  static List<Call> fromJsonList(String source) => source == null
       ? null
-      : List.from(json).map((j) => Call.fromJson(j)).toList();
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => Call.fromJson(j))
+          .toList();
 }
 
 /// Enumeration of [CallStatus] statusses.

@@ -1,4 +1,5 @@
-import '../../contacts/model/contact.dart';
+import 'dart:convert';
+
 import 'contacts.dart';
 
 /// Class encapsulating a [Group] object.
@@ -25,37 +26,54 @@ class Group {
   DateTime updatedDatetime;
 
   /// Constructor.
-  Group(
-      {this.id,
-      this.name,
-      this.href,
-      this.contacts,
-      this.createdDatetime,
-      this.updatedDatetime});
+  Group({
+    this.id,
+    this.href,
+    this.name,
+    this.contacts,
+    this.createdDatetime,
+    this.updatedDatetime,
+  });
 
-  /// Construct a [Group] object from a [json] object.
-  factory Group.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct a [Group] object from a json [String].
+  factory Group.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Group.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
+
+  /// Construct a [Group] object from a [Map].
+  factory Group.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Group(
-          id: json['id'].toString(),
-          name: json['name'].toString(),
-          href: json['href'].toString(),
-          contacts: Contacts.fromJson(json['contacts']),
-          createdDatetime: DateTime.parse(json['createdDatetime'].toString()),
-          updatedDatetime: DateTime.parse(json['updatedDatetime'].toString()));
+          id: map['id'],
+          href: map['href'],
+          name: map['name'],
+          contacts: Contacts.fromMap(map['contacts']),
+          createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
+          updatedDatetime: DateTime.parse(map['updatedDatetime'].toString()),
+        );
 
-  /// Get a list of [Group] objects from a [json] object
-  static List<Group> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Group.fromJson(j)).toList();
+  /// Get a json [String] representing the [Group].
+  String toJson() => json.encode(toMap());
 
-  /// Get a json object representing the [Contact]
-  Map<String, dynamic> toJson() => {
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
         'id': id,
         'href': href,
         'name': name,
-        'contacts': contacts.toJson(),
+        'contacts': contacts.toMap(),
         'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': updatedDatetime.toIso8601String()
+        'updatedDatetime': updatedDatetime.toIso8601String(),
       };
+
+  /// Get a list of [Group] objects from a json [String].
+  static List<Group> fromJsonList(String source) => source == null
+      ? null
+      : List<String>.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => Group.fromJson(j))
+          .toList();
 }

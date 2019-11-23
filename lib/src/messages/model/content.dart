@@ -65,15 +65,21 @@ class Currency {
   });
 
   /// Construct a [Currency] object from a json [String].
-  factory Currency.fromJson(String source) =>
-      Currency.fromMap(json.decode(source));
+  factory Currency.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Currency.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Currency] object from a [Map].
   factory Currency.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Currency(
-          currencyCode: map['currencyCode'],
-          amount: map['amount'],
+          currencyCode: map['currencyCode'].toString(),
+          amount: double.parse(map['amount'].toString()),
         );
 
   /// Get a json [String] representing the [Currency] object.
@@ -128,15 +134,22 @@ class HSMContent extends Content {
   });
 
   /// Construct an [HSMContent] object from a json [String].
-  factory HSMContent.fromJson(String source) =>
-      HSMContent.fromMap(json.decode(source));
+  factory HSMContent.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return HSMContent.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [HSMContent] object from a [Map].
   factory HSMContent.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : HSMContent(
-          namespace: map['namespace'],
-          templateName: map['templateName'],
+          namespace: map['namespace'].toString(),
+          templateName: map['templateName'].toString(),
           language: HSMLanguage.fromMap(map['language']),
           parameters: HSMLocalizableParameters.fromList(map['parameters']),
         );
@@ -174,15 +187,22 @@ class HSMLanguage {
   });
 
   /// Construct an [HSMLanguage] object from a json [String].
-  factory HSMLanguage.fromJson(String source) =>
-      HSMLanguage.fromMap(json.decode(source));
+  factory HSMLanguage.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return HSMLanguage.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [HSMLanguage] object from a [Map].
   factory HSMLanguage.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : HSMLanguage(
-          policy: map['policy'],
-          code: map['code'],
+          policy: map['policy'].toString(),
+          code: map['code'].toString(),
         );
 
   /// Get a json [String] representing the [HSMLanguage].
@@ -241,7 +261,7 @@ class HSMLocalizableParameters {
   Map<String, dynamic> toMap() => {
         'defaultValue': defaultValue,
         'currency': currency.toMap(),
-        'dateTime': dateTime.millisecondsSinceEpoch,
+        'dateTime': dateTime.toIso8601String(),
       };
 
   /// Get a list of [HSMLocalizableParameters] objects from a [list] object
@@ -282,15 +302,21 @@ class Location {
   });
 
   /// Construct an [Location] object from a json [String].
-  factory Location.fromJson(String source) =>
-      Location.fromMap(json.decode(source));
+  factory Location.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Location.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Location] object from a [Map].
   factory Location.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Location(
-          latitude: map['latitude'],
-          longitude: map['longitude'],
+          latitude: double.parse(map['latitude'].toString()),
+          longitude: double.parse(map['longitude'].toString()),
         );
 
   /// Get a json [String] representing the [Location].
@@ -339,8 +365,8 @@ class Media {
   factory Media.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Media(
-          url: map['url'],
-          caption: map['caption'],
+          url: map['url'].toString(),
+          caption: map['caption'].toString(),
         );
 
   /// Get a json [String] representing the [Media].

@@ -20,7 +20,7 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
     final response = await get('/call-flows',
         hostname: BaseService.voiceEndpoint,
         body: {'page': page, 'perpage': perpage});
-    return Future.value(Callflow.fromList(response.body));
+    return Future.value(Callflow.fromJsonList(response.body));
   }
 
   @override

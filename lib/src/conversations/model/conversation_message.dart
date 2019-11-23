@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:messagebird_dart/src/messages/model/content.dart';
 
 import '../../messages/model/message.dart';
-
 import 'fallback.dart';
 
 /// Class encapsulating a [ConversationMessage] object.
@@ -24,32 +25,42 @@ class ConversationMessage extends Message {
       Map<String, dynamic> source})
       : super(to: to, from: from, type: type, content: content, source: source);
 
-  /// Construct a [ConversationMessage] object from a [json] object.
-  factory ConversationMessage.fromJson(Map<String, dynamic> json) {
-    final MessageType type = MessageType.values.firstWhere(
-        (type) => type.toString() == 'MessageType.${json['type']}',
-        orElse: () => null);
-
-    return json == null
-        ? null
-        : ConversationMessage(
-            to: json['to'].toString(),
-            from: json['from'].toString(),
-            type: type,
-            content: Content.get(type, json['content']),
-            reportUrl: json['reportUrl'].toString(),
-            fallback: Fallback.fromJson(json['fallback']),
-            source: json['source']);
+  /// Construct a [ConversationMessage] object from a json [String].
+  factory ConversationMessage.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return ConversationMessage.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
   }
 
-  /// Get a list of [ConversationMessage] objects from a [json] object
-  static List<ConversationMessage> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => ConversationMessage.fromJson(j)).toList();
+  /// Construct a [ConversationMessage] object from a [Map].
+  factory ConversationMessage.fromMap(Map<String, dynamic> map) {
+    final MessageType type = MessageType.values.firstWhere(
+        (type) => type.toString() == 'MessageType.${map['type']}',
+        orElse: () => null);
+
+    return map == null
+        ? null
+        : ConversationMessage(
+            to: map['to'].toString(),
+            from: map['from'].toString(),
+            type: type,
+            content: Content.get(type, map['content']),
+            reportUrl: map['reportUrl'].toString(),
+            fallback: Fallback.fromJson(map['fallback']),
+            source: map['source']);
+  }
+
+  /// Get a json [String] representing the [ConversationMessage].
+  @override
+  String toJson() => json.encode(toMap());
 
   /// Get a json object representing the [ConversationMessage]
   @override
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'to': to.toString(),
         'from': from.toString(),
         'type': type.toString().replaceAll('MessageType.', ''),
@@ -58,4 +69,11 @@ class ConversationMessage extends Message {
         'fallback': fallback.toJson(),
         'source': source
       };
+
+  /// Get a list of [ConversationMessage] objects from a json [String].
+  static List<ConversationMessage> fromJsonList(String source) => source == null
+      ? null
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => ConversationMessage.fromJson(j))
+          .toList();
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'content.dart';
 
 /// Class encapsulating a [Message] object.
@@ -69,43 +71,45 @@ class Message {
       this.updatedDatetime,
       this.source});
 
-  /// Construct a [Message] object from a [json] object.
-  factory Message.fromJson(Map<String, dynamic> json) {
+  /// Construct a [Message] object from a json [String].
+  factory Message.fromJson(String source) =>
+      Message.fromMap(json.decode(source));
+
+  /// Construct a [Message] object from a [Map].
+  factory Message.fromMap(Map<String, dynamic> map) {
     final MessageType type = MessageType.values.firstWhere(
-        (type) => type.toString() == 'MessageType.${json['type'].toString()}',
+        (type) => type.toString() == 'MessageType.${map['type'].toString()}',
         orElse: () => null);
-    return json == null
+    return map == null
         ? null
         : Message(
-            id: json['id'].toString(),
-            conversationId: json['conversationId'].toString(),
-            channelId: json['channelId'].toString(),
-            to: json['to'].toString(),
-            from: json['from'].toString(),
+            id: map['id'].toString(),
+            conversationId: map['conversationId'].toString(),
+            channelId: map['channelId'].toString(),
+            to: map['to'].toString(),
+            from: map['from'].toString(),
             direction: MessageDirection.values.firstWhere(
                 (direction) =>
                     direction.toString() ==
-                    'MessageDirection.${json['direction'].toString()}',
+                    'MessageDirection.${map['direction'].toString()}',
                 orElse: () => null),
             status: MessageStatus.values.firstWhere(
                 (status) =>
                     status.toString() ==
-                    'MessageStatus.${json['status'].toString()}',
+                    'MessageStatus.${map['status'].toString()}',
                 orElse: () => null),
             type: type,
-            content: Content.get(type, json['content']),
-            createdDatetime: DateTime.parse(json['createdDatetime'].toString()),
-            updatedDatetime: DateTime.parse(json['updatedDatetime'].toString()),
-            source: json['source']);
+            content: Content.get(type, map['content']),
+            createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
+            updatedDatetime: DateTime.parse(map['updatedDatetime'].toString()),
+            source: map['source']);
   }
 
-  /// Get a list of [Message] objects from a [json] object
-  static List<Message> fromJsonList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Message.fromJson(j)).toList();
+  /// Get a json [String] representing the [Message].
+  String toJson() => json.encode(toMap());
 
-  /// Get a json object representing the [Message]
-  Map<String, dynamic> toJson() => {
+  /// Construct a [Message] object from a [Map].
+  Map<String, dynamic> toMap() => {
         'id': id,
         'conversationId': conversationId,
         'channelId': channelId,
@@ -118,6 +122,11 @@ class Message {
         'updatedDatetime': updatedDatetime.toIso8601String(),
         'source': source
       };
+
+  /// Get a list of [Message] objects from a [json] object
+  static List<Message> fromJsonList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Message.fromJson(j)).toList();
 }
 
 /// The direction of the message.
@@ -127,33 +136,6 @@ enum MessageDirection {
 
   /// Inbound message received from a customer.
   received
-}
-
-/// The type of message content.
-enum MessageType {
-  /// Text message type.
-  text,
-
-  /// Image message type.
-  image,
-
-  /// Audio content type.
-  audio,
-
-  /// Video content type.
-  video,
-
-  /// Location content type.
-  location,
-
-  /// File content type.
-  file,
-
-  /// Highly Structured Message (HSM) content type. Only available for WhatsApp.
-  hsm,
-
-  /// Email content type.
-  email
 }
 
 /// The status of the message.
@@ -181,4 +163,31 @@ enum MessageStatus {
 
   /// Message deleted.
   deleted
+}
+
+/// The type of message content.
+enum MessageType {
+  /// Text message type.
+  text,
+
+  /// Image message type.
+  image,
+
+  /// Audio content type.
+  audio,
+
+  /// Video content type.
+  video,
+
+  /// Location content type.
+  location,
+
+  /// File content type.
+  file,
+
+  /// Highly Structured Message (HSM) content type. Only available for WhatsApp.
+  hsm,
+
+  /// Email content type.
+  email
 }

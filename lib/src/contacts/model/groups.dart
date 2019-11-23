@@ -15,8 +15,14 @@ class Groups {
   });
 
   /// Construct an [Groups] object from a json [String].
-  factory Groups.fromJson(String source) =>
-      Groups.fromMap(json.decode(source)['data']);
+  factory Groups.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Groups.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Groups] object from a [Map].
   factory Groups.fromMap(Map<String, dynamic> map) => map == null

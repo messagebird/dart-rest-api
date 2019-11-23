@@ -19,14 +19,21 @@ class RecipientItem {
   });
 
   /// Construct an [RecipientItem] object from a json [String].
-  factory RecipientItem.fromJson(String source) =>
-      RecipientItem.fromMap(json.decode(source));
+  factory RecipientItem.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return RecipientItem.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [RecipientItem] object from a [Map].
   factory RecipientItem.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : RecipientItem(
-          recipient: map['recipient'],
+          recipient: int.parse(map['recipient'].toString()),
           statusDatetime: DateTime.parse(map['statusDatetime']),
         );
 

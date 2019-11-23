@@ -21,13 +21,20 @@ class Step {
   });
 
   /// Construct a [Step] object from a json [String].
-  factory Step.fromJson(String source) => Step.fromMap(json.decode(source));
+  factory Step.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Step.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Step] object from a [Map].
   factory Step.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Step(
-          id: map['id'],
+          id: map['id'].toString(),
           action: StepAction.values.firstWhere(
               (action) => action.toString() == 'StepAction.${map['action']}',
               orElse: () => null),
@@ -35,8 +42,8 @@ class Step {
               ? null
               : Map.from(map['options']).map<StepOption, Object>((key, value) =>
                   MapEntry(
-                      StepOption.values
-                          .firstWhere((o) => o.toString() == 'StepOption.$key'),
+                      StepOption.values.firstWhere(
+                          (option) => option.toString() == 'StepOption.$key'),
                       value)));
 
   /// Get a json [String] representing the [Step].
@@ -45,9 +52,9 @@ class Step {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'id': id,
-        'action': action?.toString()?.replaceAll('Action.', ''),
+        'action': action?.toString()?.replaceAll('StepAction.', ''),
         'options': options?.map<String, String>((option, value) =>
-            MapEntry(option.toString().replaceAll('Option.', ''), value))
+            MapEntry(option.toString().replaceAll('StepOption.', ''), value))
       };
 }
 

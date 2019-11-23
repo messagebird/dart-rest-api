@@ -86,7 +86,8 @@ abstract class BaseService {
   /// The parameter [hostname] is optional and defaults back to
   /// 'rest.messagebird.com'. The parameter [body] is also optional and can
   /// contain body parameters.
-  Future<Response> patch(String path, {String hostname, Object body}) async {
+  Future<Response> patch(String path,
+      {String hostname, Map<String, dynamic> body}) async {
     final Map<String, String> headers = _getHeaders();
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {

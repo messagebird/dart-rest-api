@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'fallback.dart';
 
 /// Class encapsulating a [MessageResponse] object.
@@ -6,32 +8,56 @@ class MessageResponse {
   /// message.
   String id;
 
-  /// The [MessageStatus] of the message. It will be initially set to
-  /// `accepted`.
-  MessageStatus status;
+  /// The status of the message. It will be initially set to `accepted`.
+  MessageResponseStatus status;
 
   /// An object of the form `{"id": <uuid>}`. Will be present only if a fallback
   /// was passed in your request.
   Fallback fallback;
 
-  /// Constructor
-  MessageResponse({this.id, this.status, this.fallback});
+  /// Constructor.
+  MessageResponse({
+    this.id,
+    this.status,
+    this.fallback,
+  });
 
-  /// Construct a [MessageResponse] object from a [json] object.
-  factory MessageResponse.fromJson(Map<String, dynamic> json) => json == null
+  /// Construct a [MessageResponse] object from a json [String].
+  factory MessageResponse.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return MessageResponse.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
+
+  /// Construct a [MessageResponse] object from a [Map].
+  factory MessageResponse.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : MessageResponse(
-          id: json['id'],
-          status: MessageStatus.values.firstWhere(
-              (status) => status.toString() == 'Status.${json['action']}',
-              orElse: () => MessageStatus.accepted),
-          fallback: json['fallback'] == null
-              ? null
-              : Fallback.fromJson(json['fallback']));
+          id: map['id'].toString(),
+          status: MessageResponseStatus.values.firstWhere(
+              (status) =>
+                  status.toString() == 'MessageResponseStatus.${map['status']}',
+              orElse: () => null),
+          fallback: Fallback.fromMap(map['fallback']),
+        );
+
+  /// Get a json [String] representing the [MessageResponse].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'status': status.toString().replaceAll('MessageResponseStatus.', ''),
+        'fallback': fallback.toMap(),
+      };
 }
 
 /// Enumeration of message statusses.
-enum MessageStatus {
+enum MessageResponseStatus {
   /// The message has been accepted.
   accepted,
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Channel] object.
 ///
 /// The [Channel] represent a platform from which messages can be sent and
@@ -32,33 +34,53 @@ class Channel {
   DateTime updatedDatetime;
 
   /// Constructor.
-  Channel(
-      {this.id,
-      this.name,
-      this.platformId,
-      this.status,
-      this.createdDatetime,
-      this.updatedDatetime});
+  Channel({
+    this.id,
+    this.name,
+    this.platformId,
+    this.createdDatetime,
+    this.updatedDatetime,
+  });
 
-  /// Construct a [Channel] object from a [json] object.
-  factory Channel.fromJson(Map<String, dynamic> json) => (json == null)
+  /// Construct a [Channel] object from a json [String].
+  factory Channel.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Channel.fromMap(decoded == null ? json.decode(source) : decoded[0]);
+  }
+
+  /// Construct a [Channel] object from a [Map].
+  factory Channel.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Channel(
-          id: json['id'].toString(),
-          name: json['href'].toString(),
-          platformId: json['msisdn'].toString(),
-          status: ChannelStatus.values.firstWhere(
-              (status) =>
-                  status.toString() == 'ChannelStatus.${json['status']}',
-              orElse: () => null),
-          createdDatetime: DateTime.parse(json['createdDatetime'].toString()),
-          updatedDatetime: DateTime.parse(json['updatedDatetime'].toString()),
+          id: map['id'],
+          name: map['name'],
+          platformId: map['platformId'],
+          createdDatetime: DateTime.parse(map['createdDatetime']),
+          updatedDatetime: DateTime.parse(map['updatedDatetime']),
         );
 
-  /// Get a list of [Channel] objects from a [json] object
-  static List<Channel> fromJsonList(Object json) => json == null
+  /// Get a json [String] representing the [Channel].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'name': name,
+        'platformId': platformId,
+        'createdDatetime': createdDatetime.toIso8601String(),
+        'updatedDatetime': updatedDatetime.toIso8601String(),
+      };
+
+  /// Get a list of [Channel] objects from a json [String].
+  static List<Channel> fromJsonList(String source) => source == null
       ? null
-      : List.from(json).map((j) => Channel.fromJson(j)).toList();
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => Channel.fromJson(j))
+          .toList();
 }
 
 /// Enumeration of [Channel] statusses.

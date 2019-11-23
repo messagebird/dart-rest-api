@@ -2,6 +2,58 @@ import 'dart:convert';
 
 import 'content.dart';
 
+/// Class encapsulating an [Attachment] object.
+class Attachment {
+  /// The filename of the attachment. This is inserted into the filename
+  /// parameter of the Content-Disposition header. Maximum length is 255
+  /// characters.
+  String name;
+
+  /// The MIME type of the attachment. The value will apply as-is to the
+  /// Content-Type header of the generated MIME part for the attachment. Include
+  /// the charset parameter, if needed (e.g. text/html; charset="UTF-8")
+  String type;
+
+  /// The content of the attachment as a Base64 encoded string. The string
+  /// should not contain \r\n line breaks.
+  String data;
+
+  /// Constructor.
+  Attachment({
+    this.name,
+    this.type,
+    this.data,
+  });
+
+  /// Construct an [Attachment] object from a json [String].
+  factory Attachment.fromJson(String source) =>
+      Attachment.fromMap(json.decode(source));
+
+  /// Construct an [Attachment] object from a [Map].
+  factory Attachment.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Attachment(
+          name: map['name'].toString(),
+          type: map['type'].toString(),
+          data: map['data'].toString(),
+        );
+
+  /// Get a json [String] representing the [Attachment].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        'type': type,
+        'data': data,
+      };
+
+  /// Get a list of [Attachment] objects from a [json] object
+  static List<Attachment> fromList(Object json) => json == null
+      ? null
+      : List.from(json).map((j) => Attachment.fromJson(j)).toList();
+}
+
 /// Class encapsulating an [Email] object.
 ///
 /// The email object is the same as used by the [Email API](https://developers.messagebird.com/api/email). The required fields
@@ -61,6 +113,9 @@ class Email extends Content {
   });
 
   @override
+  String toJson() => json.encode(toMap());
+
+  @override
   Map<String, dynamic> toMap() => {
         'id': id,
         'to': List<dynamic>.from(to.map((recipient) => recipient.toMap())),
@@ -73,9 +128,6 @@ class Email extends Content {
         'tracking': tracking.toMap(),
         'reportUrl': reportUrl,
       };
-
-  @override
-  String toJson() => json.encode(toMap());
 }
 
 /// The [EmailContent] object represents the content to be included as the body
@@ -94,13 +146,13 @@ class EmailContent extends Content {
   });
 
   @override
+  String toJson() => json.encode(toMap());
+
+  @override
   Map<String, dynamic> toMap() => {
         'html': html,
         'text': text,
       };
-
-  @override
-  String toJson() => json.encode(toMap());
 }
 
 /// Class encapsulating a [Recipient] object.
@@ -129,80 +181,35 @@ class Recipient {
     this.variables,
   });
 
-  /// Convert this object to a [Map].
-  Map<String, dynamic> toMap() => {
-        'email': email,
-        'name': name,
-        'variables': List<String>.from(variables.map((variable) => variable)),
-      };
+  /// Construct an [Recipient] object from a json [String].
+  factory Recipient.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return Recipient.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
   /// Construct a [Recipient] object from a [Map].
   factory Recipient.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Recipient(
-          email: map['email'],
-          name: map['name'],
+          email: map['email'].toString(),
+          name: map['name'].toString(),
           variables: List<String>.from(map['variables']),
         );
 
   /// Get a json [String] representing the [Recipient].
   String toJson() => json.encode(toMap());
 
-  /// Construct an [Recipient] object from a json [String].
-  factory Recipient.fromJson(String source) =>
-      Recipient.fromMap(json.decode(source));
-}
-
-/// Class encapsulating an [Attachment] object.
-class Attachment {
-  /// The filename of the attachment. This is inserted into the filename
-  /// parameter of the Content-Disposition header. Maximum length is 255
-  /// characters.
-  String name;
-
-  /// The MIME type of the attachment. The value will apply as-is to the
-  /// Content-Type header of the generated MIME part for the attachment. Include
-  /// the charset parameter, if needed (e.g. text/html; charset="UTF-8")
-  String type;
-
-  /// The content of the attachment as a Base64 encoded string. The string
-  /// should not contain \r\n line breaks.
-  String data;
-
-  /// Constructor.
-  Attachment({
-    this.name,
-    this.type,
-    this.data,
-  });
-
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
+        'email': email,
         'name': name,
-        'type': type,
-        'data': data,
+        'variables': variables,
       };
-
-  /// Construct an [Attachment] object from a [Map].
-  factory Attachment.fromMap(Map<String, dynamic> map) => map == null
-      ? null
-      : Attachment(
-          name: map['name'],
-          type: map['type'],
-          data: map['data'],
-        );
-
-  /// Get a json [String] representing the [Attachment].
-  String toJson() => json.encode(toMap());
-
-  /// Construct an [Attachment] object from a json [String].
-  factory Attachment.fromJson(String source) =>
-      Attachment.fromMap(json.decode(source));
-
-  /// Get a list of [Attachment] objects from a [json] object
-  static List<Attachment> fromList(Object json) => json == null
-      ? null
-      : List.from(json).map((j) => Attachment.fromJson(j)).toList();
 }
 
 /// Class encapsulating a [Tracking] object.
@@ -219,24 +226,24 @@ class Tracking {
     this.click,
   });
 
-  /// Convert this object to a [Map].
-  Map<String, dynamic> toMap() => {
-        'open': open,
-        'click': click,
-      };
+  /// Construct a [Tracking] object from a json [String].
+  factory Tracking.fromJson(String source) =>
+      Tracking.fromMap(json.decode(source));
 
   /// Construct a [Tracking] object from a [Map].
   factory Tracking.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Tracking(
-          open: map['open'],
-          click: map['click'],
+          open: map['open'] == 'true',
+          click: map['click'] == 'true',
         );
 
   /// Get a json [String] representing the [Tracking] object.
   String toJson() => json.encode(toMap());
 
-  /// Construct a [Tracking] object from a json [String].
-  factory Tracking.fromJson(String source) =>
-      Tracking.fromMap(json.decode(source));
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'open': open,
+        'click': click,
+      };
 }

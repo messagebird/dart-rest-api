@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class encapsulating a [Fallback] object.
 class Fallback {
   /// The ID that identifies the channel over which the message should be sent.
@@ -12,18 +14,35 @@ class Fallback {
   String after;
 
   /// Constructor.
-  Fallback(this.from, {this.after});
+  Fallback({
+    this.from,
+    this.after,
+  });
 
-  /// Construct a [Fallback] object from a [json] object.
-  factory Fallback.fromJson(Map<String, dynamic> json) =>
-      json == null ? null : Fallback(json['from'], after: json['after']);
-
-  /// Get a json object representing the [Fallback]
-  Map<String, String> toJson() {
-    final Map<String, String> json = {'from': from.toString()};
-    if (after != null) {
-      json.addAll({'after': after.toString()});
+  /// Construct a [Fallback] object from a json [String].
+  factory Fallback.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
     }
-    return json;
+    return Fallback.fromMap(decoded == null ? json.decode(source) : decoded[0]);
   }
+
+  /// Construct a [Fallback] object from a [Map].
+  factory Fallback.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Fallback(
+          from: map['from'],
+          after: map['after'],
+        );
+
+  /// Get a json [String] representing the [Fallback].
+  String toJson() => json.encode(toMap());
+
+  /// Convert this object to a [Map].
+  Map<String, dynamic> toMap() => {
+        'from': from,
+        'after': after,
+      };
 }

@@ -19,7 +19,7 @@ class ApiMmsService extends BaseService implements MmsService {
   Future<List<MmsMessage>> list({int limit, int offset}) async {
     final response =
         await get('/mms', body: {'limit': limit, 'offset': offset});
-    return Future.value(MmsMessage.fromList(response.body));
+    return Future.value(MmsMessage.fromJsonList(response.body));
   }
 
   @override

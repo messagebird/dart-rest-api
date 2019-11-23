@@ -62,10 +62,17 @@ class MmsMessage {
   });
 
   /// Construct an [MmsMessage] object from a json [String].
-  factory MmsMessage.fromJson(String source) =>
-      MmsMessage.fromMap(json.decode(source));
+  factory MmsMessage.fromJson(String source) {
+    final decoded = json.decode(source)['data'];
+    if (decoded is List<dynamic> && decoded.length != 1) {
+      throw Exception('Tried to decode a single object from a list of '
+          'multiple objects. Use function "fromJsonList" instead');
+    }
+    return MmsMessage.fromMap(
+        decoded == null ? json.decode(source) : decoded[0]);
+  }
 
-  /// Construct a [MmsMessage] object from a [Map].
+  /// Construct an [MmsMessage] object from a [Map].
   factory MmsMessage.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : MmsMessage(
@@ -100,8 +107,10 @@ class MmsMessage {
         'createdDatetime': createdDatetime.toIso8601String(),
       };
 
-  /// Get a list of [MmsMessage] objects from a [json] object
-  static List<MmsMessage> fromList(Object json) => json == null
+  /// Get a list of [MmsMessage] objects from a json [String].
+  static List<MmsMessage> fromJsonList(String source) => source == null
       ? null
-      : List.from(json).map((j) => MmsMessage.fromJson(j)).toList();
+      : List.from(json.decode(source)['data'] ?? json.decode(source))
+          .map((j) => MmsMessage.fromJson(j))
+          .toList();
 }

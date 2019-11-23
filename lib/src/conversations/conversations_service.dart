@@ -1,4 +1,3 @@
-import 'package:http/http.dart' show Response;
 import 'package:messagebird_dart/src/messages/model/message.dart';
 
 import 'model/conversation.dart';
@@ -13,7 +12,7 @@ abstract class ConversationsService {
   /// Retrieve all conversations for this account. By default,
   /// conversations are sorted by their lastReceivedDatetime field so that
   /// conversations with new messages appear first.
-  Future<Response> list(int limit, int offset);
+  Future<List<Conversation>> list({int limit, int offset});
 
   /// List the messages for a contact.
   Future<List<ConversationMessage>> listMessages(String contactId,
