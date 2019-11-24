@@ -8,14 +8,14 @@ import 'fallback.dart';
 /// Class encapsulating a [ConversationMessage] object.
 class ConversationMessage extends Message {
   /// The URL for delivery of status reports for the message. Must be HTTPS.
-  String reportUrl;
+  final String reportUrl;
 
   /// Parameters required to send a Fallback message if the primary delivery
   /// fails.
-  Fallback fallback;
+  final Fallback fallback;
 
   /// Constructor.
-  ConversationMessage(
+  const ConversationMessage(
       {String to,
       String from,
       MessageType type,
@@ -26,15 +26,9 @@ class ConversationMessage extends Message {
       : super(to: to, from: from, type: type, content: content, source: source);
 
   /// Construct a [ConversationMessage] object from a json [String].
-  factory ConversationMessage.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return ConversationMessage.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory ConversationMessage.fromJson(String source) =>
+      ConversationMessage.fromMap(
+          json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [ConversationMessage] object from a [Map].
   factory ConversationMessage.fromMap(Map<String, dynamic> map) {

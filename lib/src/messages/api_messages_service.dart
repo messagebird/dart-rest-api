@@ -9,15 +9,12 @@ class ApiMessagesService extends BaseService implements MessagesService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Message> create(Message message) async {
-    final response = await post('/messages', body: message.toMap());
-    return Future.value(Message.fromJson(response.body));
-  }
+  Future<Message> create(Message message) =>
+      post('/messages', body: message.toMap())
+          .then((response) => Future.value(Message.fromJson(response.body)));
 
   @override
-  Future<Message> read(String id) async {
-    final response = await get('/v1/messages/$id',
-        hostname: BaseService.conversationsEndpoint);
-    return Future.value(Message.fromJson(response.body));
-  }
+  Future<Message> read(String id) =>
+      get('/v1/messages/$id', hostname: BaseService.conversationsEndpoint)
+          .then((response) => Future.value(Message.fromJson(response.body)));
 }

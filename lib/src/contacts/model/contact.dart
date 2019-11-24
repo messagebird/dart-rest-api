@@ -7,37 +7,37 @@ import 'messages.dart';
 class Contact {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.
-  String id;
+  final String id;
 
   /// The URL of the created [Contact].
-  String href;
+  final String href;
 
   /// The phone number of [Contact].
-  String msisdn;
+  final String msisdn;
 
   /// The first name of the [Contact].
-  String firstName;
+  final String firstName;
 
   /// The last name of the [Contact].
-  String lastName;
+  final String lastName;
 
   /// Custom fields of the [Contact].
-  List<String> custom;
+  final List<String> custom;
 
   /// The groups the [Contact] belongs to.
-  Groups groups;
+  final Groups groups;
 
   /// The messages sent to the [Contact].
-  Messages messages;
+  final Messages messages;
 
   /// The date and time of the creation of the [Contact] in RFC3339 format (Y-m-d\TH:i:sP).
-  DateTime createdDatetime;
+  final DateTime createdDatetime;
 
   /// The date and time of the last update of the [Contact] in RFC3339 format (Y-m-d\TH:i:sP).
-  DateTime updatedDatetime;
+  final DateTime updatedDatetime;
 
   /// Constructor.
-  Contact(
+  const Contact(
       {this.id,
       this.href,
       this.msisdn,
@@ -50,14 +50,8 @@ class Contact {
       this.updatedDatetime});
 
   /// Construct a [Contact] object from a json [String].
-  factory Contact.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Contact.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Contact.fromJson(String source) =>
+      Contact.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Contact] object from a [Map].
   factory Contact.fromMap(Map<String, dynamic> map) => (map == null)

@@ -1,6 +1,7 @@
-import 'package:http/http.dart' show Response;
-import 'package:messagebird_dart/messagebird_dart.dart';
 import 'package:messagebird_dart/src/base_service.dart';
+
+import 'model/verify.dart';
+import 'verify_service.dart';
 
 /// API implementation of verify service.
 class ApiVerifyService extends BaseService implements VerifyService {
@@ -9,18 +10,18 @@ class ApiVerifyService extends BaseService implements VerifyService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(int recipient, Map<String, dynamic> parameters) {
-    parameters['recipient'] = recipient;
-    return post('/verify', body: parameters);
-  }
+  Future<Verify> create(Verify verify) => post('/verify', body: verify.toMap())
+      .then((response) => Future.value(Verify.fromJson(response.body)));
 
   @override
-  Future<Response> read(String id) => get('/verify/$id');
+  Future<Verify> read(String id) => get('/verify/$id')
+      .then((response) => Future.value(Verify.fromJson(response.body)));
 
   @override
-  Future<Response> remove(String id) => delete('/verify/$id');
+  Future<void> remove(String id) => delete('/verify/$id');
 
   @override
-  Future<Response> verify(String id, String token) =>
-      get('/verify/$id', body: {'token': token});
+  Future<Verify> verify(String id, String token) =>
+      get('/verify/$id', body: {'token': token})
+          .then((response) => Future.value(Verify.fromJson(response.body)));
 }

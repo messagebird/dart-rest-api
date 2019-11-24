@@ -3,26 +3,20 @@ import 'dart:convert';
 /// Class encapsulating a [Contacts] object.
 class Contacts {
   /// The total count of messages sent to contact.
-  int totalCount;
+  final int totalCount;
 
   /// URL which can be used to retrieve list of messages sent to contact.
-  String href;
+  final String href;
 
   /// Constructor.
-  Contacts({
+  const Contacts({
     this.totalCount,
     this.href,
   });
 
   /// Construct a [Contacts] object from a json [String].
-  factory Contacts.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Contacts.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Contacts.fromJson(String source) =>
+      Contacts.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Contacts] object from a [Map].
   factory Contacts.fromMap(Map<String, dynamic> map) => map == null

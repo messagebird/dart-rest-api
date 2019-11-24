@@ -29,7 +29,7 @@ class Call {
   final DateTime endedAt;
 
   /// Constructor.
-  Call({
+  const Call({
     this.id,
     this.status,
     this.source,
@@ -40,14 +40,8 @@ class Call {
   });
 
   /// Construct a [Call] object from a json [String].
-  factory Call.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Call.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Call.fromJson(String source) =>
+      Call.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Call] object from a [Map].
   factory Call.fromMap(Map<String, dynamic> map) => map == null

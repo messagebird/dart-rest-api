@@ -5,29 +5,29 @@ import '../../hlr/model/hlr.dart';
 /// Class encapsulating a [Lookup] object.
 class Lookup {
   /// The URL of this lookup.
-  String href;
+  final String href;
 
   /// The country code for this number in ISO 3166-1 alpha-2 format.
-  String countryCode;
+  final String countryCode;
 
   /// The country calling code for this number.
-  int countryPrefix;
+  final int countryPrefix;
 
   /// The phone number in E.164 format without the prefixed plus-sign.
-  int phoneNumber;
+  final int phoneNumber;
 
   /// The type of number. See [LookupType] for allowed values.
-  LookupType type;
+  final LookupType type;
 
   /// References to this phone number in several different formats.
-  Map<String, String> formats;
+  final Map<String, String> formats;
 
   /// The most recent HLR object. If no such HLR objects exists, this object
   /// won't be returned.
-  Hlr hlr;
+  final Hlr hlr;
 
   /// Constructor.
-  Lookup({
+  const Lookup({
     this.href,
     this.countryCode,
     this.countryPrefix,
@@ -38,14 +38,8 @@ class Lookup {
   });
 
   /// Construct a [Lookup] object from a json [String].
-  factory Lookup.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Lookup.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Lookup.fromJson(String source) =>
+      Lookup.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Lookup] object from a [Map].
   factory Lookup.fromMap(Map<String, dynamic> map) => map == null

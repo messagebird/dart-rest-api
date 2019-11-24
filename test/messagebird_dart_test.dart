@@ -22,21 +22,21 @@ void main() {
         json.decode(File('test_resources/keys.json').readAsStringSync());
   });
 
-  group('balance', () {
+  group('BalanceService', () {
     setUp(() async {
       balanceService = ApiBalanceService(credentials['test']);
     });
-    test('Balance getter', () async {
+    test('should get balance', () async {
       expect(await balanceService.read(), isA<Balance>());
     });
   });
 
-  group('callflows', () {
+  group('CallflowService', () {
     Callflow callflow;
     Callflow callflowFromJson;
 
-    setUp(() async {
-      callflowsService = ApiCallflowsService(credentials['test']);
+    setUp(() {
+      callflowsService = ApiCallflowsService('${credentials['test']}');
       callflowFromJson = Callflow.fromJson(
           File('test_resources/callflow.json').readAsStringSync());
       callflow = Callflow(
@@ -44,7 +44,7 @@ void main() {
           title: 'Forward call to 31612345678',
           record: false,
           steps: [
-            Step(
+            const Step(
                 id: '2fa1383e-6f21-4e6f-8c36-0920c3d0730b',
                 action: StepAction.transfer,
                 options: {StepOption.destination: '31612345678'})
@@ -53,7 +53,7 @@ void main() {
           updatedAt: DateTime.parse('2017-03-06T14:52:22Z'));
     });
 
-    test('Callflow deserialization', () {
+    test('should deserialize from json', () {
       expect(callflow.id, equals(callflowFromJson.id));
       expect(callflow.title, equals(callflowFromJson.title));
       expect(callflow.record, equals(callflowFromJson.record));
@@ -62,7 +62,7 @@ void main() {
       expect(callflow.updatedAt, equals(callflowFromJson.updatedAt));
     });
 
-    test('Callflow serialization', () {
+    test('should serialize to json', () {
       final Map<String, dynamic> serialized = callflowFromJson.toMap();
 
       expect(serialized['id'], equals(callflowFromJson.id));
@@ -71,13 +71,18 @@ void main() {
       expect(
           serialized['steps'][0]['id'], equals(callflowFromJson.steps[0].id));
     });
+
+    test('should get no conversations on our account', () async {
+      await callflowsService.read('bogus');
+      //expect((await callflowsService.list()).length, 0);
+    });
   });
 
-  group('conversations', () {
-    setUp(() async {
+  group('ConversationService', () {
+    setUp(() {
       conversationsService = ApiConversationsService(credentials['test']);
     });
-    test('Endpoint getter', () {
+    test('should get endpoint', () {
       expect(conversationsService.getEndpoint(), isA<String>());
     });
   });

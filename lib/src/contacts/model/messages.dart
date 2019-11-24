@@ -15,14 +15,8 @@ class Messages {
   });
 
   /// Construct a [Messages] object from a json [String].
-  factory Messages.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Messages.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Messages.fromJson(String source) =>
+      Messages.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Messages] object from a [Map].
   factory Messages.fromMap(Map<String, dynamic> map) => map == null

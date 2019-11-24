@@ -4,36 +4,36 @@ import 'dart:convert';
 class Hlr {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.
-  String id;
+  final String id;
 
   /// The URL of the created object.
-  String href;
+  final String href;
 
   /// The telephone number.
-  int msisdn;
+  final int msisdn;
 
   /// The [MCCMNC](https://en.wikipedia.org/wiki/Mobile_country_code) code of
   /// the network provider.
-  int network;
+  final int network;
 
   /// A client reference.
-  String reference;
+  final String reference;
 
   /// Extra HLR information. See [HlrDetails] for extra information.
-  HlrDetails details;
+  final HlrDetails details;
 
   /// The status of the msisdns. See [HlrStatus] for allowed values.
-  HlrStatus status;
+  final HlrStatus status;
 
   /// The date and time of the creation of the message in RFC3339 format
   /// (Y-m-d\TH:i:sP)
-  DateTime createdDatetime;
+  final DateTime createdDatetime;
 
   /// The datum time of the last status in RFC3339 format (Y-m-d\TH:i:sP)
-  DateTime statusDatetime;
+  final DateTime statusDatetime;
 
   /// Constructor.
-  Hlr({
+  const Hlr({
     this.id,
     this.href,
     this.msisdn,
@@ -46,14 +46,8 @@ class Hlr {
   });
 
   /// Construct an [Hlr] object from a json [String].
-  factory Hlr.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Hlr.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Hlr.fromJson(String source) =>
+      Hlr.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct an [Hlr] object from a [Map].
   factory Hlr.fromMap(Map<String, dynamic> map) => map == null

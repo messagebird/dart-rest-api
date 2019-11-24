@@ -1,6 +1,7 @@
-import 'package:http/http.dart' show Response;
+import 'dart:io' show File;
 
 import '../base_service.dart';
+import 'model/transcription.dart';
 import 'transcriptions_service.dart';
 
 /// API implementation of transcription service.
@@ -12,25 +13,34 @@ class ApiTranscriptionsService extends BaseService
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(
+  Future<Transcription> create(
           String callId, String legId, String recordingId, String language) =>
       post('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions',
-          hostname: BaseService.voiceEndpoint, body: {'language': language});
+              hostname: BaseService.voiceEndpoint, body: {'language': language})
+          .then((response) =>
+              Future.value(Transcription.fromJson(response.body)));
 
   @override
-  Future<Response> download(String callId, String legId, String recordingId,
+  Future<File> download(String callId, String legId, String recordingId,
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId.txt',
-          hostname: BaseService.voiceEndpoint);
+              hostname: BaseService.voiceEndpoint)
+          .then(
+              (response) => Future.value(File.fromRawPath(response.bodyBytes)));
 
   @override
-  Future<Response> list(String callId, String legId, String recordingId) =>
+  Future<List<Transcription>> list(
+          String callId, String legId, String recordingId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions',
-          hostname: BaseService.voiceEndpoint);
+              hostname: BaseService.voiceEndpoint)
+          .then((response) =>
+              Future.value(Transcription.fromJsonList(response.body)));
 
   @override
-  Future<Response> read(String callId, String legId, String recordingId,
+  Future<Transcription> read(String callId, String legId, String recordingId,
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId',
-          hostname: BaseService.voiceEndpoint);
+              hostname: BaseService.voiceEndpoint)
+          .then((response) =>
+              Future.value(Transcription.fromJson(response.body)));
 }

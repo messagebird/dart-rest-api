@@ -9,44 +9,33 @@ class ApiGroupsService extends BaseService implements GroupsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<void> addContacts(String groupId, List<String> contactIds) async {
-    await put('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
-    return Future.value();
-  }
+  Future<void> addContacts(String groupId, List<String> contactIds) =>
+      put('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
 
   @override
-  Future<void> removeContacts(String groupId, List<String> contactIds) async {
-    await remove('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
-    return Future.value();
-  }
+  Future<void> removeContacts(String groupId, List<String> contactIds) =>
+      remove('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
 
   @override
-  Future<Group> create(Group group) async {
-    final response = await post('/groups', body: group.toMap());
-    return Future.value(Group.fromJson(response.body));
-  }
+  Future<Group> create(Group group) => post('/groups', body: group.toMap())
+      .then((response) => Future.value(Group.fromJson(response.body)));
 
   @override
-  Future<List<Group>> list({int limit, int offset}) async {
-    final response =
-        await get('/groups', body: {'limit': limit, 'offset': offset});
-    return Future.value(Group.fromJsonList(response.body));
-  }
+  Future<List<Group>> list({int limit, int offset}) =>
+      get('/groups', body: {'limit': limit, 'offset': offset})
+          .then((response) => Future.value(Group.fromJsonList(response.body)));
 
   @override
-  Future<Group> read(String id) async {
-    final response = await get('/groups/$id');
-    return Future.value(Group.fromJson(response.body));
-  }
+  Future<Group> read(String id) => get('/groups/$id')
+      .then((response) => Future.value(Group.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/groups/$id');
 
   @override
-  Future<Group> update(String id, {Group group}) async {
-    final response = await patch('/groups/$id', body: group.toMap());
-    return Future.value(Group.fromJson(response.body));
-  }
+  Future<Group> update(String id, {Group group}) =>
+      patch('/groups/$id', body: group.toMap())
+          .then((response) => Future.value(Group.fromJson(response.body)));
 
   String _getAddContactsQueryString(List<String> contactIds) {
     // Map the contact IDs to the

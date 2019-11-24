@@ -3,23 +3,14 @@ class ApiError {
   /// The API error code.
   final int code;
 
-  /// The API error description.
-  final String description;
-
-  /// The API error parameter.
-  final String parameter;
+  /// The API error message.
+  final String message;
 
   /// Constructor.
-  ApiError({this.code, this.description, this.parameter});
+  ApiError({this.code, this.message});
 
-  /// Construct an API error from a json object.
-  factory ApiError.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    return ApiError(
-        code: json['code'],
-        description: json['description'],
-        parameter: json['parameter']);
-  }
+  /// Construct an API error from a [Map].
+  factory ApiError.fromMap(Map<String, dynamic> json) => json == null
+      ? null
+      : ApiError(code: json['code'], message: json['message']);
 }

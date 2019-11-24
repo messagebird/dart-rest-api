@@ -10,23 +10,18 @@ class ApiMmsService extends BaseService implements MmsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<MmsMessage> create(MmsMessage message) async {
-    final response = await post('/mms', body: message.toMap());
-    return Future.value(MmsMessage.fromJson(response.body));
-  }
+  Future<MmsMessage> create(MmsMessage message) =>
+      post('/mms', body: message.toMap())
+          .then((response) => Future.value(MmsMessage.fromJson(response.body)));
 
   @override
-  Future<List<MmsMessage>> list({int limit, int offset}) async {
-    final response =
-        await get('/mms', body: {'limit': limit, 'offset': offset});
-    return Future.value(MmsMessage.fromJsonList(response.body));
-  }
+  Future<List<MmsMessage>> list({int limit, int offset}) =>
+      get('/mms', body: {'limit': limit, 'offset': offset}).then(
+          (response) => Future.value(MmsMessage.fromJsonList(response.body)));
 
   @override
-  Future<MmsMessage> read(String id) async {
-    final response = await get('/mms/$id');
-    return Future.value(MmsMessage.fromJson(response.body));
-  }
+  Future<MmsMessage> read(String id) => get('/mms/$id')
+      .then((response) => Future.value(MmsMessage.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/mms/$id');

@@ -11,46 +11,36 @@ class ApiContactsService extends BaseService implements ContactsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Contact> create(Contact contact) async {
-    final response = await post('/contacts', body: contact.toMap());
-    return Future.value(Contact.fromJson(response.body));
-  }
+  Future<Contact> create(Contact contact) =>
+      post('/contacts', body: contact.toMap())
+          .then((response) => Future.value(Contact.fromJson(response.body)));
 
   @override
-  Future<List<Contact>> list({int limit, int offset}) async {
-    final response =
-        await get('/contacts', body: {'limit': limit, 'offset': offset});
-    return Future.value(Contact.fromJsonList(response.body));
-  }
+  Future<List<Contact>> list({int limit, int offset}) =>
+      get('/contacts', body: {'limit': limit, 'offset': offset}).then(
+          (response) => Future.value(Contact.fromJsonList(response.body)));
 
   @override
-  Future<Groups> listGroups(String contactId, {int limit, int offset}) async {
-    final response = await get('/contacts/$contactId/groups',
-        body: {'limit': limit, 'offset': offset});
-    return Future.value(Groups.fromJson(response.body));
-  }
+  Future<Groups> listGroups(String contactId, {int limit, int offset}) =>
+      get('/contacts/$contactId/groups',
+              body: {'limit': limit, 'offset': offset})
+          .then((response) => Future.value(Groups.fromJson(response.body)));
 
   @override
-  Future<Messages> listMessages(String contactId,
-      {int limit, int offset}) async {
-    final response = await get('/contacts/$contactId/messages',
-        body: {'limit': limit, 'offset': offset});
-    return Future.value(Messages.fromJson(response.body));
-  }
+  Future<Messages> listMessages(String contactId, {int limit, int offset}) =>
+      get('/contacts/$contactId/messages',
+              body: {'limit': limit, 'offset': offset})
+          .then((response) => Future.value(Messages.fromJson(response.body)));
 
   @override
-  Future<Contact> read(String id) async {
-    final response = await get('/contacts/$id');
-    return Future.value(Contact.fromJson(response.body));
-  }
+  Future<Contact> read(String id) => get('/contacts/$id')
+      .then((response) => Future.value(Contact.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/contacts/$id');
 
   @override
-  Future<Contact> update(Contact contact) async {
-    final response =
-        await patch('/contacts/${contact.id}', body: contact.toMap());
-    return Future.value(Contact.fromJson(response.body));
-  }
+  Future<Contact> update(Contact contact) =>
+      patch('/contacts/${contact.id}', body: contact.toMap())
+          .then((response) => Future.value(Contact.fromJson(response.body)));
 }

@@ -18,64 +18,60 @@ class ApiConversationsService extends BaseService
   String getEndpoint() => BaseService.conversationsEndpoint;
 
   @override
-  Future<List<Conversation>> list({int limit, int offset}) async {
-    final response = await get('/v1/conversations',
-        hostname: BaseService.conversationsEndpoint,
-        body: {'limit': limit, 'offset': offset});
-    return Future.value(Conversation.fromJsonList(response.body));
-  }
+  Future<List<Conversation>> list({int limit, int offset}) => get(
+          '/v1/conversations',
+          hostname: BaseService.conversationsEndpoint,
+          body: {'limit': limit, 'offset': offset})
+      .then(
+          (response) => Future.value(Conversation.fromJsonList(response.body)));
 
   @override
   Future<List<ConversationMessage>> listMessages(String contactId,
-      {int limit, int offset}) async {
-    final response = await get('/v1/conversations/$contactId/messages',
-        hostname: BaseService.conversationsEndpoint,
-        body: {'limit': limit, 'offset': offset});
-    return Future.value(ConversationMessage.fromJsonList(response.body));
-  }
+          {int limit, int offset}) =>
+      get('/v1/conversations/$contactId/messages',
+              hostname: BaseService.conversationsEndpoint,
+              body: {'limit': limit, 'offset': offset})
+          .then((response) =>
+              Future.value(ConversationMessage.fromJsonList(response.body)));
 
   @override
-  Future<Conversation> read(String id) async {
-    final response = await get('/v1/conversations/$id',
-        hostname: BaseService.conversationsEndpoint);
-    return Future.value(Conversation.fromJson(response.body));
-  }
+  Future<Conversation> read(String id) => get('/v1/conversations/$id',
+          hostname: BaseService.conversationsEndpoint)
+      .then((response) => Future.value(Conversation.fromJson(response.body)));
 
   @override
-  Future<ConversationMessage> readMessage(String id) async {
-    final response = await get('/v1/messages/$id',
-        hostname: BaseService.conversationsEndpoint);
-    return Future.value(ConversationMessage.fromJson(response.body));
-  }
+  Future<ConversationMessage> readMessage(String id) =>
+      get('/v1/messages/$id', hostname: BaseService.conversationsEndpoint).then(
+          (response) =>
+              Future.value(ConversationMessage.fromJson(response.body)));
 
   @override
-  Future<Message> reply(String id, Message message) async {
-    final response = await post('/v1/conversations/$id/messages',
-        hostname: BaseService.conversationsEndpoint, body: message.toMap());
-    return Future.value(Message.fromJson(response.body));
-  }
+  Future<Message> reply(String id, Message message) =>
+      post('/v1/conversations/$id/messages',
+              hostname: BaseService.conversationsEndpoint,
+              body: message.toMap())
+          .then((response) => Future.value(Message.fromJson(response.body)));
 
   @override
-  Future<MessageResponse> send(ConversationMessage message) async {
-    final response = await post('/v1/send',
-        hostname: BaseService.conversationsEndpoint, body: message.toMap());
-    return Future.value(MessageResponse.fromJson(response.body));
-  }
+  Future<MessageResponse> send(ConversationMessage message) => post('/v1/send',
+          hostname: BaseService.conversationsEndpoint, body: message.toMap())
+      .then(
+          (response) => Future.value(MessageResponse.fromJson(response.body)));
 
   @override
-  Future<Conversation> start(ConversationMessage message) async {
-    final response = await post('/v1/conversations/start',
-        hostname: BaseService.conversationsEndpoint, body: message.toMap());
-    return Future.value(Conversation.fromJson(response.body));
-  }
+  Future<Conversation> start(ConversationMessage message) => post(
+          '/v1/conversations/start',
+          hostname: BaseService.conversationsEndpoint,
+          body: message.toMap())
+      .then((response) => Future.value(Conversation.fromJson(response.body)));
 
   @override
-  Future<Conversation> update(String id, ConversationStatus status) async {
-    final Map<String, dynamic> j = {
+  Future<Conversation> update(String id, ConversationStatus status) {
+    final Map<String, dynamic> json = {
       'status': status.toString().replaceAll('ConversationStatus.', '')
     };
-    final response = await patch('/v1/conversations/$id',
-        hostname: BaseService.conversationsEndpoint, body: j);
-    return Future.value(Conversation.fromJson(response.body));
+    return patch('/v1/conversations/$id',
+            hostname: BaseService.conversationsEndpoint, body: json)
+        .then((response) => Future.value(Conversation.fromJson(response.body)));
   }
 }

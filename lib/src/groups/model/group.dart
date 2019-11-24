@@ -6,27 +6,27 @@ import 'contacts.dart';
 class Group {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.
-  String id;
+  final String id;
 
   /// The URL of the created object.
-  String href;
+  final String href;
 
   /// The name of the group.
-  String name;
+  final String name;
 
   /// The contacts in the group.
-  Contacts contacts;
+  final Contacts contacts;
 
   /// The date and time of the creation of the group in RFC3339 format
   /// (Y-m-d\TH:i:sP).
-  DateTime createdDatetime;
+  final DateTime createdDatetime;
 
   /// The date and time of the last update of the group in RFC3339 format
   /// (Y-m-d\TH:i:sP).
-  DateTime updatedDatetime;
+  final DateTime updatedDatetime;
 
   /// Constructor.
-  Group({
+  const Group({
     this.id,
     this.href,
     this.name,
@@ -36,14 +36,8 @@ class Group {
   });
 
   /// Construct a [Group] object from a json [String].
-  factory Group.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Group.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Group.fromJson(String source) =>
+      Group.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Group] object from a [Map].
   factory Group.fromMap(Map<String, dynamic> map) => map == null

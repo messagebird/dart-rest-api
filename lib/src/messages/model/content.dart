@@ -6,10 +6,10 @@ import 'message.dart';
 /// Class encapsulating audio content.
 class AudioContent extends Content {
   /// Required for type `audio`.
-  Media audio;
+  final Media audio;
 
   /// Constructor.
-  AudioContent(this.audio);
+  const AudioContent(this.audio);
 
   @override
   String toJson() => audio.toJson();
@@ -20,6 +20,9 @@ class AudioContent extends Content {
 
 /// Class encapsulating a [Content] object.
 abstract class Content {
+  /// Constructor.
+  const Content();
+
   /// Get a json [String] representing the [Content]
   String toJson();
 
@@ -53,26 +56,20 @@ abstract class Content {
 /// Class encapsulating the currency.
 class Currency {
   /// Required. ISO 4217 currency code.
-  String currencyCode;
+  final String currencyCode;
 
   /// Required. Total amount together with cents as a float, multiplied by 1000.
-  double amount;
+  final double amount;
 
   /// Constructor.
-  Currency({
+  const Currency({
     this.currencyCode,
     this.amount,
   });
 
   /// Construct a [Currency] object from a json [String].
-  factory Currency.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Currency.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Currency.fromJson(String source) =>
+      Currency.fromMap(json.decode(source)['data']);
 
   /// Construct a [Currency] object from a [Map].
   factory Currency.fromMap(Map<String, dynamic> map) => map == null
@@ -95,10 +92,10 @@ class Currency {
 /// Class encapsulating file content.
 class FileContent extends Content {
   /// Required for type `file`.
-  Media file;
+  final Media file;
 
   /// Constructor.
-  FileContent(this.file);
+  const FileContent(this.file);
 
   @override
   String toJson() => file.toJson();
@@ -114,19 +111,19 @@ class FileContent extends Content {
 class HSMContent extends Content {
   /// Required. WhatsApp namespace for your account. You will receive this value
   /// when setting up your WhatsApp account.
-  String namespace;
+  final String namespace;
 
   /// Required. The name of the template.
-  String templateName;
+  final String templateName;
 
   /// Required.
-  HSMLanguage language;
+  final HSMLanguage language;
 
   /// Required.
-  List<HSMLocalizableParameters> parameters;
+  final List<HSMLocalizableParameters> parameters;
 
   /// Constructor
-  HSMContent({
+  const HSMContent({
     this.namespace,
     this.templateName,
     this.language,
@@ -134,15 +131,8 @@ class HSMContent extends Content {
   });
 
   /// Construct an [HSMContent] object from a json [String].
-  factory HSMContent.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return HSMContent.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory HSMContent.fromJson(String source) =>
+      HSMContent.fromMap(json.decode(source)['data']);
 
   /// Construct a [HSMContent] object from a [Map].
   factory HSMContent.fromMap(Map<String, dynamic> map) => map == null
@@ -174,28 +164,21 @@ class HSMLanguage {
   /// for while fallback will deliver the message template in user's device
   /// language, if the settings can't be found on users device the fallback
   /// language is used.
-  String policy;
+  final String policy;
 
   /// Required. The code of the language or locale to use, accepts both language
   /// and language_locale formats (e.g., `en` or `en_US`).
-  String code;
+  final String code;
 
   /// Constructor.
-  HSMLanguage({
+  const HSMLanguage({
     this.policy,
     this.code,
   });
 
   /// Construct an [HSMLanguage] object from a json [String].
-  factory HSMLanguage.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return HSMLanguage.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory HSMLanguage.fromJson(String source) => HSMLanguage.fromMap(
+      json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [HSMLanguage] object from a [Map].
   factory HSMLanguage.fromMap(Map<String, dynamic> map) => map == null
@@ -224,34 +207,35 @@ class HSMLocalizableParameters {
   /// Required. Default value of the parameter, it is used when localization
   /// fails. The only field needed when specifying parameter value that doesn't
   /// require localization.
-  String defaultValue;
+  final String defaultValue;
 
   /// Can be present only if dateTime object is not present. An object of the
   /// form `{"currencyCode": "required string of ISO 4217 currency code", `
   /// `"amount": "required integer of total amount together with cents as a `
   /// `float, multiplied by 1000"}`
-  Currency currency;
+  final Currency currency;
 
   /// Can be present only if currency object is not present. RFC3339
   /// representation of the date and time.
-  DateTime dateTime;
+  final DateTime dateTime;
 
   /// Constructor.
-  HSMLocalizableParameters(this.defaultValue, {this.currency, this.dateTime}) {
-    if (currency != null && dateTime != null) {
-      throw Exception(
-          'Arguments "currency" and "datetime" are mutually exclusive. '
-          'Remove one of these arguments.');
-    }
-  }
+  const HSMLocalizableParameters(
+      {this.defaultValue, this.currency, this.dateTime});
 
-  /// Construct a [HSMLocalizableParameters] object from a [json] object.
-  factory HSMLocalizableParameters.fromJson(Map<String, dynamic> json) =>
-      json == null
+  /// Construct a [HSMLocalizableParameters] object from a json [String].
+  factory HSMLocalizableParameters.fromJson(String source) =>
+      HSMLocalizableParameters.fromMap(
+          json.decode(source)['data'][0] ?? json.decode(source));
+
+  /// Construct a [HSMLocalizableParameters] object from a [Map].
+  factory HSMLocalizableParameters.fromMap(Map<String, dynamic> map) =>
+      map == null
           ? null
-          : HSMLocalizableParameters(json['defaultValue'].toString(),
-              currency: Currency.fromJson(json['currency']),
-              dateTime: DateTime.parse(json['dateTime'].toString()));
+          : HSMLocalizableParameters(
+              defaultValue: map['defaultValue'].toString(),
+              currency: Currency.fromMap(map['currency']),
+              dateTime: DateTime.parse(map['dateTime'].toString()));
 
   /// Get a json object representing the [HSMLocalizableParameters]
   Map<String, dynamic> toJson() =>
@@ -275,10 +259,10 @@ class HSMLocalizableParameters {
 /// Class encapsulating image content.
 class ImageContent extends Content {
   /// Required for type `image`.
-  Media image;
+  final Media image;
 
   /// Constructor.
-  ImageContent(this.image);
+  const ImageContent(this.image);
 
   @override
   String toJson() => image.toJson();
@@ -290,26 +274,20 @@ class ImageContent extends Content {
 /// Class encapsulating a location.
 class Location {
   /// The latitude coordinates of the location.
-  double latitude;
+  final double latitude;
 
   /// The longitude coordinates of the location.
-  double longitude;
+  final double longitude;
 
   /// Constructor.
-  Location({
+  const Location({
     this.latitude,
     this.longitude,
   });
 
   /// Construct an [Location] object from a json [String].
-  factory Location.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Location.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Location.fromJson(String source) =>
+      Location.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Location] object from a [Map].
   factory Location.fromMap(Map<String, dynamic> map) => map == null
@@ -332,10 +310,10 @@ class Location {
 /// Class encapsulating location content.
 class LocationContent extends Content {
   /// Required for type `location`.
-  Location location;
+  final Location location;
 
   /// Constructor.
-  LocationContent(this.location);
+  const LocationContent(this.location);
 
   @override
   String toJson() => location.toJson();
@@ -347,19 +325,20 @@ class LocationContent extends Content {
 /// Class encapsulating a [Media] object.
 class Media {
   /// The url of the remote media file.
-  String url;
+  final String url;
 
   /// The caption associated with the media file.
-  String caption;
+  final String caption;
 
   /// Constructor.
-  Media({
+  const Media({
     this.url,
     this.caption,
   });
 
   /// Construct an [Media] object from a json [String].
-  factory Media.fromJson(String source) => Media.fromMap(json.decode(source));
+  factory Media.fromJson(String source) =>
+      Media.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Media] object from a [Map].
   factory Media.fromMap(Map<String, dynamic> map) => map == null
@@ -382,10 +361,10 @@ class Media {
 /// Class encapsulating text content.
 class TextContent extends Content {
   /// Required for type `text`. The plain-text content of the message.
-  String text;
+  final String text;
 
   /// Constructor.
-  TextContent(this.text);
+  const TextContent(this.text);
 
   @override
   String toJson() => json.encode(toMap());
@@ -397,10 +376,10 @@ class TextContent extends Content {
 /// Class encapsulating video content.
 class VideoContent extends Content {
   /// Required for type `video`.
-  Media video;
+  final Media video;
 
   /// Constructor.
-  VideoContent(this.video);
+  const VideoContent(this.video);
 
   @override
   String toJson() => video.toJson();

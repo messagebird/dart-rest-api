@@ -3,37 +3,36 @@ import 'dart:convert';
 /// Class encapsulating a [RecipientItem].
 class RecipientItem {
   /// The msisdn of the recipient.
-  int recipient;
+  final int recipient;
 
   /// The status of the message sent to the recipient. See [RecipientItemStatus]
   /// for allowed values.
-  RecipientItemStatus status;
+  final RecipientItemStatus status;
 
   /// The datum time of the last status in RFC3339 format (Y-m-d\TH:i:sP)
-  DateTime statusDatetime;
+  final DateTime statusDatetime;
 
   /// Constructor.
-  RecipientItem({
+  const RecipientItem({
     this.recipient,
+    this.status,
     this.statusDatetime,
   });
 
   /// Construct an [RecipientItem] object from a json [String].
-  factory RecipientItem.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return RecipientItem.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory RecipientItem.fromJson(String source) => RecipientItem.fromMap(
+      json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [RecipientItem] object from a [Map].
   factory RecipientItem.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : RecipientItem(
           recipient: int.parse(map['recipient'].toString()),
+          status: RecipientItemStatus.values.firstWhere(
+              (status) =>
+                  status.toString() ==
+                  'RecipientItemStatus.${map['status']}'.replaceAll(' ', '_'),
+              orElse: () => null),
           statusDatetime: DateTime.parse(map['statusDatetime']),
         );
 
@@ -43,6 +42,10 @@ class RecipientItem {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'recipient': recipient,
+        'status': status
+            ?.toString()
+            ?.replaceAll('RecipientItemStatus.', '')
+            ?.replaceAll('_', ' '),
         'statusDatetime': statusDatetime,
       };
 }

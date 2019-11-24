@@ -37,7 +37,7 @@ class Callflow {
   final DateTime updatedAt;
 
   /// Constructor.
-  Callflow({
+  const Callflow({
     this.id,
     this.title,
     this.record,
@@ -48,14 +48,8 @@ class Callflow {
   });
 
   /// Construct a [Callflow] object from a json [String].
-  factory Callflow.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Callflow.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Callflow.fromJson(String source) =>
+      Callflow.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Callflow] object from a [Map].
   factory Callflow.fromMap(Map<String, dynamic> map) => map == null
@@ -81,8 +75,8 @@ class Callflow {
         'record': record,
         'steps': List<dynamic>.from(steps.map((step) => step.toMap())),
         'isDefault': isDefault,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
+        'createdAt': createdAt?.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
       };
 
   /// Get a list of [Callflow] objects from a json [String].

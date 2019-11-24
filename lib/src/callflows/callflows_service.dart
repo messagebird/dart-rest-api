@@ -6,7 +6,7 @@ abstract class CallflowsService {
   Future<Callflow> create(Callflow callflow);
 
   /// Lists existing [Callflow] objects.
-  Future<List<Callflow>> list(int page, int perpage);
+  Future<List<Callflow>> list({int page, int perpage});
 
   /// Get a [Callflow].
   Future<Callflow> read(String id);

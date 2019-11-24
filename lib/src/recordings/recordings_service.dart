@@ -1,13 +1,16 @@
-import 'package:http/http.dart' show Response;
+import 'dart:io' show File;
+
+import 'model/recording.dart';
 
 /// Recordings service interface
 abstract class RecordingsService {
   /// Download an existing recording.
-  Future<Response> download(String callId, String legId, String recordingId);
+  Future<File> download(String callId, String legId, String recordingId);
 
   /// List recordings.
-  Future<Response> list(String callId, String legId, {int limit, int offset});
+  Future<List<Recording>> list(String callId, String legId,
+      {int limit, int offset});
 
   /// View an existing recording.
-  Future<Response> read(String callId, String legId, String recordingId);
+  Future<Recording> read(String callId, String legId, String recordingId);
 }

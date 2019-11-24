@@ -9,24 +9,19 @@ class ApiCallsService extends BaseService implements CallsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Call> create(Call call) async {
-    final response = await post('/calls',
-        hostname: BaseService.voiceEndpoint, body: call.toMap());
-    return Future.value(Call.fromJson(response.body));
-  }
+  Future<Call> create(Call call) =>
+      post('/calls', hostname: BaseService.voiceEndpoint, body: call.toMap())
+          .then((response) => Future.value(Call.fromJson(response.body)));
 
   @override
-  Future<List<Call>> list() async {
-    final response = await get('/calls', hostname: BaseService.voiceEndpoint);
-    return Future.value(Call.fromJsonList(response.body));
-  }
+  Future<List<Call>> list() =>
+      get('/calls', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Call.fromJsonList(response.body)));
 
   @override
-  Future<Call> read(int id) async {
-    final response =
-        await get('/calls/$id', hostname: BaseService.voiceEndpoint);
-    return Future.value(Call.fromJson(response.body));
-  }
+  Future<Call> read(int id) =>
+      get('/calls/$id', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Call.fromJson(response.body)));
 
   @override
   Future<void> remove(int id) =>

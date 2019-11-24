@@ -62,15 +62,8 @@ class MmsMessage {
   });
 
   /// Construct an [MmsMessage] object from a json [String].
-  factory MmsMessage.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return MmsMessage.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory MmsMessage.fromJson(String source) =>
+      MmsMessage.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct an [MmsMessage] object from a [Map].
   factory MmsMessage.fromMap(Map<String, dynamic> map) => map == null

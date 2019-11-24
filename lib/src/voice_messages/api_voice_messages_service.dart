@@ -1,6 +1,5 @@
-import 'package:http/http.dart' show Response;
-
 import '../base_service.dart';
+import 'model/voice_message.dart';
 import 'voice_messages_service.dart';
 
 /// API implementation of voice messages service.
@@ -12,12 +11,10 @@ class ApiVoiceMessagesService extends BaseService
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(
-      List<String> recipients, Map<String, dynamic> parameters) {
-    parameters['recipients'] = recipients.join(',');
-    return post('/voicemessages');
-  }
+  Future<VoiceMessage> create(VoiceMessage message) => post('/voicemessages')
+      .then((response) => Future.value(VoiceMessage.fromJson(response.body)));
 
   @override
-  Future<Response> read(String id) => get('/voicemessages/$id');
+  Future<VoiceMessage> read(String id) => get('/voicemessages/$id')
+      .then((response) => Future.value(VoiceMessage.fromJson(response.body)));
 }

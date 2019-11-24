@@ -15,21 +15,15 @@ class Balance {
   final double amount;
 
   /// Constructor.
-  Balance({
+  const Balance({
     this.payment,
     this.type,
     this.amount,
   });
 
   /// Construct a [Balance] object from a json [String].
-  factory Balance.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Balance.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Balance.fromJson(String source) =>
+      Balance.fromMap(json.decode(source));
 
   /// Construct a [Balance] object from a [Map].
   factory Balance.fromMap(Map<String, dynamic> map) => map == null

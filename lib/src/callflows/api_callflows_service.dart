@@ -9,35 +9,28 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Callflow> create(Callflow callflow) async {
-    final response = await post('/call-flows',
-        hostname: BaseService.voiceEndpoint, body: callflow.toMap());
-    return Future.value(Callflow.fromJson(response.body));
-  }
+  Future<Callflow> create(Callflow callflow) => post('/call-flows',
+          hostname: BaseService.voiceEndpoint, body: callflow.toMap())
+      .then((response) => Future.value(Callflow.fromJson(response.body)));
 
   @override
-  Future<List<Callflow>> list(int page, int perpage) async {
-    final response = await get('/call-flows',
-        hostname: BaseService.voiceEndpoint,
-        body: {'page': page, 'perpage': perpage});
-    return Future.value(Callflow.fromJsonList(response.body));
-  }
+  Future<List<Callflow>> list({int page, int perpage}) => get('/call-flows',
+          hostname: BaseService.voiceEndpoint,
+          body: {'page': page, 'perpage': perpage})
+      .then((response) => Future.value(Callflow.fromJsonList(response.body)));
 
   @override
-  Future<Callflow> read(String id) async {
-    final response =
-        await get('/call-flows/$id', hostname: BaseService.voiceEndpoint);
-    return Future.value(Callflow.fromJson(response.body));
-  }
+  Future<Callflow> read(String id) =>
+      get('/call-flows/$id', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Callflow.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) =>
       delete('/call-flows/$id', hostname: BaseService.voiceEndpoint);
 
   @override
-  Future<Callflow> update(Callflow callflow) async {
-    final response = await put('/call-flows/${callflow.id}',
-        hostname: BaseService.voiceEndpoint, body: callflow.toMap());
-    return Future.value(Callflow.fromJson(response.body));
-  }
+  Future<Callflow> update(Callflow callflow) =>
+      put('/call-flows/${callflow.id}',
+              hostname: BaseService.voiceEndpoint, body: callflow.toMap())
+          .then((response) => Future.value(Callflow.fromJson(response.body)));
 }

@@ -7,19 +7,19 @@ class Attachment {
   /// The filename of the attachment. This is inserted into the filename
   /// parameter of the Content-Disposition header. Maximum length is 255
   /// characters.
-  String name;
+  final String name;
 
   /// The MIME type of the attachment. The value will apply as-is to the
   /// Content-Type header of the generated MIME part for the attachment. Include
   /// the charset parameter, if needed (e.g. text/html; charset="UTF-8")
-  String type;
+  final String type;
 
   /// The content of the attachment as a Base64 encoded string. The string
   /// should not contain \r\n line breaks.
-  String data;
+  final String data;
 
   /// Constructor.
-  Attachment({
+  const Attachment({
     this.name,
     this.type,
     this.data,
@@ -61,51 +61,53 @@ class Attachment {
 class Email extends Content {
   /// A unique random ID for this message on the MessageBird platform, returned
   /// upon acceptance of the message.
-  String id;
+  final String id;
 
   /// Required. A List containing of all the recipients of the message.
-  List<Recipient> to;
+  final List<Recipient> to;
 
   /// Required. Name / address that will be displayed in the from field of the
   /// sent messages, the domain in the address email must be registered to one
   /// of the channels in the MessageBird account.
-  Recipient from;
+  final Recipient from;
 
   /// Required. This will be displayed as the subject in the message, expected
   /// in the UTF-8 charset without RFC2047 encoding.
-  String subject;
+  final String subject;
 
   /// Required. HTML or text content for the email. At least one type of content
   /// is required.
-  EmailContent content;
+  final EmailContent content;
 
   /// Email address used to compose the email’s “Reply-To” header.
-  String replyTo;
+  final String replyTo;
 
   /// Email address used to compose the email’s “Return-Path” header. Must match
   /// the sending domain of the MessageBird account.
-  String returnPath;
+  final String returnPath;
 
   /// Object containing custom headers other than Subject, From, To, and
   /// Reply-To. These will be sent along with the message.
-  Map<String, String> headers;
+  final Map<String, String> headers;
 
   /// List of the attachments of the message.
-  List<Attachment> attachments;
+  final List<Attachment> attachments;
 
   /// Optional. Allows for tracking options.
-  Tracking tracking;
+  final Tracking tracking;
 
   /// The URL for delivery of status reports for the message. Must use https.
-  String reportUrl;
+  final String reportUrl;
 
   /// Constructor
-  Email({
+  const Email({
     this.id,
     this.to,
     this.from,
     this.subject,
+    this.content,
     this.replyTo,
+    this.returnPath,
     this.headers,
     this.attachments,
     this.tracking,
@@ -121,7 +123,9 @@ class Email extends Content {
         'to': List<dynamic>.from(to.map((recipient) => recipient.toMap())),
         'from': from.toMap(),
         'subject': subject,
+        'content': content.toMap(),
         'replyTo': replyTo,
+        'returnPath': returnPath,
         'headers': headers,
         'attachments': List<dynamic>.from(
             attachments.map((attachment) => attachment.toMap())),
@@ -134,13 +138,13 @@ class Email extends Content {
 /// of your message, it can contain either HTML or plain text.
 class EmailContent extends Content {
   /// HTML content of the message, expected in UTF-8.
-  String html;
+  final String html;
 
   /// Plain text of the message, expected in UTF-8.
-  String text;
+  final String text;
 
   /// Constructor.
-  EmailContent({
+  const EmailContent({
     this.html,
     this.text,
   });
@@ -164,33 +168,26 @@ class EmailContent extends Content {
 /// variables not present in the content or headers are ignored.
 class Recipient {
   /// Required. Valid email address.
-  String email;
+  final String email;
 
   /// Name attached to the email address, this appears in the To field in a
   /// users email client.
-  String name;
+  final String name;
 
   /// List of variables used for placeholders inside the content or headers of
   /// your email.
-  List<String> variables;
+  final List<String> variables;
 
   /// Constructor.
-  Recipient({
+  const Recipient({
     this.email,
     this.name,
     this.variables,
   });
 
   /// Construct an [Recipient] object from a json [String].
-  factory Recipient.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Recipient.fromMap(
-        decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Recipient.fromJson(String source) =>
+      Recipient.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Recipient] object from a [Map].
   factory Recipient.fromMap(Map<String, dynamic> map) => map == null
@@ -215,20 +212,20 @@ class Recipient {
 /// Class encapsulating a [Tracking] object.
 class Tracking {
   /// Adds a tracking pixel to handle `message.opened` events. (Default: true)
-  bool open;
+  final bool open;
 
   /// Adds link-wrapping to handle `link.clicked` events. (Default: true)
-  bool click;
+  final bool click;
 
   /// Constructor.
-  Tracking({
+  const Tracking({
     this.open,
     this.click,
   });
 
   /// Construct a [Tracking] object from a json [String].
   factory Tracking.fromJson(String source) =>
-      Tracking.fromMap(json.decode(source));
+      Tracking.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
 
   /// Construct a [Tracking] object from a [Map].
   factory Tracking.fromMap(Map<String, dynamic> map) => map == null

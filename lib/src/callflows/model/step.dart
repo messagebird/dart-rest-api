@@ -14,21 +14,15 @@ class Step {
   final Map<StepOption, Object> options;
 
   /// Constructor.
-  Step({
+  const Step({
     this.id,
     this.action,
     this.options,
   });
 
   /// Construct a [Step] object from a json [String].
-  factory Step.fromJson(String source) {
-    final decoded = json.decode(source)['data'];
-    if (decoded is List<dynamic> && decoded.length != 1) {
-      throw Exception('Tried to decode a single object from a list of '
-          'multiple objects. Use function "fromJsonList" instead');
-    }
-    return Step.fromMap(decoded == null ? json.decode(source) : decoded[0]);
-  }
+  factory Step.fromJson(String source) => Step.fromMap(
+      json.decode(source)['data'][0] ?? json.decode(source)['data']);
 
   /// Construct a [Step] object from a [Map].
   factory Step.fromMap(Map<String, dynamic> map) => map == null

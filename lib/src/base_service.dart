@@ -23,7 +23,7 @@ abstract class BaseService {
       Map.castFrom(loadYaml(File('./pubspec.yaml').readAsStringSync()));
 
   /// Constructor.
-  BaseService(this._accessKey, {int timeout = 5000, List<String> features})
+  BaseService(this._accessKey, {int timeout, List<String> features})
       : _timeout = (timeout == null) ? 5000 : timeout {
     if (features?.contains('ENDABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
         false) {
@@ -47,9 +47,6 @@ abstract class BaseService {
           )
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
-    } on ApiError {
-      // Problem with handling the response
-      rethrow;
     } on Exception catch (e) {
       // Problem with sending the request
       throw CommunicationProblem(e.toString());
@@ -73,9 +70,6 @@ abstract class BaseService {
               headers: _getHeaders())
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
-    } on ApiError {
-      // Problem with handling the response
-      rethrow;
     } on Exception catch (e) {
       // Problem with sending the request
       throw CommunicationProblem(e.toString());
@@ -92,16 +86,10 @@ abstract class BaseService {
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
-          .patch(
-            _getUrl(path, hostname: 'hostname'),
-            headers: headers,
-            body: (body is Map) ? _createBody(body) : body.toString(),
-          )
+          .patch(_getUrl(path, hostname: 'hostname'),
+              headers: headers, body: _createBody(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
-    } on ApiError {
-      // Problem with handling the response
-      rethrow;
     } on Exception catch (e) {
       // Problem with sending the request
       throw CommunicationProblem(e.toString());
@@ -122,9 +110,6 @@ abstract class BaseService {
               headers: headers, body: _createBody(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
-    } on ApiError {
-      // Problem with handling the response
-      rethrow;
     } on Exception catch (e) {
       // Problem with sending the request
       throw CommunicationProblem(e.toString());
@@ -148,27 +133,27 @@ abstract class BaseService {
           )
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
-    } on ApiError {
-      // Problem with handling the response
-      rethrow;
     } on Exception catch (e) {
       // Problem with sending the request
       throw CommunicationProblem(e.toString());
     }
   }
 
-  String _createBody(Map<String, String> parameters) {
+  String _createBody(Map<String, dynamic> parameters) {
     if (parameters == null || parameters.isEmpty) {
       return '';
     }
     final List<String> nvps = [];
     parameters.forEach((k, v) {
-      nvps.add('${Uri.encodeComponent(k)}=${Uri.encodeComponent(v)}');
+      if (v != null) {
+        nvps.add('${Uri.encodeComponent(k.toString())}='
+            '${Uri.encodeComponent(v.toString())}');
+      }
     });
     return nvps.join('&');
   }
 
-  String _createQuery(Map<String, String> parameters) {
+  String _createQuery(Map<String, dynamic> parameters) {
     if (parameters == null || parameters.isEmpty) {
       return '';
     }
@@ -188,7 +173,7 @@ abstract class BaseService {
     }
     headers.addAll({
       'User-Agent':
-          'MessageBird/ApiClient/${_pubspec['version']} Dart/${Platform.version}'
+          'MessageBird/ApiClient/${_pubspec['version']} Dart/${Platform.version.split(' ')[0]}'
     });
     return headers;
   }
@@ -216,7 +201,9 @@ abstract class BaseService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response;
     } else {
-      throw ApiError.fromJson(json.decode(response.body));
+      final ApiError apiError =
+          ApiError.fromMap(json.decode(response.body)['errors'][0]);
+      throw Exception('Api error ${apiError.code}: ${apiError.message}');
     }
   }
 }

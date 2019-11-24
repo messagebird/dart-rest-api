@@ -10,8 +10,6 @@ class ApiBalanceService extends BaseService implements BalanceService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Balance> read() async {
-    final response = await get('/balance');
-    return Future.value(Balance.fromJson(response.body));
-  }
+  Future<Balance> read() => get('/balance')
+      .then((response) => Future.value(Balance.fromJson(response.body)));
 }
