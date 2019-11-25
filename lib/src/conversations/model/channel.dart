@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating a [Channel] object.
 ///
 /// The [Channel] represent a platform from which messages can be sent and
@@ -57,8 +59,8 @@ class Channel {
           status: ChannelStatus.values.firstWhere(
               (status) => status.toString() == 'ChannelStatus.${map['action']}',
               orElse: () => null),
-          createdDatetime: DateTime.parse(map['createdDatetime']),
-          updatedDatetime: DateTime.parse(map['updatedDatetime']),
+          createdDatetime: parseDate(map['createdDatetime']),
+          updatedDatetime: parseDate(map['updatedDatetime']),
         );
 
   /// Get a json [String] representing the [Channel].
@@ -77,9 +79,12 @@ class Channel {
   /// Get a list of [Channel] objects from a json [String].
   static List<Channel> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Channel.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Channel>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Channel.fromJson(j))
+              .toList();
 }
 
 /// Enumeration of [Channel] statusses.

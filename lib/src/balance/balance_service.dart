@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/balance/model/balance.dart';
+import 'model/balance.dart';
 
 /// Balance service interface.
 // ignore: one_member_abstracts

@@ -187,4 +187,6 @@ enum StepOption {
   ///
   /// Default is: false.
   mask,
+
+  token,
 }

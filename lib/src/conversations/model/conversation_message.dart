@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/messages/model/content.dart';
+import 'package:messagebird_dart/src/general/model/content.dart';
+import 'package:messagebird_dart/src/general/model/message.dart';
 
-import '../../messages/model/message.dart';
 import 'fallback.dart';
 
 /// Class encapsulating a [ConversationMessage] object.
@@ -16,14 +16,19 @@ class ConversationMessage extends Message {
 
   /// Constructor.
   const ConversationMessage(
-      {String to,
-      String from,
-      MessageType type,
+      {MessageType type,
       Content content,
+      String to,
+      String channelId,
+      Map<String, dynamic> source,
       this.reportUrl,
-      this.fallback,
-      Map<String, dynamic> source})
-      : super(to: to, from: from, type: type, content: content, source: source);
+      this.fallback})
+      : super(
+            type: type,
+            content: content,
+            to: to,
+            channelId: channelId,
+            source: source);
 
   /// Construct a [ConversationMessage] object from a json [String].
   factory ConversationMessage.fromJson(String source) =>
@@ -39,13 +44,13 @@ class ConversationMessage extends Message {
     return map == null
         ? null
         : ConversationMessage(
-            to: map['to'].toString(),
-            from: map['from'].toString(),
             type: type,
             content: Content.get(type, map['content']),
-            reportUrl: map['reportUrl'].toString(),
-            fallback: Fallback.fromJson(map['fallback']),
-            source: map['source']);
+            to: map['to'].toString(),
+            channelId: map['channelId'].toString(),
+            source: map['source'],
+            reportUrl: map['reportUrl'],
+            fallback: Fallback.fromJson(map['fallback']));
   }
 
   /// Get a json [String] representing the [ConversationMessage].
@@ -55,19 +60,22 @@ class ConversationMessage extends Message {
   /// Get a json object representing the [ConversationMessage]
   @override
   Map<String, dynamic> toMap() => {
-        'to': to.toString(),
-        'from': from.toString(),
         'type': type.toString().replaceAll('MessageType.', ''),
-        'content': content.toJson(),
-        'reportUrl': reportUrl.toString(),
-        'fallback': fallback.toJson(),
-        'source': source
+        'content': content.toMap(),
+        'to': to.toString(),
+        'channelId': channelId.toString(),
+        'source': source,
+        'reportUrl': reportUrl,
+        'fallback': fallback?.toJson(),
       };
 
   /// Get a list of [ConversationMessage] objects from a json [String].
   static List<ConversationMessage> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => ConversationMessage.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <ConversationMessage>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => ConversationMessage.fromJson(j))
+              .toList();
 }

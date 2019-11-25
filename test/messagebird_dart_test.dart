@@ -9,13 +9,16 @@ import 'package:messagebird_dart/src/callflows/model/callflow.dart';
 import 'package:messagebird_dart/src/callflows/model/step.dart';
 import 'package:messagebird_dart/src/conversations/api_conversations_service.dart';
 import 'package:messagebird_dart/src/conversations/conversations_service.dart';
+import 'package:messagebird_dart/src/conversations/model/conversation_message.dart';
+import 'package:messagebird_dart/src/general/model/content.dart';
+import 'package:messagebird_dart/src/general/model/message.dart';
 import 'package:test/test.dart';
 
 void main() {
-  ConversationsService conversationsService;
+  Map credentials;
   BalanceService balanceService;
   CallflowsService callflowsService;
-  Map credentials;
+  ConversationsService conversationsService;
 
   setUp(() async {
     credentials =
@@ -23,20 +26,31 @@ void main() {
   });
 
   group('BalanceService', () {
+    Balance balance;
+
     setUp(() async {
       balanceService = ApiBalanceService(credentials['test']);
+      balance = await balanceService.read();
     });
-    test('should get balance', () async {
-      expect(await balanceService.read(), isA<Balance>());
+
+    test('should get balance object', () {
+      expect(balance, isA<Balance>());
+    });
+
+    test('should return valid properties ', () {
+      expect(balance.amount, isA<double>());
+      expect(balance.payment, isIn(Payment.values));
+      expect(balance.type, isA<String>());
     });
   });
 
   group('CallflowService', () {
     Callflow callflow;
     Callflow callflowFromJson;
+    final List<String> ids = [];
 
     setUp(() {
-      callflowsService = ApiCallflowsService('${credentials['test']}');
+      callflowsService = ApiCallflowsService(credentials['live']);
       callflowFromJson = Callflow.fromJson(
           File('test_resources/callflow.json').readAsStringSync());
       callflow = Callflow(
@@ -72,18 +86,53 @@ void main() {
           serialized['steps'][0]['id'], equals(callflowFromJson.steps[0].id));
     });
 
-    test('should get no conversations on our account', () async {
-      await callflowsService.read('bogus');
-      //expect((await callflowsService.list()).length, 0);
+    test('should create a callflow', () async {
+      final Callflow createdCallflow = await callflowsService.create(callflow);
+      ids.add(createdCallflow.id);
+      expect(createdCallflow.title, equals(callflow.title));
+      expect(createdCallflow.record, equals(callflow.record));
+      expect(createdCallflow.steps[0].id, equals(callflow.steps[0].id));
+    });
+
+    test('should delete a callflow', () async {
+      await callflowsService.remove(ids[0]);
+      await callflowsService.read(ids[0]).catchError((error) {
+        expect(error.toString(), contains('(code 13)')); // Not found
+      });
+    });
+  });
+
+  group('ContactsService', () {
+    ContactsService contactsService;
+
+    setUp(() {
+      contactsService = ApiContactsService(credentials['live']);
+    });
+
+    test('gets contacts', () async {
+      expect((await contactsService.list()).length, isA<int>());
     });
   });
 
   group('ConversationService', () {
     setUp(() {
-      conversationsService = ApiConversationsService(credentials['test']);
+      conversationsService = ApiConversationsService(credentials['live']);
     });
+
     test('should get endpoint', () {
       expect(conversationsService.getEndpoint(), isA<String>());
+    });
+
+    test('should get conversations on our account', () async {
+      expect((await conversationsService.list()).length, greaterThan(0));
+    });
+
+    test('should start a conversation', () async {
+      await conversationsService.start(const ConversationMessage(
+          type: MessageType.text,
+          content: TextContent('Hello world!'),
+          to: '31617692626',
+          channelId: 'b6e314222822441a907aa03ef3d425f9'));
     });
   });
 }

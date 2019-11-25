@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 import 'recipients.dart';
 
 /// Class encapsulating a [MmsMessage].
@@ -78,8 +80,8 @@ class MmsMessage {
           body: map['body'],
           mediaUrls: List<String>.from(map['mediaUrls']),
           reference: map['reference'],
-          scheduledDatetime: DateTime.parse(map['scheduledDatetime']),
-          createdDatetime: DateTime.parse(map['createdDatetime']),
+          scheduledDatetime: parseDate(map['scheduledDatetime']),
+          createdDatetime: parseDate(map['createdDatetime']),
         );
 
   /// Get a json [String] representing the [MmsMessage]
@@ -103,7 +105,10 @@ class MmsMessage {
   /// Get a list of [MmsMessage] objects from a json [String].
   static List<MmsMessage> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => MmsMessage.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <MmsMessage>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => MmsMessage.fromJson(j))
+              .toList();
 }

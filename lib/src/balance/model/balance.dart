@@ -2,12 +2,12 @@ import 'dart:convert';
 
 /// Class encapsulating a [Balance] object.
 class Balance {
-  /// The payment method. Possible values are `prepaid` and `postpaid`.
-  final String payment;
+  /// The payment method. See [Payment] for allowed values.
+  final Payment payment;
 
   /// The payment type. Possible values are: `credits`, `euros`, `pounds`
-  /// and `dollars`. For all other supported currencies, an [ISO-4217](https://www.wikipedia.org/wiki/ISO_4217) code
-  /// is returned.
+  /// and `dollars`. For all other supported currencies, an [ISO-4217](https://www.wikipedia.org/wiki/ISO_4217)
+  /// code is returned.
   final String type;
 
   /// The amount of balance of the payment type. When postpaid is your payment
@@ -29,8 +29,19 @@ class Balance {
   factory Balance.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Balance(
-          payment: map['payment'],
+          payment: Payment.values.firstWhere(
+              (payment) => payment.toString() == 'Payment.${map['payment']}',
+              orElse: () => null),
           type: map['type'],
           amount: double.parse(map['amount'].toString()),
         );
+}
+
+/// Enumeration of possible payment types.
+enum Payment {
+  /// The [Balance] is paid in advance.
+  prepaid,
+
+  /// The [Balance] is paid afterwards.
+  postpaid
 }

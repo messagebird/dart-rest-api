@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../util.dart';
 import 'email.dart';
 import 'message.dart';
 
@@ -235,7 +236,7 @@ class HSMLocalizableParameters {
           : HSMLocalizableParameters(
               defaultValue: map['defaultValue'].toString(),
               currency: Currency.fromMap(map['currency']),
-              dateTime: DateTime.parse(map['dateTime'].toString()));
+              dateTime: parseDate(map['dateTime']));
 
   /// Get a json object representing the [HSMLocalizableParameters]
   Map<String, dynamic> toJson() =>

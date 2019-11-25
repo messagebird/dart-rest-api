@@ -1,4 +1,4 @@
-import 'model/message.dart';
+import 'package:messagebird_dart/src/general/model/message.dart';
 
 /// Message service interface.
 abstract class MessagesService {

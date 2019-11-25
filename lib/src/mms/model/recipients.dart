@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating a [RecipientItem].
 class RecipientItem {
   /// The msisdn of the recipient.
@@ -33,7 +35,7 @@ class RecipientItem {
                   status.toString() ==
                   'RecipientItemStatus.${map['status']}'.replaceAll(' ', '_'),
               orElse: () => null),
-          statusDatetime: DateTime.parse(map['statusDatetime']),
+          statusDatetime: parseDate(map['statusDatetime']),
         );
 
   /// Get a json [String] representing the [RecipientItem].

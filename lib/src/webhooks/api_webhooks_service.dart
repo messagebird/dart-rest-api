@@ -1,6 +1,5 @@
-import 'package:http/http.dart' show Response;
-
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
+import 'model/webhook.dart';
 import 'webhooks_service.dart';
 
 /// API implementation of webhooks service.
@@ -10,29 +9,30 @@ class ApiWebhooksService extends BaseService implements WebhooksService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Response> create(Map<String, dynamic> parameters) =>
-      post('/v1/webhooks',
-          hostname: BaseService.conversationsEndpoint, body: parameters);
+  Future<Webhook> create(Webhook webhook) => post('/v1/webhooks',
+          hostname: BaseService.conversationsEndpoint, body: webhook.toMap())
+      .then((response) => Future.value(Webhook.fromJson(response.body)));
 
   @override
-  Future<Response> list({int limit, int offset}) => get('/v1/webhooks',
-      hostname: BaseService.conversationsEndpoint,
-      body: {'limit': limit, 'offset': offset});
+  Future<List<Webhook>> list({int limit, int offset}) => get('/v1/webhooks',
+          hostname: BaseService.conversationsEndpoint,
+          body: {'limit': limit, 'offset': offset})
+      .then((response) => Future.value(Webhook.fromJsonList(response.body)));
 
   @override
-  Future<Response> read(String id) => get(
+  Future<Webhook> read(String id) => get(
+        '/v1/webhooks/$id',
+        hostname: BaseService.conversationsEndpoint,
+      ).then((response) => Future.value(Webhook.fromJson(response.body)));
+
+  @override
+  Future<void> remove(String id) => delete(
         '/v1/webhooks/$id',
         hostname: BaseService.conversationsEndpoint,
       );
 
   @override
-  Future<Response> remove(String id) => delete(
-        '/v1/webhooks/$id',
-        hostname: BaseService.conversationsEndpoint,
-      );
-
-  @override
-  Future<Response> update(String id, Map<String, dynamic> parameters) =>
-      patch('/v1/webhooks',
-          hostname: BaseService.conversationsEndpoint, body: parameters);
+  Future<Webhook> update(Webhook webhook) => patch('/v1/webhooks/${webhook.id}',
+          hostname: BaseService.conversationsEndpoint, body: webhook.toMap())
+      .then((response) => Future.value(Webhook.fromJson(response.body)));
 }

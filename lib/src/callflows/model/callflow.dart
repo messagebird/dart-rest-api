@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 import 'step.dart';
 
 /// Class encapsulating a [Callflow] object.
@@ -61,9 +63,8 @@ class Callflow {
           steps:
               List<Step>.from(map['steps']?.map((step) => Step.fromMap(step))),
           isDefault: map['isDefault'].toString() == 'true',
-          createdAt: DateTime.parse(map['createdAt']),
-          updatedAt: DateTime.parse(map['updatedAt']),
-        );
+          createdAt: parseDate(map['createdAt']),
+          updatedAt: parseDate(map['updatedAt']));
 
   /// Get a json [String] representing the [Callflow].
   String toJson() => json.encode(toMap());
@@ -82,7 +83,10 @@ class Callflow {
   /// Get a list of [Callflow] objects from a json [String].
   static List<Callflow> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Callflow.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Callflow>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Callflow.fromMap(j))
+              .toList();
 }

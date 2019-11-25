@@ -1,8 +1,9 @@
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/contact.dart';
+import 'package:messagebird_dart/src/general/model/groups.dart';
+import 'package:messagebird_dart/src/general/model/messages.dart';
+
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'contacts_service.dart';
-import 'model/contact.dart';
-import 'model/groups.dart';
-import 'model/messages.dart';
 
 /// API implementation of [ContactsService].
 class ApiContactsService extends BaseService implements ContactsService {

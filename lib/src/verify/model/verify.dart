@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/contacts/model/messages.dart';
+import 'package:messagebird_dart/src/general/model/messages.dart';
+import 'package:messagebird_dart/src/general/util.dart';
 
 /// Class encapsulating a [Verify].
 class Verify {
@@ -60,9 +61,8 @@ class Verify {
           status: VerifyStatus.values.firstWhere(
               (status) => status.toString() == 'VerifyStatus.${map['status']}',
               orElse: () => null),
-          createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
-          validUntilDatetime:
-              DateTime.parse(map['validUntilDatetime'].toString()),
+          createdDatetime: parseDate(map['createdDatetime']),
+          validUntilDatetime: parseDate(map['validUntilDatetime']),
         );
 
   /// Get a json [String] representing the [Verify].

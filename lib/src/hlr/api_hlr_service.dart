@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'hlr_service.dart';
 import 'model/hlr.dart';
 

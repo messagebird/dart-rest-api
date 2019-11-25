@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating a [Call] object.
 class Call {
   /// The unique ID of the [Call].
@@ -53,9 +55,9 @@ class Call {
               orElse: () => null),
           source: map['source'].toString(),
           destination: map['destination'].toString(),
-          createdAt: DateTime.parse(map['createdAt']),
-          updatedAt: DateTime.parse(map['updatedAt']),
-          endedAt: DateTime.parse(map['endedAt']),
+          createdAt: parseDate(map['createdAt']),
+          updatedAt: parseDate(map['updatedAt']),
+          endedAt: parseDate(map['endedAt']),
         );
 
   /// Get a json [String] representing the [Call].
@@ -75,9 +77,12 @@ class Call {
   /// Get a list of [Call] objects from a json [String].
   static List<Call> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Call.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Call>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Call.fromJson(j))
+              .toList();
 }
 
 /// Enumeration of [CallStatus] statusses.

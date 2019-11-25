@@ -1,7 +1,6 @@
-import 'package:messagebird_dart/src/mms/model/mms_message.dart';
-
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'mms_service.dart';
+import 'model/mms_message.dart';
 
 /// API implementation of mms service.
 class ApiMmsService extends BaseService implements MmsService {

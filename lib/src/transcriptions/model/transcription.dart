@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating a [Transcription].
 class Transcription {
   /// The unique ID of the transcription.
@@ -49,8 +51,8 @@ class Transcription {
           id: data['id'].toString(),
           recordingId: data['recordingId'].toString(),
           error: data['error'].toString(),
-          createdAt: DateTime.parse(data['createdAt'].toString()),
-          updatedAt: DateTime.parse(data['updatedAt'].toString()),
+          createdAt: parseDate(data['createdAt']),
+          updatedAt: parseDate(data['updatedAt']),
           links: Map<String, Uri>.from(
               map['_links'].map((key, uri) => {key: Uri.parse(uri)})));
     }
@@ -73,7 +75,10 @@ class Transcription {
   /// Get a list of [Transcription] objects from a json [String].
   static List<Transcription> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Transcription.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Transcription>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Transcription.fromJson(j))
+              .toList();
 }

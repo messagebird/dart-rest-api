@@ -5,8 +5,8 @@ import 'dart:io' show File, Platform;
 import 'package:http/http.dart' show Response, Client, BaseClient;
 import 'package:yaml/yaml.dart';
 
-import 'general/exception/communication_problem.dart';
-import 'general/model/api_error.dart';
+import '../exception/communication_problem.dart';
+import 'api_error.dart';
 
 /// Base service.
 abstract class BaseService {
@@ -59,6 +59,8 @@ abstract class BaseService {
   /// used to provide parameters to the requests
   Future<Response> get(String path,
       {String hostname, Map<String, dynamic> body}) {
+    final Map<String, String> headers = _getHeaders();
+    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
           .get(
@@ -67,7 +69,7 @@ abstract class BaseService {
                   // ignore: lines_longer_than_80_chars
                   '${(body != null) ? _createQuery(body) : ''}',
                   hostname: hostname),
-              headers: _getHeaders())
+              headers: headers)
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
     } on Exception catch (e) {
@@ -83,11 +85,10 @@ abstract class BaseService {
   Future<Response> patch(String path,
       {String hostname, Map<String, dynamic> body}) async {
     final Map<String, String> headers = _getHeaders();
-    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
           .patch(_getUrl(path, hostname: 'hostname'),
-              headers: headers, body: _createBody(body))
+              headers: headers, body: json.encode(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
     } on Exception catch (e) {
@@ -103,11 +104,10 @@ abstract class BaseService {
   Future<Response> post(String path,
       {String hostname, Map<String, dynamic> body}) {
     final Map<String, String> headers = _getHeaders();
-    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
           .post(_getUrl(path, hostname: hostname),
-              headers: headers, body: _createBody(body))
+              headers: headers, body: json.encode(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
     } on Exception catch (e) {
@@ -129,7 +129,7 @@ abstract class BaseService {
           .put(
             _getUrl('path', hostname: 'hostname'),
             headers: headers,
-            body: _createBody(body),
+            body: json.encode(body),
           )
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
@@ -139,7 +139,7 @@ abstract class BaseService {
     }
   }
 
-  String _createBody(Map<String, dynamic> parameters) {
+  String _createQuery(Map<String, dynamic> parameters) {
     if (parameters == null || parameters.isEmpty) {
       return '';
     }
@@ -150,28 +150,16 @@ abstract class BaseService {
             '${Uri.encodeComponent(v.toString())}');
       }
     });
-    return nvps.join('&');
-  }
-
-  String _createQuery(Map<String, dynamic> parameters) {
-    if (parameters == null || parameters.isEmpty) {
-      return '';
-    }
-    final List<String> nvps = [];
-    parameters.forEach((k, v) {
-      if (v != null) {
-        nvps.add('${Uri.encodeComponent(k)}=${Uri.encodeComponent(v)}');
-      }
-    });
     return (nvps.isEmpty) ? '' : '?${nvps.join('&')}';
   }
 
   Map<String, String> _getHeaders() {
     final Map<String, String> headers = {};
     if (_accessKey != null) {
-      headers.addAll({'Authorization': 'Accesskey $_accessKey'});
+      headers.addAll({'Authorization': 'AccessKey $_accessKey'});
     }
     headers.addAll({
+      'Accept': 'application/json',
       'User-Agent':
           'MessageBird/ApiClient/${_pubspec['version']} Dart/${Platform.version.split(' ')[0]}'
     });
@@ -203,7 +191,8 @@ abstract class BaseService {
     } else {
       final ApiError apiError =
           ApiError.fromMap(json.decode(response.body)['errors'][0]);
-      throw Exception('Api error ${apiError.code}: ${apiError.message}');
+      throw Exception('API error (code ${apiError.code}): '
+          '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
     }
   }
 }

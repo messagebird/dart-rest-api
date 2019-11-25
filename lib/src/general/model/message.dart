@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../util.dart';
 import 'content.dart';
 
 /// Class encapsulating a [Message] object.
@@ -100,8 +101,8 @@ class Message {
                 orElse: () => null),
             type: type,
             content: Content.get(type, map['content']),
-            createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
-            updatedDatetime: DateTime.parse(map['updatedDatetime'].toString()),
+            createdDatetime: parseDate(map['createdDatetime']),
+            updatedDatetime: parseDate(map['updatedDatetime']),
             source: map['source']);
   }
 

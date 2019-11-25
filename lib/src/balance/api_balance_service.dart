@@ -1,7 +1,7 @@
-import 'package:messagebird_dart/src/balance/model/balance.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 
-import '../base_service.dart';
 import 'balance_service.dart';
+import 'model/balance.dart';
 
 /// API implementation of [BalanceService].
 class ApiBalanceService extends BaseService implements BalanceService {

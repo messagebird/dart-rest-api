@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
 import 'package:messagebird_dart/src/mms/model/recipients.dart';
 
 /// Enumeration of [VoiceMessage] language options.
@@ -260,9 +261,8 @@ class VoiceMessage {
                   'MachineOption.${map['ifMachine']}'.replaceAll('_', ''),
               orElse: () => null),
           machineTimeout: int.parse(map['machineTimeout'].toString()),
-          scheduledDatetime:
-              DateTime.parse(map['scheduledDatetime'].toString()),
-          createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
+          scheduledDatetime: parseDate(map['scheduledDatetime']),
+          createdDatetime: parseDate(map['createdDatetime']),
           recipients: Recipients.fromMap(map['recipients']),
         );
 

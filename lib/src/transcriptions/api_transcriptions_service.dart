@@ -1,6 +1,6 @@
 import 'dart:io' show File;
 
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'model/transcription.dart';
 import 'transcriptions_service.dart';
 

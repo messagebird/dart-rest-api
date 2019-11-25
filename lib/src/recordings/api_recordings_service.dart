@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'model/recording.dart';
 import 'recordings_service.dart';
 

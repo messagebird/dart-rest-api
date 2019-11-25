@@ -1,4 +1,4 @@
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
 

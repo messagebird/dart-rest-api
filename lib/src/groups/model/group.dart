@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 import 'contacts.dart';
 
 /// Class encapsulating a [Group] object.
@@ -47,8 +49,8 @@ class Group {
           href: map['href'],
           name: map['name'],
           contacts: Contacts.fromMap(map['contacts']),
-          createdDatetime: DateTime.parse(map['createdDatetime'].toString()),
-          updatedDatetime: DateTime.parse(map['updatedDatetime'].toString()),
+          createdDatetime: parseDate(map['createdDatetime']),
+          updatedDatetime: parseDate(map['updatedDatetime']),
         );
 
   /// Get a json [String] representing the [Group].
@@ -67,7 +69,10 @@ class Group {
   /// Get a list of [Group] objects from a json [String].
   static List<Group> fromJsonList(String source) => source == null
       ? null
-      : List<String>.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Group.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Group>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Group.fromJson(j))
+              .toList();
 }

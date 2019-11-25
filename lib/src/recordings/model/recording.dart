@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating a [Recording].
 class Recording {
   /// The unique ID of the recording.
@@ -70,8 +72,8 @@ class Recording {
                   'RecordingStatus.${data['status']}'.replaceAll(' ', '_'),
               orElse: () => null),
           duration: int.parse(data['duration'].toString()),
-          createdAt: DateTime.parse(data['createdAt'].toString()),
-          updatedAt: DateTime.parse(data['updatedAt'].toString()),
+          createdAt: parseDate(data['createdAt']),
+          updatedAt: parseDate(data['updatedAt']),
           links: Map<String, Uri>.from(
               map['_links'].map((key, uri) => {key: Uri.parse(uri)})));
     }
@@ -97,9 +99,12 @@ class Recording {
   /// Get a list of [Recording] objects from a json [String].
   static List<Recording> fromJsonList(String source) => source == null
       ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Recording.fromJson(j))
-          .toList();
+      : json.decode(source)['totalCount'] == 0 ??
+              json.decode(source)['pagination']['totalCount'] == 0
+          ? <Recording>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Recording.fromJson(j))
+              .toList();
 }
 
 /// Enumeration of [Recording] statusses.

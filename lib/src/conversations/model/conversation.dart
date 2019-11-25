@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/contacts/model/contact.dart';
+import 'package:messagebird_dart/src/general/model/contact.dart';
+import 'package:messagebird_dart/src/general/util.dart';
 
 import 'channel.dart';
 import 'messages_count.dart';
@@ -71,8 +72,10 @@ class Conversation {
   });
 
   /// Construct a [Conversation] object from a json [String].
-  factory Conversation.fromJson(String source) => Conversation.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory Conversation.fromJson(String source) =>
+      Conversation.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Conversation] object from a [Map].
   factory Conversation.fromMap(Map<String, dynamic> map) => map == null
@@ -87,9 +90,10 @@ class Conversation {
                   status.toString() == 'ConversationStatus.${map['status']}',
               orElse: () => null),
           messages: MessagesCount.fromMap(map['messages']),
-          createdDatetime: DateTime.parse(map['createdDatetime']),
-          updatedDatetime: DateTime.parse(map['updatedDatetime']),
-          lastReceivedDatetime: DateTime.parse(map['lastReceivedDatetime']),
+          createdDatetime: parseDate(map['createdDatetime'].toString()),
+          updatedDatetime: parseDate(map['updatedDatetime'].toString()),
+          lastReceivedDatetime:
+              parseDate(map['lastReceivedDatetime'].toString()),
           lastUsedChannelId: map['lastUsedChannelId'],
         );
 
@@ -111,11 +115,17 @@ class Conversation {
       };
 
   /// Get a list of [Conversation] objects from a json [String].
-  static List<Conversation> fromJsonList(String source) => source == null
-      ? null
-      : List.from(json.decode(source)['data'] ?? json.decode(source))
-          .map((j) => Conversation.fromJson(j))
-          .toList();
+  static List<Conversation> fromJsonList(String source) {
+    if (source == null) {
+      return null;
+    } else {
+      return json.decode(source)['totalCount'] == 0
+          ? <Conversation>[]
+          : List.from(json.decode(source)['items'] ?? json.decode(source))
+              .map((j) => Conversation.fromMap(j))
+              .toList();
+    }
+  }
 }
 
 /// Enumeration of [Conversation] statusses

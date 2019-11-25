@@ -1,6 +1,6 @@
-import 'model/contact.dart';
-import 'model/groups.dart';
-import 'model/messages.dart';
+import 'package:messagebird_dart/src/general/model/contact.dart';
+import 'package:messagebird_dart/src/general/model/groups.dart';
+import 'package:messagebird_dart/src/general/model/messages.dart';
 
 /// Contacts service interface.
 abstract class ContactsService {

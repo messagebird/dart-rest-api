@@ -1,8 +1,8 @@
-import 'package:messagebird_dart/src/conversations/model/conversation.dart';
-import 'package:messagebird_dart/src/messages/model/message.dart';
+import 'package:messagebird_dart/src/general/model/message.dart';
 
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'conversations_service.dart';
+import 'model/conversation.dart';
 import 'model/conversation_message.dart';
 import 'model/message_response.dart';
 

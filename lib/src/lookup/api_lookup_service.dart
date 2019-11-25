@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:messagebird_dart/src/hlr/model/hlr.dart';
 
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'lookup_service.dart';
 import 'model/lookup.dart';
 

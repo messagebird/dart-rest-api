@@ -1,4 +1,4 @@
-import '../base_service.dart';
+import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'model/voice_message.dart';
 import 'voice_messages_service.dart';
 

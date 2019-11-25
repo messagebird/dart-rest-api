@@ -1,19 +1,19 @@
-import 'package:http/http.dart' show Response;
+import 'model/webhook.dart';
 
 /// Webhooks service interface.
 abstract class WebhooksService {
   /// Creates a new webhook.
-  Future<Response> create(Map<String, dynamic> parameters);
+  Future<Webhook> create(Webhook webhook);
 
   /// Retieves a list of webhooks.
-  Future<Response> list({int limit, int offset});
+  Future<List<Webhook>> list({int limit, int offset});
 
   /// Retrieves an existing webhook by id.
-  Future<Response> read(String id);
+  Future<Webhook> read(String id);
 
   /// Removes webhook.
-  Future<Response> remove(String id);
+  Future<void> remove(String id);
 
   /// Updates a webhook.
-  Future<Response> update(String id, Map<String, dynamic> parameters);
+  Future<Webhook> update(Webhook webhook);
 }
