@@ -78,10 +78,10 @@ class Hlr {
         'msisdn': msisdn,
         'network': network,
         'reference': reference,
-        'details': details.toMap(),
-        'status': status.toString().replaceAll('HlrStatus.', ''),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'statusDatetime': statusDatetime.toIso8601String(),
+        'details': details?.toMap(),
+        'status': status?.toString()?.replaceAll('HlrStatus.', ''),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'statusDatetime': statusDatetime?.toIso8601String(),
       };
 }
 

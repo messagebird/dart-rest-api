@@ -74,10 +74,10 @@ class Verify {
         'href': href,
         'recipient': recipient,
         'reference': reference,
-        'messages': messages.toMap(),
+        'messages': messages?.toMap(),
         'status': status?.toString()?.replaceAll('VerifyStatus.', ''),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'validUntilDatetime': validUntilDatetime.toIso8601String(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'validUntilDatetime': validUntilDatetime?.toIso8601String(),
       };
 }
 

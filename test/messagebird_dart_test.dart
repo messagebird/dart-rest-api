@@ -26,6 +26,9 @@ void main() {
   });
 
   group('BalanceService', () {
+    /// Available methods:\
+    ///
+    /// GET /balance
     Balance balance;
 
     setUp(() async {
@@ -45,6 +48,13 @@ void main() {
   });
 
   group('CallflowService', () {
+    /// Available methods:
+    ///
+    /// GET /call-flows/
+    /// GET /call-flows/{id}
+    /// POST /call-flows/
+    /// PUT /call-flows/{id}
+    /// DELETE /call-flows/{id}
     Callflow callflow;
     Callflow callflowFromJson;
     final List<String> ids = [];
@@ -103,6 +113,15 @@ void main() {
   });
 
   group('ContactsService', () {
+    /// Available methods:
+    ///
+    /// POST /contacts
+    /// GET /contacts
+    /// GET /contacts/{contactId}
+    /// GET /contacts/{contactId}/groups
+    /// GET /contacts/{contactId}/messages
+    /// PATCH /contacts/{contactId}
+    /// DELETE /contacts/{contactId}
     ContactsService contactsService;
 
     setUp(() {
@@ -110,11 +129,20 @@ void main() {
     });
 
     test('gets contacts', () async {
-      expect((await contactsService.list()).length, isA<int>());
+      expect((await contactsService.list()).length, greaterThan(0));
     });
   });
 
   group('ConversationService', () {
+    /// Available methods:
+    ///
+    /// POST /conversations/start
+    /// GET /conversations
+    /// GET /conversations/{id}
+    /// PATCH /conversations/{id}
+    /// GET /conversations/{id}/messages
+    /// POST /conversations/{id}/messages
+
     setUp(() {
       conversationsService = ApiConversationsService(credentials['live']);
     });
@@ -123,16 +151,16 @@ void main() {
       expect(conversationsService.getEndpoint(), isA<String>());
     });
 
-    test('should get conversations on our account', () async {
-      expect((await conversationsService.list()).length, greaterThan(0));
-    });
-
     test('should start a conversation', () async {
       await conversationsService.start(const ConversationMessage(
           type: MessageType.text,
           content: TextContent('Hello world!'),
           to: '31617692626',
           channelId: 'b6e314222822441a907aa03ef3d425f9'));
+    });
+
+    test('should get conversations on our account', () async {
+      expect((await conversationsService.list()).length, greaterThan(0));
     });
   });
 }

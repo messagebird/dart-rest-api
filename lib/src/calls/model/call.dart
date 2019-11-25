@@ -66,11 +66,11 @@ class Call {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'id': id,
-        'status': status.toString().replaceAll('CallStatus.', ''),
+        'status': status?.toString()?.replaceAll('CallStatus.', ''),
         'source': source,
         'destination': destination,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
+        'createdAt': createdAt?.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
         'endedAt': endedAt,
       };
 

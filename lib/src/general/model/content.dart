@@ -245,8 +245,8 @@ class HSMLocalizableParameters {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'defaultValue': defaultValue,
-        'currency': currency.toMap(),
-        'dateTime': dateTime.toIso8601String(),
+        'currency': currency?.toMap(),
+        'dateTime': dateTime?.toIso8601String(),
       };
 
   /// Get a list of [HSMLocalizableParameters] objects from a [list] object

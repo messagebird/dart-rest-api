@@ -284,8 +284,8 @@ class VoiceMessage {
         'repeat': repeat,
         'ifMachine': ifMachine?.toString()?.replaceAll('MachineOption.', ''),
         'machineTimeout': machineTimeout,
-        'scheduledDatetime': scheduledDatetime.toIso8601String(),
-        'createdDatetime': createdDatetime.toIso8601String(),
+        'scheduledDatetime': scheduledDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
         'recipients': recipients.toMap(),
       };
 }

@@ -188,5 +188,6 @@ enum StepOption {
   /// Default is: false.
   mask,
 
+  /// API doc missing.
   token,
 }

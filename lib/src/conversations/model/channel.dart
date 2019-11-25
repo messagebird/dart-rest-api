@@ -72,8 +72,8 @@ class Channel {
         'name': name,
         'platformId': platformId,
         'status': status?.toString()?.replaceAll('ChannelStatus.', ''),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': updatedDatetime.toIso8601String(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'updatedDatetime': updatedDatetime?.toIso8601String(),
       };
 
   /// Get a list of [Channel] objects from a json [String].

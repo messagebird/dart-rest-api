@@ -88,10 +88,10 @@ class Contact {
         'firstName': firstName,
         'lastName': lastName,
         'customDetails': customDetails,
-        'groups': groups.toJson(),
-        'messages': messages.toJson(),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': createdDatetime.toIso8601String()
+        'groups': groups?.toJson(),
+        'messages': messages?.toJson(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'updatedDatetime': createdDatetime?.toIso8601String()
       };
 
   /// Get a list of [Contact] objects from a json [String]

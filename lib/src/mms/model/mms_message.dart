@@ -93,13 +93,13 @@ class MmsMessage {
         'href': href,
         'direction': direction,
         'originator': originator,
-        'recipients': recipients.toMap(),
+        'recipients': recipients?.toMap(),
         'subject': subject,
         'body': body,
         'mediaUrls': mediaUrls,
         'reference': reference,
-        'scheduledDatetime': scheduledDatetime.toIso8601String(),
-        'createdDatetime': createdDatetime.toIso8601String(),
+        'scheduledDatetime': scheduledDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
       };
 
   /// Get a list of [MmsMessage] objects from a json [String].

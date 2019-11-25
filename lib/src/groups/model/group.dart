@@ -61,9 +61,9 @@ class Group {
         'id': id,
         'href': href,
         'name': name,
-        'contacts': contacts.toMap(),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': updatedDatetime.toIso8601String(),
+        'contacts': contacts?.toMap(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'updatedDatetime': updatedDatetime?.toIso8601String(),
       };
 
   /// Get a list of [Group] objects from a json [String].

@@ -103,14 +103,14 @@ class Conversation {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'id': id,
-        'contact': contact.toMap(),
+        'contact': contact?.toMap(),
         'channels':
             List<dynamic>.from(channels.map((channel) => channel.toMap())),
-        'status': status.toString().replaceAll('ConversationStatus.', ''),
-        'messages': messages.toMap(),
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': updatedDatetime.toIso8601String(),
-        'lastReceivedDatetime': lastReceivedDatetime.toIso8601String(),
+        'status': status?.toString()?.replaceAll('ConversationStatus.', ''),
+        'messages': messages?.toMap(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'updatedDatetime': updatedDatetime?.toIso8601String(),
+        'lastReceivedDatetime': lastReceivedDatetime?.toIso8601String(),
         'lastUsedChannelId': lastUsedChannelId,
       };
 

@@ -116,11 +116,11 @@ class Message {
         'channelId': channelId,
         'to': to,
         'from': from,
-        'direction': direction.toString().replaceAll('MessageDirection.', ''),
-        'type': type.toString().replaceAll('MessageType.', ''),
+        'direction': direction?.toString()?.replaceAll('MessageDirection.', ''),
+        'type': type?.toString()?.replaceAll('MessageType.', ''),
         'content': content,
-        'createdDatetime': createdDatetime.toIso8601String(),
-        'updatedDatetime': updatedDatetime.toIso8601String(),
+        'createdDatetime': createdDatetime?.toIso8601String(),
+        'updatedDatetime': updatedDatetime?.toIso8601String(),
         'source': source
       };
 

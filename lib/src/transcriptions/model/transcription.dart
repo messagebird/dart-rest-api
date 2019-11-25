@@ -66,8 +66,8 @@ class Transcription {
         'id': id,
         'recordingId': recordingId,
         'error': error,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
+        'createdAt': createdAt?.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
         '_links': Map<String, String>.from(
             links.map((key, uri) => MapEntry(key, uri.toString())))
       };
