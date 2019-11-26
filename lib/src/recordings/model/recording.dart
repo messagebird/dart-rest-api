@@ -71,7 +71,7 @@ class Recording {
                   status.toString() ==
                   'RecordingStatus.${data['status']}'.replaceAll(' ', '_'),
               orElse: () => null),
-          duration: int.parse(data['duration'].toString()),
+          duration: int.tryParse(data['duration'].toString()),
           createdAt: parseDate(data['createdAt']),
           updatedAt: parseDate(data['updatedAt']),
           links: Map<String, Uri>.from(
@@ -99,8 +99,10 @@ class Recording {
   /// Get a list of [Recording] objects from a json [String].
   static List<Recording> fromJsonList(String source) => source == null
       ? null
-      : json.decode(source)['totalCount'] == 0 ??
-              json.decode(source)['pagination']['totalCount'] == 0
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Recording>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
               .map((j) => Recording.fromJson(j))

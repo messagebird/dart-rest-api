@@ -81,8 +81,10 @@ class Channel {
   /// Get a list of [Channel] objects from a json [String].
   static List<Channel> fromJsonList(String source) => source == null
       ? null
-      : json.decode(source)['totalCount'] == 0 ??
-              json.decode(source)['pagination']['totalCount'] == 0
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Channel>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
               .map((j) => Channel.fromJson(j))

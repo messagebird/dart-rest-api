@@ -56,8 +56,10 @@ class Webhook {
   /// Get a list of [Webhook] objects from a json [String].
   static List<Webhook> fromJsonList(String source) => source == null
       ? null
-      : json.decode(source)['totalCount'] == 0 ??
-              json.decode(source)['pagination']['totalCount'] == 0
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Webhook>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
               .map((j) => Webhook.fromJson(j))

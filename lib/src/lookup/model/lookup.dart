@@ -49,8 +49,8 @@ class Lookup {
       : Lookup(
           href: map['href'],
           countryCode: map['countryCode'],
-          countryPrefix: int.parse(map['countryPrefix'].toString()),
-          phoneNumber: int.parse(map['phoneNumber'].toString()),
+          countryPrefix: int.tryParse(map['countryPrefix'].toString()),
+          phoneNumber: int.tryParse(map['phoneNumber'].toString()),
           type: LookupType.values.firstWhere(
               (status) =>
                   status.toString() ==

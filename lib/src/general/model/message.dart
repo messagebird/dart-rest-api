@@ -126,10 +126,17 @@ class Message {
         'source': source
       };
 
-  /// Get a list of [Message] objects from a [json] object
-  static List<Message> fromJsonList(Object json) => json == null
+  /// Get a list of [Message] objects from a json [String]
+  static List<Message> fromJsonList(String source) => source == null
       ? null
-      : List.from(json).map((j) => Message.fromJson(j)).toList();
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
+          ? <Message>[]
+          : List<dynamic>.from(json.decode(source)['items'])
+              .map((j) => Message.fromMap(j))
+              .toList();
 }
 
 /// The direction of the message.

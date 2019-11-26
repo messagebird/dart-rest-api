@@ -78,7 +78,7 @@ class Currency {
       ? null
       : Currency(
           currencyCode: map['currencyCode'],
-          amount: double.parse(map['amount'].toString()),
+          amount: double.tryParse(map['amount'].toString()),
         );
 
   /// Get a json [String] representing the [Currency] object.
@@ -302,8 +302,8 @@ class Location {
   factory Location.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Location(
-          latitude: double.parse(map['latitude'].toString()),
-          longitude: double.parse(map['longitude'].toString()),
+          latitude: double.tryParse(map['latitude'].toString()),
+          longitude: double.tryParse(map['longitude'].toString()),
         );
 
   /// Get a json [String] representing the [Location].

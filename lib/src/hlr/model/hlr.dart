@@ -146,9 +146,10 @@ class HlrDetails {
           country_name: map['country_name'],
           location_msc: map['location_msc'],
           location_iso: map['location_iso'],
-          ported: map['ported'] == null ? null : int.parse(map['ported']) == 1,
+          ported:
+              map['ported'] == null ? null : int.tryParse(map['ported']) == 1,
           roaming:
-              map['roaming'] == null ? null : int.parse(map['roaming']) == 1,
+              map['roaming'] == null ? null : int.tryParse(map['roaming']) == 1,
         );
 
   /// Get a json [String] representing the [HlrDetails]

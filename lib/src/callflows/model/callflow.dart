@@ -88,8 +88,10 @@ class Callflow {
   /// Get a list of [Callflow] objects from a json [String].
   static List<Callflow> fromJsonList(String source) => source == null
       ? null
-      : json.decode(source)['totalCount'] == 0 ??
-              json.decode(source)['pagination']['totalCount'] == 0
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Callflow>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
               .map((j) => Callflow.fromMap(j))

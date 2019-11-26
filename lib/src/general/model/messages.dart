@@ -24,7 +24,7 @@ class Messages {
   factory Messages.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Messages(
-          totalCount: int.parse(map['totalCount'].toString()),
+          totalCount: int.tryParse(map['totalCount'].toString()),
           href: map['href'],
         );
 

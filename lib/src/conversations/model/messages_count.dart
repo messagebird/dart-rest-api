@@ -31,7 +31,7 @@ class MessagesCount {
       ? null
       : MessagesCount(
           href: map['href'],
-          totalCount: int.parse(map['totalCount'].toString()),
+          totalCount: int.tryParse(map['totalCount'].toString()),
           lastMessageId: map['lastMessageId'],
         );
 

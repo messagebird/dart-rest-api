@@ -97,15 +97,14 @@ class Contact {
       };
 
   /// Get a list of [Contact] objects from a json [String]
-  static List<Contact> fromJsonList(String source) {
-    if (source == null) {
-      return null;
-    } else {
-      return json.decode(source)['totalCount'] == 0
+  static List<Contact> fromJsonList(String source) => source == null
+      ? null
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Contact>[]
           : List<dynamic>.from(json.decode(source)['items'])
               .map((j) => Contact.fromMap(j))
               .toList();
-    }
-  }
 }

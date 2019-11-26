@@ -33,7 +33,7 @@ class Balance {
               (payment) => payment.toString() == 'Payment.${map['payment']}',
               orElse: () => null),
           type: map['type'],
-          amount: double.parse(map['amount'].toString()),
+          amount: double.tryParse(map['amount'].toString()),
         );
 }
 

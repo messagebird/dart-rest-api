@@ -86,7 +86,7 @@ abstract class BaseService {
     final Map<String, String> headers = _getHeaders();
     try {
       return Future.value(_client
-          .patch(_getUrl(path, hostname: 'hostname'),
+          .patch(_getUrl(path, hostname: hostname),
               headers: headers, body: json.encode(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));

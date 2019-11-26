@@ -31,7 +31,7 @@ class RecipientItem {
   factory RecipientItem.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : RecipientItem(
-          recipient: int.parse(map['recipient'].toString()),
+          recipient: int.tryParse(map['recipient'].toString()),
           status: RecipientItemStatus.values.firstWhere(
               (status) =>
                   status.toString() ==

@@ -115,17 +115,16 @@ class Conversation {
       };
 
   /// Get a list of [Conversation] objects from a json [String].
-  static List<Conversation> fromJsonList(String source) {
-    if (source == null) {
-      return null;
-    } else {
-      return json.decode(source)['totalCount'] == 0
+  static List<Conversation> fromJsonList(String source) => source == null
+      ? null
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <Conversation>[]
           : List.from(json.decode(source)['items'] ?? json.decode(source))
               .map((j) => Conversation.fromMap(j))
               .toList();
-    }
-  }
 }
 
 /// Enumeration of [Conversation] statusses

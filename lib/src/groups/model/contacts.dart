@@ -24,7 +24,7 @@ class Contacts {
   factory Contacts.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Contacts(
-          totalCount: int.parse(map['totalCount'].toString()),
+          totalCount: int.tryParse(map['totalCount'].toString()),
           href: map['href'],
         );
 

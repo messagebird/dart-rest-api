@@ -1,6 +1,7 @@
 import 'package:messagebird_dart/src/callflows/model/callflow.dart';
 
 import 'model/call.dart';
+import 'model/leg.dart';
 
 /// Calls service interface.
 abstract class CallsService {
@@ -15,4 +16,10 @@ abstract class CallsService {
 
   /// Remove a [Call].
   Future<void> remove(String id);
+
+  /// List the [Leg] objects from a [Call].
+  Future<List<Leg>> listLegs(String callId);
+
+  /// Read a [Leg] from a [Call].
+  Future<Leg> readLeg(String callId, String legId);
 }

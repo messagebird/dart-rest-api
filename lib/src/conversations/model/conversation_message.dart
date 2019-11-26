@@ -73,8 +73,10 @@ class ConversationMessage extends Message {
   /// Get a list of [ConversationMessage] objects from a json [String].
   static List<ConversationMessage> fromJsonList(String source) => source == null
       ? null
-      : json.decode(source)['totalCount'] == 0 ??
-              json.decode(source)['pagination']['totalCount'] == 0
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
           ? <ConversationMessage>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
               .map((j) => ConversationMessage.fromJson(j))

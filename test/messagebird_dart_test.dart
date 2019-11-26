@@ -8,9 +8,11 @@ import 'package:messagebird_dart/src/balance/model/balance.dart';
 import 'package:messagebird_dart/src/callflows/model/callflow.dart';
 import 'package:messagebird_dart/src/callflows/model/step.dart';
 import 'package:messagebird_dart/src/calls/model/call.dart';
+import 'package:messagebird_dart/src/calls/model/leg.dart';
 import 'package:messagebird_dart/src/conversations/api_conversations_service.dart';
 import 'package:messagebird_dart/src/conversations/conversations_service.dart';
 import 'package:messagebird_dart/src/conversations/model/conversation_message.dart';
+import 'package:messagebird_dart/src/general/model/contact.dart';
 import 'package:messagebird_dart/src/general/model/content.dart';
 import 'package:messagebird_dart/src/general/model/message.dart';
 import 'package:test/test.dart';
@@ -158,6 +160,16 @@ void main() {
       expect((await callsService.read(ids[0])).id, isNotNull);
     });
 
+    test('should get legs from a call', () async {
+      expect(await callsService.listLegs(ids[0]), isEmpty);
+    });
+
+    test('should read a leg from a call', () async {
+      final List<Leg> legs = await callsService.listLegs(ids[0]);
+      final Leg readLeg = await callsService.readLeg(ids[0], legs[0].id);
+      expect(legs[0].id, equals(readLeg.id));
+    });
+
     test('should update a call', () async {
       // Not testable.
     });
@@ -181,13 +193,49 @@ void main() {
     /// PATCH /contacts/{contactId}
     /// DELETE /contacts/{contactId}
     ContactsService contactsService;
+    Contact contact;
+    final List<String> ids = [];
 
     setUp(() {
       contactsService = ApiContactsService(credentials['live']);
+      contact = Contact.fromJson(
+          File('test_resources/contact.json').readAsStringSync());
     });
 
-    test('gets contacts', () async {
+    test('should create a contact', () async {
+      final Contact createdContact = await contactsService.create(contact);
+      ids.add(createdContact.id);
+      expect(createdContact.msisdn, contact.msisdn);
+      expect(createdContact.firstName, contact.firstName);
+      expect(createdContact.lastName, contact.lastName);
+    });
+
+    test('should list contacts', () async {
       expect(await contactsService.list(), isNotEmpty);
+    });
+
+    test('should get a contact', () async {
+      expect((await contactsService.read(ids[0])).msisdn, contact.msisdn);
+    });
+
+    test('should get contact groups', () async {
+      expect((await contactsService.read(ids[0])).groups, isNotNull);
+    });
+
+    test('should get contact messages', () async {
+      expect((await contactsService.read(ids[0])).messages, isNotNull);
+    });
+
+    test('should update a contact', () async {
+      await contactsService.update(Contact(id: ids[0], firstName: 'Lucas'));
+      expect((await contactsService.read(ids[0])).firstName, 'Lucas');
+    });
+
+    test('should delete a contact', () async {
+      await contactsService.remove(ids[0]);
+      await contactsService.read(ids[0]).catchError((error) {
+        expect(error.toString(), contains('(code 20)')); // Not found
+      });
     });
   });
 

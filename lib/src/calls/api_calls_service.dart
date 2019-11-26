@@ -1,4 +1,5 @@
 import 'package:messagebird_dart/src/callflows/model/callflow.dart';
+import 'package:messagebird_dart/src/calls/model/leg.dart';
 import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'package:messagebird_dart/src/webhooks/model/webhook.dart';
 import 'calls_service.dart';
@@ -32,4 +33,14 @@ class ApiCallsService extends BaseService implements CallsService {
   @override
   Future<void> remove(String id) =>
       delete('/calls/$id', hostname: BaseService.voiceEndpoint);
+
+  @override
+  Future<Leg> readLeg(String callId, String legId) =>
+      get('/calls/$callId/legs/$legId', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Leg.fromJson(response.body)));
+
+  @override
+  Future<List<Leg>> listLegs(String callId) =>
+      get('/calls/$callId/legs', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Leg.fromJsonList(response.body)));
 }

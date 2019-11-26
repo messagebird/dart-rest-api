@@ -256,13 +256,13 @@ class VoiceMessage {
           voice: Voice.values.firstWhere(
               (voice) => voice.toString() == 'Voice.${map['voice']}',
               orElse: () => null),
-          repeat: int.parse(map['repeat'].toString()),
+          repeat: int.tryParse(map['repeat'].toString()),
           ifMachine: MachineOption.values.firstWhere(
               (option) =>
                   option.toString() ==
                   'MachineOption.${map['ifMachine']}'.replaceAll('_', ''),
               orElse: () => null),
-          machineTimeout: int.parse(map['machineTimeout'].toString()),
+          machineTimeout: int.tryParse(map['machineTimeout'].toString()),
           scheduledDatetime: parseDate(map['scheduledDatetime']),
           createdDatetime: parseDate(map['createdDatetime']),
           recipients: Recipients.fromMap(map['recipients']),
