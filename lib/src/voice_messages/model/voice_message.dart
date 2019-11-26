@@ -234,18 +234,20 @@ class VoiceMessage {
   });
 
   /// Construct a [VoiceMessage] object from a json [String].
-  factory VoiceMessage.fromJson(String source) => VoiceMessage.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory VoiceMessage.fromJson(String source) =>
+      VoiceMessage.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [VoiceMessage] object from a [Map].
   factory VoiceMessage.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : VoiceMessage(
-          id: map['id'].toString(),
-          href: map['href'].toString(),
-          reference: map['reference'].toString(),
-          originator: map['originator'].toString(),
-          body: map['body'].toString(),
+          id: map['id'],
+          href: map['href'],
+          reference: map['reference'],
+          originator: map['originator'],
+          body: map['body'],
           language: Language.values.firstWhere(
               (language) =>
                   language.toString() ==

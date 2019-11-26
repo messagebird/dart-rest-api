@@ -1,4 +1,6 @@
+import 'package:messagebird_dart/src/callflows/model/callflow.dart';
 import 'package:messagebird_dart/src/general/model/base_service.dart';
+import 'package:messagebird_dart/src/webhooks/model/webhook.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
 
@@ -9,8 +11,12 @@ class ApiCallsService extends BaseService implements CallsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Call> create(Call call) =>
-      post('/calls', hostname: BaseService.voiceEndpoint, body: call.toMap())
+  Future<Call> create(Call call, Callflow callflow, {Webhook webhook}) =>
+      post('/calls',
+              hostname: BaseService.voiceEndpoint,
+              body: call.toMap()
+                ..addAll({'callFlow': callflow.toMap()})
+                ..addAll(webhook == null ? {} : {'webhook': webhook.toMap()}))
           .then((response) => Future.value(Call.fromJson(response.body)));
 
   @override
@@ -19,11 +25,11 @@ class ApiCallsService extends BaseService implements CallsService {
           .then((response) => Future.value(Call.fromJsonList(response.body)));
 
   @override
-  Future<Call> read(int id) =>
+  Future<Call> read(String id) =>
       get('/calls/$id', hostname: BaseService.voiceEndpoint)
           .then((response) => Future.value(Call.fromJson(response.body)));
 
   @override
-  Future<void> remove(int id) =>
+  Future<void> remove(String id) =>
       delete('/calls/$id', hostname: BaseService.voiceEndpoint);
 }

@@ -48,9 +48,9 @@ class Transcription {
     } else {
       final Map<String, dynamic> data = map['data'];
       return Transcription(
-          id: data['id'].toString(),
-          recordingId: data['recordingId'].toString(),
-          error: data['error'].toString(),
+          id: data['id'],
+          recordingId: data['recordingId'],
+          error: data['error'],
           createdAt: parseDate(data['createdAt']),
           updatedAt: parseDate(data['updatedAt']),
           links: Map<String, Uri>.from(

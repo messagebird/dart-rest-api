@@ -22,13 +22,15 @@ class Step {
 
   /// Construct a [Step] object from a json [String].
   factory Step.fromJson(String source) => Step.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source)['data']);
+      (json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Step] object from a [Map].
   factory Step.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Step(
-          id: map['id'].toString(),
+          id: map['id'],
           action: StepAction.values.firstWhere(
               (action) => action.toString() == 'StepAction.${map['action']}',
               orElse: () => null),

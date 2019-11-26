@@ -7,6 +7,7 @@ import 'package:messagebird_dart/src/balance/balance_service.dart';
 import 'package:messagebird_dart/src/balance/model/balance.dart';
 import 'package:messagebird_dart/src/callflows/model/callflow.dart';
 import 'package:messagebird_dart/src/callflows/model/step.dart';
+import 'package:messagebird_dart/src/calls/model/call.dart';
 import 'package:messagebird_dart/src/conversations/api_conversations_service.dart';
 import 'package:messagebird_dart/src/conversations/conversations_service.dart';
 import 'package:messagebird_dart/src/conversations/model/conversation_message.dart';
@@ -33,10 +34,10 @@ void main() {
 
     setUp(() async {
       balanceService = ApiBalanceService(credentials['test']);
-      balance = await balanceService.read();
     });
 
-    test('should get balance object', () {
+    test('should get balance object', () async {
+      balance = await balanceService.read();
       expect(balance, isA<Balance>());
     });
 
@@ -63,27 +64,20 @@ void main() {
       callflowsService = ApiCallflowsService(credentials['live']);
       callflowFromJson = Callflow.fromJson(
           File('test_resources/callflow.json').readAsStringSync());
-      callflow = Callflow(
-          id: 'de3ed163-d5fc-45f4-b8c4-7eea7458c635',
-          title: 'Forward call to 31612345678',
-          record: false,
-          steps: [
-            const Step(
-                id: '2fa1383e-6f21-4e6f-8c36-0920c3d0730b',
-                action: StepAction.transfer,
-                options: {StepOption.destination: '31612345678'})
-          ],
-          createdAt: DateTime.parse('2017-03-06T14:52:22Z'),
-          updatedAt: DateTime.parse('2017-03-06T14:52:22Z'));
+      callflow = const Callflow(title: 'Say message', record: true, steps: [
+        Step(action: StepAction.say, options: {
+          StepOption.payload: 'This is a journey into sound. Good bye!',
+          StepOption.voice: 'male',
+          StepOption.language: 'en-US'
+        })
+      ]);
     });
 
     test('should deserialize from json', () {
-      expect(callflow.id, equals(callflowFromJson.id));
       expect(callflow.title, equals(callflowFromJson.title));
       expect(callflow.record, equals(callflowFromJson.record));
-      expect(callflow.steps[0].id, equals(callflowFromJson.steps[0].id));
-      expect(callflow.createdAt, equals(callflowFromJson.createdAt));
-      expect(callflow.updatedAt, equals(callflowFromJson.updatedAt));
+      expect(
+          callflow.steps[0].action, equals(callflowFromJson.steps[0].action));
     });
 
     test('should serialize to json', () {
@@ -96,17 +90,81 @@ void main() {
           serialized['steps'][0]['id'], equals(callflowFromJson.steps[0].id));
     });
 
+    test('should list callflows', () async {
+      expect(await callflowsService.list(), isNotEmpty);
+    });
+
     test('should create a callflow', () async {
       final Callflow createdCallflow = await callflowsService.create(callflow);
       ids.add(createdCallflow.id);
       expect(createdCallflow.title, equals(callflow.title));
       expect(createdCallflow.record, equals(callflow.record));
-      expect(createdCallflow.steps[0].id, equals(callflow.steps[0].id));
+      expect(createdCallflow.steps[0].action, equals(callflow.steps[0].action));
+    });
+
+    test('should get a callflow', () async {
+      expect(await callflowsService.read(ids[0]), isNotNull);
+    });
+
+    test('should update a callflow', () async {
+      await callflowsService.update(Callflow(id: ids[0], title: 'Test', steps: [
+        const Step(
+            action: StepAction.transfer,
+            options: {StepOption.destination: '31611223344'})
+      ]));
+      expect((await callflowsService.read(ids[0])).title, 'Test');
     });
 
     test('should delete a callflow', () async {
       await callflowsService.remove(ids[0]);
       await callflowsService.read(ids[0]).catchError((error) {
+        expect(error.toString(), contains('(code 13)')); // Not found
+      });
+    });
+  });
+
+  group('CallsService', () {
+    /// Available methods:
+    ///
+    /// POST /calls/
+    /// GET /calls/
+    /// GET /calls/{callID}
+    /// DELETE /calls/{callID}
+    /// GET /calls/{callID}/legs
+    /// GET /calls/{callID}/legs/{legID}
+    final List<String> ids = [];
+    CallsService callsService;
+    Call call;
+    Callflow callflow;
+
+    setUp(() {
+      callsService = ApiCallsService(credentials['live']);
+      call = Call.fromJson(File('test_resources/call.json').readAsStringSync());
+      callflow = Callflow.fromJson(
+          File('test_resources/callflow.json').readAsStringSync());
+    });
+
+    test('should create a call', () async {
+      final Call createdCall = await callsService.create(call, callflow);
+      ids.add(createdCall.id);
+      expect(createdCall.source, equals(call.source));
+    });
+
+    test('should list calls', () async {
+      expect(await callsService.list(), isNotEmpty);
+    });
+
+    test('should get a call', () async {
+      expect((await callsService.read(ids[0])).id, isNotNull);
+    });
+
+    test('should update a call', () async {
+      // Not testable.
+    });
+
+    test('should delete a call', () async {
+      await callsService.remove(ids[0]);
+      await callsService.read(ids[0]).catchError((error) {
         expect(error.toString(), contains('(code 13)')); // Not found
       });
     });
@@ -129,7 +187,7 @@ void main() {
     });
 
     test('gets contacts', () async {
-      expect((await contactsService.list()).length, greaterThan(0));
+      expect(await contactsService.list(), isNotEmpty);
     });
   });
 
@@ -160,7 +218,7 @@ void main() {
     });
 
     test('should get conversations on our account', () async {
-      expect((await conversationsService.list()).length, greaterThan(0));
+      expect(await conversationsService.list(), isNotEmpty);
     });
   });
 }

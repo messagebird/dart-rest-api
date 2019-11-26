@@ -27,15 +27,17 @@ class Attachment {
 
   /// Construct an [Attachment] object from a json [String].
   factory Attachment.fromJson(String source) =>
-      Attachment.fromMap(json.decode(source));
+      Attachment.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct an [Attachment] object from a [Map].
   factory Attachment.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Attachment(
-          name: map['name'].toString(),
-          type: map['type'].toString(),
-          data: map['data'].toString(),
+          name: map['name'],
+          type: map['type'],
+          data: map['data'],
         );
 
   /// Get a json [String] representing the [Attachment].
@@ -187,14 +189,16 @@ class Recipient {
 
   /// Construct an [Recipient] object from a json [String].
   factory Recipient.fromJson(String source) =>
-      Recipient.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Recipient.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Recipient] object from a [Map].
   factory Recipient.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Recipient(
-          email: map['email'].toString(),
-          name: map['name'].toString(),
+          email: map['email'],
+          name: map['name'],
           variables: List<String>.from(map['variables']),
         );
 
@@ -225,7 +229,9 @@ class Tracking {
 
   /// Construct a [Tracking] object from a json [String].
   factory Tracking.fromJson(String source) =>
-      Tracking.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Tracking.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Tracking] object from a [Map].
   factory Tracking.fromMap(Map<String, dynamic> map) => map == null

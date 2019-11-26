@@ -47,7 +47,9 @@ class Verify {
 
   /// Construct a [Verify] object from a json [String].
   factory Verify.fromJson(String source) =>
-      Verify.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Verify.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Verify] object from a [Map].
   factory Verify.fromMap(Map<String, dynamic> map) => map == null

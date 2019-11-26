@@ -23,14 +23,16 @@ class MessageResponse {
   });
 
   /// Construct a [MessageResponse] object from a json [String].
-  factory MessageResponse.fromJson(String source) => MessageResponse.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory MessageResponse.fromJson(String source) =>
+      MessageResponse.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [MessageResponse] object from a [Map].
   factory MessageResponse.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : MessageResponse(
-          id: map['id'].toString(),
+          id: map['id'],
           status: MessageResponseStatus.values.firstWhere(
               (status) =>
                   status.toString() == 'MessageResponseStatus.${map['status']}',

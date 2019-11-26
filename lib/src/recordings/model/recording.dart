@@ -58,14 +58,14 @@ class Recording {
     } else {
       final Map<String, dynamic> data = map['data'];
       return Recording(
-          id: data['id'].toString(),
-          format: data['format'].toString(),
+          id: data['id'],
+          format: data['format'],
           type: RecordingType.values.firstWhere(
               (type) =>
                   type.toString() ==
                   'RecordingType.${data['type']}'.replaceAll(' ', '_'),
               orElse: () => null),
-          legId: data['legId'].toString(),
+          legId: data['legId'],
           status: RecordingStatus.values.firstWhere(
               (status) =>
                   status.toString() ==

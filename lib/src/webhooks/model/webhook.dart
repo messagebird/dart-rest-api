@@ -25,7 +25,9 @@ class Webhook {
 
   /// Construct a [Webhook] object from a json [String].
   factory Webhook.fromJson(String source) =>
-      Webhook.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Webhook.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Webhook] object from a [Map].
   factory Webhook.fromMap(Map<String, dynamic> map) => map == null

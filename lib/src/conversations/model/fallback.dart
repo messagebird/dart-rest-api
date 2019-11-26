@@ -16,12 +16,14 @@ class Fallback {
   /// Constructor.
   const Fallback({
     this.from,
-    this.after,
+    this.after = '1m',
   });
 
   /// Construct a [Fallback] object from a json [String].
   factory Fallback.fromJson(String source) =>
-      Fallback.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Fallback.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Fallback] object from a [Map].
   factory Fallback.fromMap(Map<String, dynamic> map) => map == null

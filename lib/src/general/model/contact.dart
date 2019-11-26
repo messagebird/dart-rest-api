@@ -52,7 +52,9 @@ class Contact {
 
   /// Construct a [Contact] object from a json [String].
   factory Contact.fromJson(String source) =>
-      Contact.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Contact.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Contact] object from a [Map].
   factory Contact.fromMap(Map<String, dynamic> map) {

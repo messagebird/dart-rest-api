@@ -60,7 +60,6 @@ abstract class BaseService {
   Future<Response> get(String path,
       {String hostname, Map<String, dynamic> body}) {
     final Map<String, String> headers = _getHeaders();
-    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
           .get(
@@ -123,11 +122,10 @@ abstract class BaseService {
   Future<Response> put(String path,
       {String hostname, Map<String, dynamic> body}) {
     final Map<String, String> headers = _getHeaders();
-    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     try {
       return Future.value(_client
           .put(
-            _getUrl('path', hostname: 'hostname'),
+            _getUrl(path, hostname: hostname),
             headers: headers,
             body: json.encode(body),
           )

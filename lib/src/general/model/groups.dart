@@ -16,13 +16,15 @@ class Groups {
 
   /// Construct an [Groups] object from a json [String].
   factory Groups.fromJson(String source) =>
-      Groups.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Groups.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Groups] object from a [Map].
   factory Groups.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Groups(
-          totalCount: map['totalCount'],
+          totalCount: int.parse(map['totalCount'].toString()),
           href: map['href'],
         );
 

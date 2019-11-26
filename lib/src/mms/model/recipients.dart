@@ -22,8 +22,10 @@ class RecipientItem {
   });
 
   /// Construct an [RecipientItem] object from a json [String].
-  factory RecipientItem.fromJson(String source) => RecipientItem.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory RecipientItem.fromJson(String source) =>
+      RecipientItem.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [RecipientItem] object from a [Map].
   factory RecipientItem.fromMap(Map<String, dynamic> map) => map == null

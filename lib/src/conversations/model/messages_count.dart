@@ -21,16 +21,18 @@ class MessagesCount {
   });
 
   /// Construct a [MessagesCount] object from a json [String].
-  factory MessagesCount.fromJson(String source) => MessagesCount.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory MessagesCount.fromJson(String source) =>
+      MessagesCount.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [MessagesCount] object from a [Map].
   factory MessagesCount.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : MessagesCount(
-          href: map['href'].toString(),
+          href: map['href'],
           totalCount: int.parse(map['totalCount'].toString()),
-          lastMessageId: map['lastMessageId'].toString(),
+          lastMessageId: map['lastMessageId'],
         );
 
   /// Get a json [String] representing the [MessagesCount].

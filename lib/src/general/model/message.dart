@@ -74,7 +74,9 @@ class Message {
 
   /// Construct a [Message] object from a json [String].
   factory Message.fromJson(String source) =>
-      Message.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Message.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Message] object from a [Map].
   factory Message.fromMap(Map<String, dynamic> map) {
@@ -84,11 +86,11 @@ class Message {
     return map == null
         ? null
         : Message(
-            id: map['id'].toString(),
-            conversationId: map['conversationId'].toString(),
-            channelId: map['channelId'].toString(),
-            to: map['to'].toString(),
-            from: map['from'].toString(),
+            id: map['id'],
+            conversationId: map['conversationId'],
+            channelId: map['channelId'],
+            to: map['to'],
+            from: map['from'],
             direction: MessageDirection.values.firstWhere(
                 (direction) =>
                     direction.toString() ==

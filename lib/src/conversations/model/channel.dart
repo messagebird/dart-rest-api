@@ -47,7 +47,9 @@ class Channel {
 
   /// Construct a [Channel] object from a json [String].
   factory Channel.fromJson(String source) =>
-      Channel.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Channel.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Channel] object from a [Map].
   factory Channel.fromMap(Map<String, dynamic> map) => map == null

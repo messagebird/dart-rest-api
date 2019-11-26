@@ -39,7 +39,9 @@ class Group {
 
   /// Construct a [Group] object from a json [String].
   factory Group.fromJson(String source) =>
-      Group.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Group.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Group] object from a [Map].
   factory Group.fromMap(Map<String, dynamic> map) => map == null

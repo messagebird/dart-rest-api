@@ -39,14 +39,16 @@ class Lookup {
 
   /// Construct a [Lookup] object from a json [String].
   factory Lookup.fromJson(String source) =>
-      Lookup.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Lookup.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Lookup] object from a [Map].
   factory Lookup.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Lookup(
-          href: map['href'].toString(),
-          countryCode: map['countryCode'].toString(),
+          href: map['href'],
+          countryCode: map['countryCode'],
           countryPrefix: int.parse(map['countryPrefix'].toString()),
           phoneNumber: int.parse(map['phoneNumber'].toString()),
           type: LookupType.values.firstWhere(

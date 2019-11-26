@@ -1,20 +1,14 @@
 {
-    "data": [
+    "title": "Say message",
+    "record": true,
+    "steps": [
         {
-            "id": "de3ed163-d5fc-45f4-b8c4-7eea7458c635",
-            "title": "Forward call to 31612345678",
-            "record": false,
-            "steps": [
-                {
-                    "id": "2fa1383e-6f21-4e6f-8c36-0920c3d0730b"
-                }
-            ],
-            "default": false,
-            "createdAt": "2017-03-06T14:52:22Z",
-            "updatedAt": "2017-03-06T14:52:22Z"
+            "action": "say",
+            "options": {
+                "payload": "This is a journey into sound. Good bye!",
+                "voice": "male",
+                "language": "en-US"
+            }
         }
-    ],
-    "_links": {
-        "self": "/call-flows/de3ed163-d5fc-45f4-b8c4-7eea7458c635"
-    }
+    ]
 }

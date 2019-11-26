@@ -47,7 +47,9 @@ class Hlr {
 
   /// Construct an [Hlr] object from a json [String].
   factory Hlr.fromJson(String source) =>
-      Hlr.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Hlr.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct an [Hlr] object from a [Map].
   factory Hlr.fromMap(Map<String, dynamic> map) => map == null

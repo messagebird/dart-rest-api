@@ -16,14 +16,16 @@ class Contacts {
 
   /// Construct a [Contacts] object from a json [String].
   factory Contacts.fromJson(String source) =>
-      Contacts.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Contacts.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Contacts] object from a [Map].
   factory Contacts.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Contacts(
           totalCount: int.parse(map['totalCount'].toString()),
-          href: map['href'].toString(),
+          href: map['href'],
         );
 
   /// Get a json [String] representing the [Contacts].

@@ -65,7 +65,9 @@ class MmsMessage {
 
   /// Construct an [MmsMessage] object from a json [String].
   factory MmsMessage.fromJson(String source) =>
-      MmsMessage.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      MmsMessage.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct an [MmsMessage] object from a [Map].
   factory MmsMessage.fromMap(Map<String, dynamic> map) => map == null

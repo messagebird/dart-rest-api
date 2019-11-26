@@ -46,8 +46,7 @@ abstract class Content {
       case MessageType.hsm:
         return HSMContent.fromJson(json['hsm']);
       case MessageType.email:
-        return EmailContent(
-            html: json['html']?.toString(), text: json['text']?.toString());
+        return EmailContent(html: json['html'], text: json['text']);
       default:
         return null;
     }
@@ -70,13 +69,15 @@ class Currency {
 
   /// Construct a [Currency] object from a json [String].
   factory Currency.fromJson(String source) =>
-      Currency.fromMap(json.decode(source)['data']);
+      Currency.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Currency] object from a [Map].
   factory Currency.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Currency(
-          currencyCode: map['currencyCode'].toString(),
+          currencyCode: map['currencyCode'],
           amount: double.parse(map['amount'].toString()),
         );
 
@@ -133,14 +134,16 @@ class HSMContent extends Content {
 
   /// Construct an [HSMContent] object from a json [String].
   factory HSMContent.fromJson(String source) =>
-      HSMContent.fromMap(json.decode(source)['data']);
+      HSMContent.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [HSMContent] object from a [Map].
   factory HSMContent.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : HSMContent(
-          namespace: map['namespace'].toString(),
-          templateName: map['templateName'].toString(),
+          namespace: map['namespace'],
+          templateName: map['templateName'],
           language: HSMLanguage.fromMap(map['language']),
           parameters: HSMLocalizableParameters.fromList(map['parameters']),
         );
@@ -178,15 +181,17 @@ class HSMLanguage {
   });
 
   /// Construct an [HSMLanguage] object from a json [String].
-  factory HSMLanguage.fromJson(String source) => HSMLanguage.fromMap(
-      json.decode(source)['data'][0] ?? json.decode(source));
+  factory HSMLanguage.fromJson(String source) =>
+      HSMLanguage.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [HSMLanguage] object from a [Map].
   factory HSMLanguage.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : HSMLanguage(
-          policy: map['policy'].toString(),
-          code: map['code'].toString(),
+          policy: map['policy'],
+          code: map['code'],
         );
 
   /// Get a json [String] representing the [HSMLanguage].
@@ -226,15 +231,16 @@ class HSMLocalizableParameters {
 
   /// Construct a [HSMLocalizableParameters] object from a json [String].
   factory HSMLocalizableParameters.fromJson(String source) =>
-      HSMLocalizableParameters.fromMap(
-          json.decode(source)['data'][0] ?? json.decode(source));
+      HSMLocalizableParameters.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [HSMLocalizableParameters] object from a [Map].
   factory HSMLocalizableParameters.fromMap(Map<String, dynamic> map) =>
       map == null
           ? null
           : HSMLocalizableParameters(
-              defaultValue: map['defaultValue'].toString(),
+              defaultValue: map['defaultValue'],
               currency: Currency.fromMap(map['currency']),
               dateTime: parseDate(map['dateTime']));
 
@@ -288,7 +294,9 @@ class Location {
 
   /// Construct an [Location] object from a json [String].
   factory Location.fromJson(String source) =>
-      Location.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Location.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Location] object from a [Map].
   factory Location.fromMap(Map<String, dynamic> map) => map == null
@@ -339,14 +347,16 @@ class Media {
 
   /// Construct an [Media] object from a json [String].
   factory Media.fromJson(String source) =>
-      Media.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Media.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Media] object from a [Map].
   factory Media.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Media(
-          url: map['url'].toString(),
-          caption: map['caption'].toString(),
+          url: map['url'],
+          caption: map['caption'],
         );
 
   /// Get a json [String] representing the [Media].
@@ -371,7 +381,7 @@ class TextContent extends Content {
   String toJson() => json.encode(toMap());
 
   @override
-  Map<String, dynamic> toMap() => {'text': text.toString()};
+  Map<String, dynamic> toMap() => {'text': text};
 }
 
 /// Class encapsulating video content.

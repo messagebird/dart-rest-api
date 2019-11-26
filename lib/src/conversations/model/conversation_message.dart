@@ -32,8 +32,9 @@ class ConversationMessage extends Message {
 
   /// Construct a [ConversationMessage] object from a json [String].
   factory ConversationMessage.fromJson(String source) =>
-      ConversationMessage.fromMap(
-          json.decode(source)['data'][0] ?? json.decode(source));
+      ConversationMessage.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [ConversationMessage] object from a [Map].
   factory ConversationMessage.fromMap(Map<String, dynamic> map) {
@@ -46,8 +47,8 @@ class ConversationMessage extends Message {
         : ConversationMessage(
             type: type,
             content: Content.get(type, map['content']),
-            to: map['to'].toString(),
-            channelId: map['channelId'].toString(),
+            to: map['to'],
+            channelId: map['channelId'],
             source: map['source'],
             reportUrl: map['reportUrl'],
             fallback: Fallback.fromJson(map['fallback']));
@@ -62,8 +63,8 @@ class ConversationMessage extends Message {
   Map<String, dynamic> toMap() => {
         'type': type.toString().replaceAll('MessageType.', ''),
         'content': content.toMap(),
-        'to': to.toString(),
-        'channelId': channelId.toString(),
+        'to': to,
+        'channelId': channelId,
         'source': source,
         'reportUrl': reportUrl,
         'fallback': fallback?.toJson(),

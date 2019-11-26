@@ -42,7 +42,7 @@ class Callflow {
   const Callflow({
     this.id,
     this.title,
-    this.record,
+    this.record = false,
     this.steps,
     this.isDefault,
     this.createdAt,
@@ -51,18 +51,21 @@ class Callflow {
 
   /// Construct a [Callflow] object from a json [String].
   factory Callflow.fromJson(String source) =>
-      Callflow.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Callflow.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Callflow] object from a [Map].
   factory Callflow.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Callflow(
-          id: map['id'].toString(),
-          title: map['title'].toString(),
+          id: map['id'],
+          title: map['title'],
           record: map['record'].toString() == 'true',
-          steps:
-              List<Step>.from(map['steps']?.map((step) => Step.fromMap(step))),
-          isDefault: map['isDefault'].toString() == 'true',
+          steps: map['steps'] == null
+              ? null
+              : List<Step>.from(map['steps'].map((step) => Step.fromMap(step))),
+          isDefault: map['default'].toString() == 'true',
           createdAt: parseDate(map['createdAt']),
           updatedAt: parseDate(map['updatedAt']));
 
@@ -74,8 +77,10 @@ class Callflow {
         'id': id,
         'title': title,
         'record': record,
-        'steps': List<dynamic>.from(steps.map((step) => step.toMap())),
-        'isDefault': isDefault,
+        'steps': steps == null
+            ? null
+            : List<dynamic>.from(steps.map((step) => step.toMap())),
+        'default': isDefault,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
       };

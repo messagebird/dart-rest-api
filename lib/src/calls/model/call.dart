@@ -43,18 +43,20 @@ class Call {
 
   /// Construct a [Call] object from a json [String].
   factory Call.fromJson(String source) =>
-      Call.fromMap(json.decode(source)['data'][0] ?? json.decode(source));
+      Call.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
 
   /// Construct a [Call] object from a [Map].
   factory Call.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Call(
-          id: map['id'].toString(),
+          id: map['id'],
           status: CallStatus.values.firstWhere(
               (status) => status.toString() == 'CallStatus.${map['status']}',
               orElse: () => null),
-          source: map['source'].toString(),
-          destination: map['destination'].toString(),
+          source: map['source'],
+          destination: map['destination'],
           createdAt: parseDate(map['createdAt']),
           updatedAt: parseDate(map['updatedAt']),
           endedAt: parseDate(map['endedAt']),
@@ -81,7 +83,7 @@ class Call {
               json.decode(source)['pagination']['totalCount'] == 0
           ? <Call>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
-              .map((j) => Call.fromJson(j))
+              .map((j) => Call.fromMap(j))
               .toList();
 }
 
