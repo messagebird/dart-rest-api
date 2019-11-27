@@ -50,10 +50,17 @@ class Attachment {
         'data': data,
       };
 
-  /// Get a list of [Attachment] objects from a [json] object
-  static List<Attachment> fromList(Object json) => json == null
+  /// Get a list of [Attachment] objects from a json [String].
+  static List<Attachment> fromJsonList(String source) => source == null
       ? null
-      : List.from(json).map((j) => Attachment.fromJson(j)).toList();
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
+          ? <Attachment>[]
+          : List<dynamic>.from(json.decode(source)['items'])
+              .map((j) => Attachment.fromMap(j))
+              .toList();
 }
 
 /// Class encapsulating an [Email] object.
@@ -116,6 +123,31 @@ class Email extends Content {
     this.reportUrl,
   });
 
+  /// Construct an [Email] object from a json [String].
+  factory Email.fromJson(String source) =>
+      Email.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
+
+  /// Construct an [Email] object from a [Map].
+  factory Email.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Email(
+          id: map['id'],
+          to: map['to'] == null
+              ? null
+              : List<Recipient>.from(
+                  map['to'].map((recipient) => Recipient.fromMap(recipient))),
+          from: Recipient.fromMap(map['from']),
+          subject: map['subject'],
+          content: EmailContent.fromMap(map['content']),
+          replyTo: map['replyTo'],
+          returnPath: map['returnPath'],
+          headers: map['headers'],
+          attachments: Attachment.fromJsonList(map['attachments']),
+          tracking: Tracking.fromMap(map['tracking']),
+          reportUrl: map['reportUrl']);
+
   @override
   String toJson() => json.encode(toMap());
 
@@ -129,9 +161,11 @@ class Email extends Content {
         'replyTo': replyTo,
         'returnPath': returnPath,
         'headers': headers,
-        'attachments': List<dynamic>.from(
-            attachments.map((attachment) => attachment.toMap())),
-        'tracking': tracking.toMap(),
+        'attachments': attachments == null
+            ? null
+            : List<dynamic>.from(
+                attachments.map((attachment) => attachment.toMap())),
+        'tracking': tracking?.toMap(),
         'reportUrl': reportUrl,
       };
 }
@@ -150,6 +184,16 @@ class EmailContent extends Content {
     this.html,
     this.text,
   });
+
+  /// Construct an [EmailContent] object from a json [String].
+  factory EmailContent.fromJson(String source) =>
+      EmailContent.fromMap((json.decode(source)['data'] != null)
+          ? json.decode(source)['data'][0]
+          : json.decode(source));
+
+  /// Construct an [EmailContent] object from a [Map].
+  factory EmailContent.fromMap(Map<String, dynamic> map) =>
+      map == null ? null : EmailContent(html: map['html'], text: map['text']);
 
   @override
   String toJson() => json.encode(toMap());
@@ -176,9 +220,9 @@ class Recipient {
   /// users email client.
   final String name;
 
-  /// List of variables used for placeholders inside the content or headers of
+  /// Map of variables used for placeholders inside the content or headers of
   /// your email.
-  final List<String> variables;
+  final Map<String, dynamic> variables;
 
   /// Constructor.
   const Recipient({
@@ -199,7 +243,7 @@ class Recipient {
       : Recipient(
           email: map['email'],
           name: map['name'],
-          variables: List<String>.from(map['variables']),
+          variables: map['variables'],
         );
 
   /// Get a json [String] representing the [Recipient].
@@ -211,6 +255,18 @@ class Recipient {
         'name': name,
         'variables': variables,
       };
+
+  /// Get a list of [Attachment] objects from a json [String].
+  static List<Recipient> fromJsonList(String source) => source == null
+      ? null
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
+          ? <Recipient>[]
+          : List<dynamic>.from(json.decode(source)['items'])
+              .map((j) => Recipient.fromMap(j))
+              .toList();
 }
 
 /// Class encapsulating a [Tracking] object.

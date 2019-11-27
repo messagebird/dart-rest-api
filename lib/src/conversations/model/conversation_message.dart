@@ -19,6 +19,7 @@ class ConversationMessage extends Message {
       {MessageType type,
       Content content,
       String to,
+      String from,
       String channelId,
       Map<String, dynamic> source,
       this.reportUrl,
@@ -27,6 +28,7 @@ class ConversationMessage extends Message {
             type: type,
             content: content,
             to: to,
+            from: from,
             channelId: channelId,
             source: source);
 
@@ -46,7 +48,7 @@ class ConversationMessage extends Message {
         ? null
         : ConversationMessage(
             type: type,
-            content: Content.get(type, map['content']),
+            content: Content.fromMap(type, map['content']),
             to: map['to'],
             channelId: map['channelId'],
             source: map['source'],
@@ -63,6 +65,7 @@ class ConversationMessage extends Message {
   Map<String, dynamic> toMap() => {
         'type': type.toString().replaceAll('MessageType.', ''),
         'content': content.toMap(),
+        'from': from,
         'to': to,
         'channelId': channelId,
         'source': source,

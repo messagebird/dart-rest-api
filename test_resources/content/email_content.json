@@ -1,0 +1,25 @@
+{
+    "email": {
+        "subject": "Hello from Drillster",
+        "to": [
+            {
+                "name": "Jane Doe",
+                "email": "jane@drillster.com",
+                "variables": {
+                    "firstname": "Jane",
+                    "lastname": "Doe",
+                    "orderNo": "ABC-321",
+                    "link": "mailto:unsubscribe@drillster.com?subject="
+                }
+            }
+        ],
+        "from": {
+            "name": "Luc",
+            "email": "luc@drillster.com"
+        },
+        "replyTo": "luc@drillster.com",
+        "content": {
+            "html": "<b>Hello {{firstname}} {{lastname}}!</b><br><br>Your order <b>{{orderNo}}</b> has been accepted.<br>You'll receive a new email once your order has been shipped.<br><br>Your friends at <a href=\"https: //www.messagebird.com\">MessageBird.com</a><br><a href=\"{{{link}}}{{orderNo}}\">Unsubscribe</a>"
+        }
+    }
+}

@@ -26,9 +26,9 @@ class ApiConversationsService extends BaseService
           (response) => Future.value(Conversation.fromJsonList(response.body)));
 
   @override
-  Future<List<ConversationMessage>> listMessages(String contactId,
+  Future<List<ConversationMessage>> listMessages(String id,
           {int limit, int offset}) =>
-      get('/v1/conversations/$contactId/messages',
+      get('/v1/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: {'limit': limit, 'offset': offset})
           .then((response) =>

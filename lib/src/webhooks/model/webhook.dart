@@ -47,7 +47,7 @@ class Webhook {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'id': id,
-        'events': List<dynamic>.from(events.map((x) => x)),
+        'events': List<dynamic>.from(events.map((event) => event)),
         'channelId': channelId,
         'url': url,
         'status': status?.toString()?.replaceAll('WebhookStatus.', ''),

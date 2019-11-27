@@ -102,7 +102,7 @@ class Message {
                     'MessageStatus.${map['status'].toString()}',
                 orElse: () => null),
             type: type,
-            content: Content.get(type, map['content']),
+            content: Content.fromMap(type, map['content']),
             createdDatetime: parseDate(map['createdDatetime']),
             updatedDatetime: parseDate(map['updatedDatetime']),
             source: map['source']);

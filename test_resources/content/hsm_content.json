@@ -1,0 +1,18 @@
+{
+    "hsm": {
+        "namespace": "5ba2d0b7_f2c6_433b_a66e_57b009ceb6ff",
+        "templateName": "support",
+        "language": {
+            "policy": "deterministic",
+            "code": "en"
+        },
+        "params": [
+            {
+                "default": "Bob"
+            },
+            {
+                "default": "tomorrow!"
+            }
+        ]
+    }
+}

@@ -17,6 +17,3 @@ test_resources/keys.json
 .vscode
 
 **/.DS_Store
-
-# test_coverage
-test/.test_coverage.dart

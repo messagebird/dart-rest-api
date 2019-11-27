@@ -14,8 +14,8 @@ abstract class ConversationsService {
   /// conversations with new messages appear first.
   Future<List<Conversation>> list({int limit, int offset});
 
-  /// List the messages for a contact.
-  Future<List<ConversationMessage>> listMessages(String contactId,
+  /// List the messages in a conversation.
+  Future<List<ConversationMessage>> listMessages(String id,
       {int limit, int offset});
 
   /// Retrieve a single conversation.
