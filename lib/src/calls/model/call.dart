@@ -71,8 +71,8 @@ class Call {
         'status': status?.toString()?.replaceAll('CallStatus.', ''),
         'source': source,
         'destination': destination,
-        'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
+        'createdAt': createdAt?.toString(),
+        'updatedAt': updatedAt?.toString(),
         'endedAt': endedAt,
       };
 

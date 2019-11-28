@@ -1,0 +1,11 @@
+{
+    "id": "61afc0531573b08ddbe36e1c85602827",
+    "href": "https://rest.messagebird.com/groups/61afc0531573b08ddbe36e1c85602827",
+    "name": "Work",
+    "contacts": {
+        "totalCount": 0,
+        "href": "https://rest.messagebird.com/groups/61afc0531573b08ddbe36e1c85602827/contacts"
+    },
+    "createdDatetime": "2016-04-29T09:42:26+00:00",
+    "updatedDatetime": "2016-04-29T09:42:26+00:00"
+}

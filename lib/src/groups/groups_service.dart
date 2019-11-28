@@ -1,14 +1,19 @@
+import 'package:messagebird_dart/src/general/model/contact.dart';
+
 import 'model/group.dart';
 
 /// Groups service interface.
 abstract class GroupsService {
+  /// Add contact to group. The ID of the group needs to be supplied.
+  Future<List<Contact>> listContacts(String groupId);
+
   /// Add contact to group. The IDs of the group and contact need to be
   /// supplied.
   Future<void> addContacts(String groupId, List<String> contactIds);
 
   /// Remove contact to group. The IDs of the group and contact need to be
   /// supplied.
-  Future<void> removeContacts(String groupId, List<String> contactIds);
+  Future<void> removeContact(String groupId, String contactId);
 
   /// Create a new Group. Parameters are optional.
   Future<Group> create(Group group);

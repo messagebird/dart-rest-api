@@ -66,7 +66,7 @@ abstract class BaseService {
               _getUrl(
                   '$path'
                   // ignore: lines_longer_than_80_chars
-                  '${(body != null) ? _createQuery(body) : ''}',
+                  '${body == null ? '' : _createQuery(body)}',
                   hostname: hostname),
               headers: headers)
           .timeout(Duration(milliseconds: _timeout))
@@ -87,7 +87,7 @@ abstract class BaseService {
     try {
       return Future.value(_client
           .patch(_getUrl(path, hostname: hostname),
-              headers: headers, body: json.encode(body))
+              headers: headers, body: body == null ? {} : json.encode(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
     } on Exception catch (e) {
@@ -106,7 +106,7 @@ abstract class BaseService {
     try {
       return Future.value(_client
           .post(_getUrl(path, hostname: hostname),
-              headers: headers, body: json.encode(body))
+              headers: headers, body: body == null ? {} : json.encode(body))
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));
     } on Exception catch (e) {
@@ -127,7 +127,7 @@ abstract class BaseService {
           .put(
             _getUrl(path, hostname: hostname),
             headers: headers,
-            body: json.encode(body),
+            body: body == null ? {} : json.encode(body),
           )
           .timeout(Duration(milliseconds: _timeout))
           .then(_handleResponse));

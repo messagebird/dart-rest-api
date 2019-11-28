@@ -78,8 +78,8 @@ class Verify {
         'reference': reference,
         'messages': messages?.toMap(),
         'status': status?.toString()?.replaceAll('VerifyStatus.', ''),
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'validUntilDatetime': validUntilDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toString(),
+        'validUntilDatetime': validUntilDatetime?.toString(),
       };
 }
 

@@ -1,0 +1,13 @@
+{
+  "to": "+31612345678",
+  "from": "619747f69cf940a98fb443140ce9aed2",
+  "type": "text",
+  "content": {
+    "text": "Hello!"
+  },
+  "reportUrl": "https://example.com/reports",
+  "fallback": {
+    "from": "2ecea8ee6c564bb4ab15929c44527687",
+    "after": "5m"
+  }
+}

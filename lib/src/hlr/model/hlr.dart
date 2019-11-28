@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird_dart/src/general/util.dart';
+
 /// Class encapsulating an [Hlr] (Home Location Registering) object.
 class Hlr {
   /// A unique random ID which is created on the MessageBird platform and is
@@ -60,14 +62,12 @@ class Hlr {
           msisdn: map['msisdn'],
           network: map['network'],
           reference: map['reference'],
-          details: map['details'],
+          details: HlrDetails.fromMap(map['details']),
           status: HlrStatus.values.firstWhere(
               (status) => status.toString() == 'HlrStatus.${map['status']}',
               orElse: () => HlrStatus.unknown),
-          createdDatetime:
-              DateTime.fromMillisecondsSinceEpoch(map['createdDatetime']),
-          statusDatetime:
-              DateTime.fromMillisecondsSinceEpoch(map['statusDatetime']),
+          createdDatetime: parseDate(map['createdDatetime'].toString()),
+          statusDatetime: parseDate(map['statusDatetime'].toString()),
         );
 
   /// Get a json [String] representing the [Hlr].
@@ -82,9 +82,21 @@ class Hlr {
         'reference': reference,
         'details': details?.toMap(),
         'status': status?.toString()?.replaceAll('HlrStatus.', ''),
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'statusDatetime': statusDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toString(),
+        'statusDatetime': statusDatetime?.toString(),
       };
+
+  /// Get a list of [Hlr] objects from a json [String].
+  static List<Hlr> fromJsonList(String source) => source == null
+      ? null
+      : ((json.decode(source).containsKey('totalCount') &&
+                  json.decode(source)['totalCount'] == 0) ||
+              json.decode(source).containsKey('pagination') &&
+                  json.decode(source)['pagination']['totalCount'] == 0)
+          ? <Hlr>[]
+          : List.from(json.decode(source)['data'] ?? json.decode(source))
+              .map((j) => Hlr.fromMap(j))
+              .toList();
 }
 
 /// Class encapsulating [HlrDetails].
@@ -146,10 +158,8 @@ class HlrDetails {
           country_name: map['country_name'],
           location_msc: map['location_msc'],
           location_iso: map['location_iso'],
-          ported:
-              map['ported'] == null ? null : int.tryParse(map['ported']) == 1,
-          roaming:
-              map['roaming'] == null ? null : int.tryParse(map['roaming']) == 1,
+          ported: map['ported'] == null ? null : map['ported'] == 1,
+          roaming: map['roaming'] == null ? null : map['roaming'] == 1,
         );
 
   /// Get a json [String] representing the [HlrDetails]

@@ -10,7 +10,7 @@ class ApiMmsService extends BaseService implements MmsService {
 
   @override
   Future<MmsMessage> create(MmsMessage message) =>
-      post('/mms', body: message.toMap())
+      post('/mms', body: message.toMap(send: true))
           .then((response) => Future.value(MmsMessage.fromJson(response.body)));
 
   @override

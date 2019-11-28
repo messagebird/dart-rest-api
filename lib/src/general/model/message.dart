@@ -25,6 +25,10 @@ class Message {
   /// received on.
   final String channelId;
 
+  /// A unique identifier for the platform that is used by this channel, for
+  /// example: sms, whatsapp or messenger.
+  final String platform;
+
   /// The unique ID that identifies the message recepient. The value depends on
   /// platform.
   final String to;
@@ -62,6 +66,7 @@ class Message {
       {this.id,
       this.conversationId,
       this.channelId,
+      this.platform,
       this.to,
       this.from,
       this.direction,
@@ -89,6 +94,7 @@ class Message {
             id: map['id'],
             conversationId: map['conversationId'],
             channelId: map['channelId'],
+            platform: map['platform'],
             to: map['to'],
             from: map['from'],
             direction: MessageDirection.values.firstWhere(
@@ -116,13 +122,14 @@ class Message {
         'id': id,
         'conversationId': conversationId,
         'channelId': channelId,
+        'platform': platform,
         'to': to,
         'from': from,
         'direction': direction?.toString()?.replaceAll('MessageDirection.', ''),
         'type': type?.toString()?.replaceAll('MessageType.', ''),
-        'content': content,
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'updatedDatetime': updatedDatetime?.toIso8601String(),
+        'content': content.toMap(),
+        'createdDatetime': createdDatetime?.toString(),
+        'updatedDatetime': updatedDatetime?.toString(),
         'source': source
       };
 

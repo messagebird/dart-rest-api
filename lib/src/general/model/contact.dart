@@ -57,11 +57,9 @@ class Contact {
           : json.decode(source));
 
   /// Construct a [Contact] object from a [Map].
-  factory Contact.fromMap(Map<String, dynamic> map) {
-    if (map == null) {
-      return null;
-    } else {
-      return Contact(
+  factory Contact.fromMap(Map<String, dynamic> map) => map == null
+      ? null
+      : Contact(
           id: map['id'].toString(),
           href: map['href'].toString(),
           msisdn: map['msisdn'].toString(),
@@ -76,8 +74,6 @@ class Contact {
               : Messages.fromMap(map['messages']),
           createdDatetime: parseDate(map['createdDatetime']?.toString()),
           updatedDatetime: parseDate(map['updatedDatetime']?.toString()));
-    }
-  }
 
   /// Get a json [String] representing the [Contact].
   String toJson() => json.encode(toMap());
@@ -90,10 +86,10 @@ class Contact {
         'firstName': firstName,
         'lastName': lastName,
         'customDetails': customDetails,
-        'groups': groups?.toJson(),
-        'messages': messages?.toJson(),
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'updatedDatetime': createdDatetime?.toIso8601String()
+        'groups': groups?.toMap(),
+        'messages': messages?.toMap(),
+        'createdDatetime': createdDatetime?.toString(),
+        'updatedDatetime': createdDatetime?.toString()
       };
 
   /// Get a list of [Contact] objects from a json [String]

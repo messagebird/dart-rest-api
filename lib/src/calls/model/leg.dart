@@ -111,10 +111,10 @@ class Leg {
         'cost': cost,
         'currency': currency,
         'duration': duration,
-        'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
-        'answeredAt': answeredAt?.toIso8601String(),
-        'endedAt': endedAt?.toIso8601String(),
+        'createdAt': createdAt?.toString(),
+        'updatedAt': updatedAt?.toString(),
+        'answeredAt': answeredAt?.toString(),
+        'endedAt': endedAt?.toString(),
       };
 
   /// Get a list of [Leg] objects from a json [String].

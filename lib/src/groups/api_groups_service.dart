@@ -1,4 +1,5 @@
 import 'package:messagebird_dart/src/general/model/base_service.dart';
+import 'package:messagebird_dart/src/general/model/contact.dart';
 import 'groups_service.dart';
 import 'model/group.dart';
 
@@ -9,12 +10,17 @@ class ApiGroupsService extends BaseService implements GroupsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<void> addContacts(String groupId, List<String> contactIds) =>
-      put('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
+  Future<List<Contact>> listContacts(String groupId) =>
+      get('/groups/$groupId/contacts').then(
+          (response) => Future.value(Contact.fromJsonList(response.body)));
 
   @override
-  Future<void> removeContacts(String groupId, List<String> contactIds) =>
-      remove('/groups/$groupId?${_getAddContactsQueryString(contactIds)}');
+  Future<void> addContacts(String groupId, List<String> contactIds) =>
+      put('/groups/$groupId/contacts', body: {'ids': contactIds});
+
+  @override
+  Future<void> removeContact(String groupId, String contactId) =>
+      delete('/groups/$groupId/contacts/$contactId');
 
   @override
   Future<Group> create(Group group) => post('/groups', body: group.toMap())
@@ -36,18 +42,4 @@ class ApiGroupsService extends BaseService implements GroupsService {
   Future<Group> update(String id, {Group group}) =>
       patch('/groups/$id', body: group.toMap())
           .then((response) => Future.value(Group.fromJson(response.body)));
-
-  String _getAddContactsQueryString(List<String> contactIds) {
-    // Map the contact IDs to the
-    // `_method=PUT&ids[]=contact-id&ids[]=other-contact-id` format. See
-    // docs in addContacts and:
-    // * https://developers.messagebird.com/docs/alternatives
-    // * https://developers.messagebird.com/docs/groups#add-contact-to-group
-    final List<String> parameters = [];
-    parameters.add('_method=PUT');
-    for (var i = 0; i < contactIds.length; i++) {
-      parameters.add('ids[]=${contactIds[i]}');
-    }
-    return parameters.join('&');
-  }
 }

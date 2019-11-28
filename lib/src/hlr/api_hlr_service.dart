@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:messagebird_dart/src/general/model/base_service.dart';
 import 'hlr_service.dart';
 import 'model/hlr.dart';
@@ -11,11 +9,18 @@ class ApiHlrService extends BaseService implements HlrService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<Hlr> create(int msisdn, {String ref}) =>
-      post('/hlr', body: {'msdisdn': msisdn.toString(), 'reference': ref})
+  Future<Hlr> create(int msisdn, {String reference}) =>
+      post('/hlr', body: {'msisdn': msisdn, 'reference': reference})
           .then((response) => Future.value(Hlr.fromJson(response.body)));
 
   @override
-  Future<Hlr> read(String id) => get('/hlr/$id').then((response) =>
-      Future.value(Hlr.fromJson(json.decode(response.body)['data'])));
+  Future<Hlr> read(String id) => get('/hlr/$id')
+      .then((response) => Future.value(Hlr.fromJson(response.body)));
+
+  @override
+  Future<void> remove(String id) => delete('/hlr/$id');
+
+  @override
+  Future<List<Hlr>> list() => get('/hlr')
+      .then((response) => Future.value(Hlr.fromJsonList(response.body)));
 }

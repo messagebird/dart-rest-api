@@ -6,7 +6,7 @@ DateTime parseDate(Object date) {
   if (date == null) {
     return null;
   } else if (date is DateTime) {
-    string = date.toIso8601String();
+    string = date.toString();
   } else if (date is String) {
     string = date;
   } else {

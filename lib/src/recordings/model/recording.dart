@@ -90,8 +90,8 @@ class Recording {
         'legId': legId,
         'status': status?.toString()?.replaceAll('RecordingStatus.', ''),
         'duration': duration,
-        'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
+        'createdAt': createdAt?.toString(),
+        'updatedAt': updatedAt?.toString(),
         '_links': Map<String, String>.from(
             links.map((key, uri) => MapEntry(key, uri.toString())))
       };

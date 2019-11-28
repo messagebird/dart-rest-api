@@ -90,18 +90,20 @@ class MmsMessage {
   String toJson() => json.encode(toMap());
 
   /// Convert this object to a [Map].
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap({bool send = false}) => {
         'id': id,
         'href': href,
         'direction': direction,
         'originator': originator,
-        'recipients': recipients?.toMap(),
+        'recipients': send
+            ? List.from(recipients.items.map((item) => item.recipient))
+            : recipients?.toMap(),
         'subject': subject,
         'body': body,
         'mediaUrls': mediaUrls,
         'reference': reference,
-        'scheduledDatetime': scheduledDatetime?.toIso8601String(),
-        'createdDatetime': createdDatetime?.toIso8601String(),
+        'scheduledDatetime': scheduledDatetime?.toString(),
+        'createdDatetime': createdDatetime?.toString(),
       };
 
   /// Get a list of [MmsMessage] objects from a json [String].

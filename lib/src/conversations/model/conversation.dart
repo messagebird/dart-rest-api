@@ -108,9 +108,9 @@ class Conversation {
             List<dynamic>.from(channels.map((channel) => channel.toMap())),
         'status': status?.toString()?.replaceAll('ConversationStatus.', ''),
         'messages': messages?.toMap(),
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'updatedDatetime': updatedDatetime?.toIso8601String(),
-        'lastReceivedDatetime': lastReceivedDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toString(),
+        'updatedDatetime': updatedDatetime?.toString(),
+        'lastReceivedDatetime': lastReceivedDatetime?.toString(),
         'lastUsedChannelId': lastUsedChannelId,
       };
 

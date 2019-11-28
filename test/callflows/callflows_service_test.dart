@@ -11,7 +11,7 @@ void main() {
     Map credentials;
     CallflowsService callflowsService;
     Callflow callflow;
-    final List<String> ids = [];
+    String id;
 
     setUp(() {
       credentials =
@@ -32,24 +32,24 @@ void main() {
 
     test('should create a callflow', () async {
       final Callflow createdCallflow = await callflowsService.create(callflow);
-      ids.add(createdCallflow.id);
+      id = createdCallflow.id;
       expect(createdCallflow.title, equals(callflow.title));
       expect(createdCallflow.record, equals(callflow.record));
       expect(createdCallflow.steps[0].action, equals(callflow.steps[0].action));
     });
 
     test('should get a callflow', () async {
-      expect(await callflowsService.read(ids[0]), isNotNull);
+      expect(await callflowsService.read(id), isNotNull);
     });
 
     test('should update a callflow', () async {
-      await callflowsService.update(Callflow(id: ids[0], title: 'Test'));
-      expect((await callflowsService.read(ids[0])).title, 'Test');
+      await callflowsService.update(Callflow(id: id, title: 'Test'));
+      expect((await callflowsService.read(id)).title, 'Test');
     });
 
     test('should delete a callflow', () async {
-      await callflowsService.remove(ids[0]);
-      await callflowsService.read(ids[0]).catchError((error) {
+      await callflowsService.remove(id);
+      await callflowsService.read(id).catchError((error) {
         expect(error.toString(), contains('(code 13)')); // Not found
       });
     });

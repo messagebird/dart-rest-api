@@ -31,19 +31,15 @@ void main() {
       expect(await conversationsService.list(), isNotEmpty);
     });
 
-    test('should get a conversation on our account', () async {
-      expect(await conversationsService.list(), isNotEmpty);
-    });
-
     test('should reply to a conversation', () async {
+      final Message message = await conversationsService.reply(
+          conversationId,
+          const ConversationMessage(
+              type: MessageType.text,
+              content: TextContent('Hello world!'),
+              channelId: 'b6e314222822441a907aa03ef3d425f9'));
       expect(
-          (await conversationsService.reply(
-                  conversationId,
-                  const ConversationMessage(
-                      type: MessageType.text,
-                      content: TextContent('Hello world!'),
-                      channelId: 'b6e314222822441a907aa03ef3d425f9')))
-              .status,
+          message.status,
           isIn([
             MessageStatus.pending,
             MessageStatus.delivered,
@@ -52,13 +48,13 @@ void main() {
           ]));
     });
 
-    test('should get the messages in a conversation', () async {
+    test('should list messages in a conversation', () async {
       expect(
           await conversationsService.listMessages(conversationId), isNotEmpty);
     });
 
     test('should archive a conversation', () async {
-      //expect(await conversationsService.list(), isNotEmpty);
+      // Not implemented.
     });
   });
 }

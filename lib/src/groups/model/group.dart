@@ -64,8 +64,8 @@ class Group {
         'href': href,
         'name': name,
         'contacts': contacts?.toMap(),
-        'createdDatetime': createdDatetime?.toIso8601String(),
-        'updatedDatetime': updatedDatetime?.toIso8601String(),
+        'createdDatetime': createdDatetime?.toString(),
+        'updatedDatetime': updatedDatetime?.toString(),
       };
 
   /// Get a list of [Group] objects from a json [String].

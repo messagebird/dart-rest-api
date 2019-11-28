@@ -130,6 +130,6 @@ class Recipients {
         'totalSendCount': totalSendCount,
         'totalDeliveredCount': totalDeliveredCount,
         'totalDeliveryFailedCount': totalDeliveryFailedCount,
-        'items': List<RecipientItem>.from(items.map((item) => item.toMap())),
+        'items': List.from(items.map((item) => item.toMap())),
       };
 }

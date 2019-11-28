@@ -14,6 +14,10 @@ class ConversationMessage extends Message {
   /// fails.
   final Fallback fallback;
 
+  /// The type of event message being posted, to be able to send that field, the
+  /// value of the parameter `type` must be a `event`.
+  final String eventType;
+
   /// Constructor.
   const ConversationMessage(
       {MessageType type,
@@ -23,6 +27,7 @@ class ConversationMessage extends Message {
       String channelId,
       Map<String, dynamic> source,
       this.reportUrl,
+      this.eventType,
       this.fallback})
       : super(
             type: type,
@@ -48,12 +53,18 @@ class ConversationMessage extends Message {
         ? null
         : ConversationMessage(
             type: type,
-            content: Content.fromMap(type, map['content']),
+            content: map['content'] == null
+                ? null
+                : Content.fromMap(type, map['content']),
+            from: map['from'],
             to: map['to'],
             channelId: map['channelId'],
             source: map['source'],
             reportUrl: map['reportUrl'],
-            fallback: Fallback.fromJson(map['fallback']));
+            eventType: map['eventType'],
+            fallback: map['fallback'] == null
+                ? null
+                : Fallback.fromMap(map['fallback']));
   }
 
   /// Get a json [String] representing the [ConversationMessage].
@@ -63,14 +74,15 @@ class ConversationMessage extends Message {
   /// Get a json object representing the [ConversationMessage]
   @override
   Map<String, dynamic> toMap() => {
-        'type': type.toString().replaceAll('MessageType.', ''),
-        'content': content.toMap(),
+        'type': type?.toString()?.replaceAll('MessageType.', ''),
+        'content': content?.toMap(),
         'from': from,
         'to': to,
         'channelId': channelId,
         'source': source,
         'reportUrl': reportUrl,
-        'fallback': fallback?.toJson(),
+        'eventType': eventType,
+        'fallback': fallback?.toMap(),
       };
 
   /// Get a list of [ConversationMessage] objects from a json [String].
@@ -81,7 +93,7 @@ class ConversationMessage extends Message {
               json.decode(source).containsKey('pagination') &&
                   json.decode(source)['pagination']['totalCount'] == 0)
           ? <ConversationMessage>[]
-          : List.from(json.decode(source)['data'] ?? json.decode(source))
-              .map((j) => ConversationMessage.fromJson(j))
+          : List.from(json.decode(source)['items'])
+              .map((j) => ConversationMessage.fromMap(j))
               .toList();
 }

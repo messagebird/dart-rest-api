@@ -8,9 +8,9 @@ import 'package:test/test.dart';
 void main() {
   group('ContactsService', () {
     Map credentials;
+    String id;
     ContactsService contactsService;
     Contact contact;
-    final List<String> ids = [];
 
     setUp(() {
       credentials =
@@ -22,7 +22,7 @@ void main() {
 
     test('should create a contact', () async {
       final Contact createdContact = await contactsService.create(contact);
-      ids.add(createdContact.id);
+      id = createdContact.id;
       expect(createdContact.msisdn, contact.msisdn);
       expect(createdContact.firstName, contact.firstName);
       expect(createdContact.lastName, contact.lastName);
@@ -33,25 +33,25 @@ void main() {
     });
 
     test('should get a contact', () async {
-      expect((await contactsService.read(ids[0])).msisdn, contact.msisdn);
+      expect((await contactsService.read(id)).msisdn, contact.msisdn);
     });
 
     test('should get contact groups', () async {
-      expect((await contactsService.read(ids[0])).groups, isNotNull);
+      expect((await contactsService.read(id)).groups, isNotNull);
     });
 
     test('should get contact messages', () async {
-      expect((await contactsService.read(ids[0])).messages, isNotNull);
+      expect((await contactsService.read(id)).messages, isNotNull);
     });
 
     test('should update a contact', () async {
-      await contactsService.update(Contact(id: ids[0], firstName: 'Lucas'));
-      expect((await contactsService.read(ids[0])).firstName, 'Lucas');
+      await contactsService.update(Contact(id: id, firstName: 'Lucas'));
+      expect((await contactsService.read(id)).firstName, 'Lucas');
     });
 
     test('should delete a contact', () async {
-      await contactsService.remove(ids[0]);
-      await contactsService.read(ids[0]).catchError((error) {
+      await contactsService.remove(id);
+      await contactsService.read(id).catchError((error) {
         expect(error.toString(), contains('(code 20)')); // Not found
       });
     });

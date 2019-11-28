@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 void main() {
   group('CallsService', () {
     Map credentials;
-    final List<String> ids = [];
+    String id;
     CallsService callsService;
     Call call;
     Callflow callflow;
@@ -26,7 +26,7 @@ void main() {
 
     test('should create a call', () async {
       final Call createdCall = await callsService.create(call, callflow);
-      ids.add(createdCall.id);
+      id = createdCall.id;
       expect(createdCall.source, equals(call.source));
     });
 
@@ -35,16 +35,16 @@ void main() {
     });
 
     test('should get a call', () async {
-      expect((await callsService.read(ids[0])).id, isNotNull);
+      expect((await callsService.read(id)).id, isNotNull);
     });
 
     test('should get legs from a call', () async {
-      expect(await callsService.listLegs(ids[0]), isList);
+      expect(await callsService.listLegs(id), isList);
     });
 
     test('should read a leg from a call', () async {
-      final List<Leg> legs = await callsService.listLegs(ids[0]);
-      final Leg readLeg = await callsService.readLeg(ids[0], legs[0].id);
+      final List<Leg> legs = await callsService.listLegs(id);
+      final Leg readLeg = await callsService.readLeg(id, legs[0].id);
       expect(legs[0].id, equals(readLeg.id));
     });
 
@@ -53,8 +53,8 @@ void main() {
     });
 
     test('should delete a call', () async {
-      await callsService.remove(ids[0]);
-      await callsService.read(ids[0]).catchError((error) {
+      await callsService.remove(id);
+      await callsService.read(id).catchError((error) {
         expect(error.toString(), contains('(code 13)')); // Not found
       });
     });

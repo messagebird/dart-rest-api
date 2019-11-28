@@ -81,8 +81,8 @@ class Callflow {
             ? null
             : List<dynamic>.from(steps.map((step) => step.toMap())),
         'default': isDefault,
-        'createdAt': createdAt?.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
+        'createdAt': createdAt?.toString(),
+        'updatedAt': updatedAt?.toString(),
       };
 
   /// Get a list of [Callflow] objects from a json [String].
