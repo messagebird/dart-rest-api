@@ -14,7 +14,8 @@ class ApiLookupService extends BaseService implements LookupService {
   Future<Lookup> read(int phoneNumber, {String countryCode}) =>
       get('/lookup/$phoneNumber',
               body: countryCode == null ? {} : {'countryCode': countryCode})
-          .then((response) => Future.value(Lookup.fromJson(response.body)));
+          .then((response) => Future.value(
+              response == null ? null : Lookup.fromJson(response.body)));
 
   @override
   Future<Hlr> requestHlr(int phoneNumber,
@@ -24,8 +25,9 @@ class ApiLookupService extends BaseService implements LookupService {
           .then((response) => Future.value(Hlr.fromJson(response.body)));
 
   @override
-  Future<Hlr> readHlr(int phoneNumber, {String countryCode}) =>
-      get('/lookup/$phoneNumber/hlr',
-              body: countryCode == null ? {} : {'countryCode': countryCode})
-          .then((response) => Future.value(Hlr.fromJson(response.body)));
+  Future<Hlr> readHlr(int phoneNumber, {String countryCode}) => get(
+          '/lookup/$phoneNumber/hlr',
+          body: countryCode == null ? {} : {'countryCode': countryCode})
+      .then((response) =>
+          Future.value(response == null ? null : Hlr.fromJson(response.body)));
 }

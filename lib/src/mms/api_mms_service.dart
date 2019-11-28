@@ -19,8 +19,9 @@ class ApiMmsService extends BaseService implements MmsService {
           (response) => Future.value(MmsMessage.fromJsonList(response.body)));
 
   @override
-  Future<MmsMessage> read(String id) => get('/mms/$id')
-      .then((response) => Future.value(MmsMessage.fromJson(response.body)));
+  Future<MmsMessage> read(String id) =>
+      get('/mms/$id').then((response) => Future.value(
+          response == null ? null : MmsMessage.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/mms/$id');

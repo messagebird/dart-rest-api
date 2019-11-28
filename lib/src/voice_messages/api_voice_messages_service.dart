@@ -15,6 +15,7 @@ class ApiVoiceMessagesService extends BaseService
       .then((response) => Future.value(VoiceMessage.fromJson(response.body)));
 
   @override
-  Future<VoiceMessage> read(String id) => get('/voicemessages/$id')
-      .then((response) => Future.value(VoiceMessage.fromJson(response.body)));
+  Future<VoiceMessage> read(String id) =>
+      get('/voicemessages/$id').then((response) => Future.value(
+          response == null ? null : VoiceMessage.fromJson(response.body)));
 }

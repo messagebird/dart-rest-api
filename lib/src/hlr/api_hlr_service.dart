@@ -14,8 +14,8 @@ class ApiHlrService extends BaseService implements HlrService {
           .then((response) => Future.value(Hlr.fromJson(response.body)));
 
   @override
-  Future<Hlr> read(String id) => get('/hlr/$id')
-      .then((response) => Future.value(Hlr.fromJson(response.body)));
+  Future<Hlr> read(String id) => get('/hlr/$id').then((response) =>
+      Future.value(response == null ? null : Hlr.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/hlr/$id');

@@ -49,9 +49,7 @@ void main() {
 
     test('should delete a callflow', () async {
       await callflowsService.remove(id);
-      await callflowsService.read(id).catchError((error) {
-        expect(error.toString(), contains('(code 13)')); // Not found
-      });
+      expect(await callflowsService.read(id), isNull);
     });
   });
 }

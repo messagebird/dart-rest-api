@@ -51,9 +51,7 @@ void main() {
 
     test('should delete a contact', () async {
       await contactsService.remove(id);
-      await contactsService.read(id).catchError((error) {
-        expect(error.toString(), contains('(code 20)')); // Not found
-      });
+      expect(await contactsService.read(id), isNull);
     });
   });
 }

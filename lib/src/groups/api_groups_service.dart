@@ -32,8 +32,8 @@ class ApiGroupsService extends BaseService implements GroupsService {
           .then((response) => Future.value(Group.fromJsonList(response.body)));
 
   @override
-  Future<Group> read(String id) => get('/groups/$id')
-      .then((response) => Future.value(Group.fromJson(response.body)));
+  Future<Group> read(String id) => get('/groups/$id').then((response) =>
+      Future.value(response == null ? null : Group.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/groups/$id');

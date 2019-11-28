@@ -25,8 +25,8 @@ class ApiTranscriptionsService extends BaseService
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId.txt',
               hostname: BaseService.voiceEndpoint)
-          .then(
-              (response) => Future.value(File.fromRawPath(response.bodyBytes)));
+          .then((response) => Future.value(
+              response == null ? null : File.fromRawPath(response.bodyBytes)));
 
   @override
   Future<List<Transcription>> list(
@@ -41,6 +41,6 @@ class ApiTranscriptionsService extends BaseService
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId',
               hostname: BaseService.voiceEndpoint)
-          .then((response) =>
-              Future.value(Transcription.fromJson(response.body)));
+          .then((response) => Future.value(
+              response == null ? null : Transcription.fromJson(response.body)));
 }

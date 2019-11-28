@@ -35,15 +35,17 @@ class ApiConversationsService extends BaseService
               Future.value(ConversationMessage.fromJsonList(response.body)));
 
   @override
-  Future<Conversation> read(String id) => get('/v1/conversations/$id',
-          hostname: BaseService.conversationsEndpoint)
-      .then((response) => Future.value(Conversation.fromJson(response.body)));
+  Future<Conversation> read(String id) =>
+      get('/v1/conversations/$id', hostname: BaseService.conversationsEndpoint)
+          .then((response) => Future.value(
+              response == null ? null : Conversation.fromJson(response.body)));
 
   @override
   Future<ConversationMessage> readMessage(String id) =>
       get('/v1/messages/$id', hostname: BaseService.conversationsEndpoint).then(
-          (response) =>
-              Future.value(ConversationMessage.fromJson(response.body)));
+          (response) => Future.value(response == null
+              ? null
+              : ConversationMessage.fromJson(response.body)));
 
   @override
   Future<Message> reply(String id, Message message) =>

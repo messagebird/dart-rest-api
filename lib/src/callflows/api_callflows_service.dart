@@ -21,8 +21,9 @@ class ApiCallflowsService extends BaseService implements CallflowsService {
 
   @override
   Future<Callflow> read(String id) =>
-      get('/call-flows/$id', hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(Callflow.fromJson(response.body)));
+      get('/call-flows/$id', hostname: BaseService.voiceEndpoint).then(
+          (response) => Future.value(
+              response == null ? null : Callflow.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) =>

@@ -61,9 +61,7 @@ void main() {
 
     test('should remove a group', () async {
       await groupsService.remove(id);
-      await groupsService.read(id).catchError((error) {
-        expect(error.toString(), contains('(code 20)')); // Not found
-      });
+      expect(await groupsService.read(id), isNull);
     });
   });
 }

@@ -34,8 +34,8 @@ class ApiContactsService extends BaseService implements ContactsService {
           .then((response) => Future.value(Messages.fromJson(response.body)));
 
   @override
-  Future<Contact> read(String id) => get('/contacts/$id')
-      .then((response) => Future.value(Contact.fromJson(response.body)));
+  Future<Contact> read(String id) => get('/contacts/$id').then((response) =>
+      Future.value(response == null ? null : Contact.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/contacts/$id');

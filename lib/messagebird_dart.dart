@@ -26,9 +26,6 @@ export 'src/hlr/hlr_service.dart';
 export 'src/lookup/api_lookup_service.dart';
 export 'src/lookup/lookup_service.dart';
 
-export 'src/messages/api_messages_service.dart';
-export 'src/messages/messages_service.dart';
-
 export 'src/mms/api_mms_service.dart';
 export 'src/mms/mms_service.dart';
 

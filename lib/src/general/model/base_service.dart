@@ -184,13 +184,16 @@ abstract class BaseService {
   }
 
   Response _handleResponse(Response response) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return response;
-    } else {
+    if (response.statusCode < 200 || response.statusCode >= 300) {
       final ApiError apiError =
           ApiError.fromMap(json.decode(response.body)['errors'][0]);
-      throw Exception('API error (code ${apiError.code}): '
-          '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+      if (apiError.code != 20 && apiError.code != 13) {
+        throw Exception('API error (code ${apiError.code}): '
+            '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+      } else {
+        return null;
+      }
     }
+    return response;
   }
 }

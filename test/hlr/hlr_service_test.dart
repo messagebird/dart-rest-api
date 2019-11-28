@@ -31,8 +31,7 @@ void main() {
 
     test('should remove an HLR', () async {
       //await hlrService.remove(id);
-      //await hlrService.read(id).catchError((error) {
-      //  expect(error.toString(), contains('(code 20)')); // Not found
+      //expect(await hlrService.read(id), isNull);
       //});
     });
   });

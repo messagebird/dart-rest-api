@@ -11,10 +11,11 @@ class ApiRecordingsService extends BaseService implements RecordingsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<File> download(String callId, String legId, String recordingId) => get(
-          '/calls/$callId/legs/$legId/recordings/$recordingId.wav',
-          hostname: BaseService.voiceEndpoint)
-      .then((response) => Future.value(File.fromRawPath(response.bodyBytes)));
+  Future<File> download(String callId, String legId, String recordingId) =>
+      get('/calls/$callId/legs/$legId/recordings/$recordingId.wav',
+              hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(
+              response == null ? null : File.fromRawPath(response.bodyBytes)));
 
   @override
   Future<List<Recording>> list(String callId, String legId,
@@ -28,5 +29,6 @@ class ApiRecordingsService extends BaseService implements RecordingsService {
   Future<Recording> read(String callId, String legId, String recordingId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId',
               hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(Recording.fromJson(response.body)));
+          .then((response) => Future.value(
+              response == null ? null : Recording.fromJson(response.body)));
 }

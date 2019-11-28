@@ -27,17 +27,19 @@ class ApiCallsService extends BaseService implements CallsService {
 
   @override
   Future<Call> read(String id) =>
-      get('/calls/$id', hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(Call.fromJson(response.body)));
+      get('/calls/$id', hostname: BaseService.voiceEndpoint).then((response) =>
+          Future.value(response == null ? null : Call.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) =>
       delete('/calls/$id', hostname: BaseService.voiceEndpoint);
 
   @override
-  Future<Leg> readLeg(String callId, String legId) =>
-      get('/calls/$callId/legs/$legId', hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(Leg.fromJson(response.body)));
+  Future<Leg> readLeg(String callId, String legId) => get(
+          '/calls/$callId/legs/$legId',
+          hostname: BaseService.voiceEndpoint)
+      .then((response) =>
+          Future.value(response == null ? null : Leg.fromJson(response.body)));
 
   @override
   Future<List<Leg>> listLegs(String callId) =>

@@ -14,8 +14,8 @@ class ApiVerifyService extends BaseService implements VerifyService {
       .then((response) => Future.value(Verify.fromJson(response.body)));
 
   @override
-  Future<Verify> read(String id) => get('/verify/$id')
-      .then((response) => Future.value(Verify.fromJson(response.body)));
+  Future<Verify> read(String id) => get('/verify/$id').then((response) =>
+      Future.value(response == null ? null : Verify.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/verify/$id');

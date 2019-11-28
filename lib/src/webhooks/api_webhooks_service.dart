@@ -23,7 +23,8 @@ class ApiWebhooksService extends BaseService implements WebhooksService {
   Future<Webhook> read(String id) => get(
         '/v1/webhooks/$id',
         hostname: BaseService.conversationsEndpoint,
-      ).then((response) => Future.value(Webhook.fromJson(response.body)));
+      ).then((response) => Future.value(
+          response == null ? null : Webhook.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete(

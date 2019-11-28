@@ -32,6 +32,9 @@ balanceService.read().then((balance) => print('My balance is ${balance.amount}')
 ## Conversations Whatsapp Sandbox
 To use the whatsapp sandbox you need to add `"ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX"` to the list of features you want enabled (named parameter `features` in the constructor of any service).
 
+## Tests
+This repository includes unit tests, located in the `test` directory. To run them, execute `pub run test` in the command line. Covered are, per service, service tests and json (de)serialization tests of data classes.
+
 ## License
 The MessageBird REST API for Dart is licensed under [The BSD 2-Clause License](http://opensource.org/licenses/BSD-2-Clause). Copyright (c) 2019, Drillster B.V. 
 The MessageBird platform and MessageBird trademark are property of MessageBird B.V.

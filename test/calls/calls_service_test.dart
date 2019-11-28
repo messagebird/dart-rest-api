@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -54,9 +55,16 @@ void main() {
 
     test('should delete a call', () async {
       await callsService.remove(id);
-      await callsService.read(id).catchError((error) {
-        expect(error.toString(), contains('(code 13)')); // Not found
-      });
+
+      Call call;
+      final Timer timer = Timer(const Duration(seconds: 5), () => null);
+      while (call == null ||
+          call.status == CallStatus.starting ||
+          timer.isActive) {
+        call = await callsService.read(id);
+      }
+
+      expect(call.status, equals(CallStatus.ended));
     });
   });
 }

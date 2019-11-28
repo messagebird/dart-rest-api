@@ -73,7 +73,7 @@ class Call {
         'destination': destination,
         'createdAt': createdAt?.toString(),
         'updatedAt': updatedAt?.toString(),
-        'endedAt': endedAt,
+        'endedAt': endedAt?.toString(),
       };
 
   /// Get a list of [Call] objects from a json [String].
