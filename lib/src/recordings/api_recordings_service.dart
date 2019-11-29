@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:messagebird_dart/src/general/model/base_service.dart';
+
 import 'model/recording.dart';
 import 'recordings_service.dart';
 
@@ -11,11 +12,10 @@ class ApiRecordingsService extends BaseService implements RecordingsService {
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<File> download(String callId, String legId, String recordingId) =>
+  Future<Uint8List> download(String callId, String legId, String recordingId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId.wav',
               hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(
-              response == null ? null : File.fromRawPath(response.bodyBytes)));
+          .then((response) => Future.value(response?.bodyBytes));
 
   @override
   Future<List<Recording>> list(String callId, String legId,
@@ -31,4 +31,9 @@ class ApiRecordingsService extends BaseService implements RecordingsService {
               hostname: BaseService.voiceEndpoint)
           .then((response) => Future.value(
               response == null ? null : Recording.fromJson(response.body)));
+
+  @override
+  Future<void> remove(String callId, String legId, String recordingId) =>
+      delete('/calls/$callId/legs/$legId/recordings/$recordingId',
+          hostname: BaseService.voiceEndpoint);
 }

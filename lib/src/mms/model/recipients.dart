@@ -50,7 +50,7 @@ class RecipientItem {
             ?.toString()
             ?.replaceAll('RecipientItemStatus.', '')
             ?.replaceAll('_', ' '),
-        'statusDatetime': statusDatetime,
+        'statusDatetime': statusDatetime?.toString(),
       };
 }
 

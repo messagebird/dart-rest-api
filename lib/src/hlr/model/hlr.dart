@@ -94,7 +94,7 @@ class Hlr {
               json.decode(source).containsKey('pagination') &&
                   json.decode(source)['pagination']['totalCount'] == 0)
           ? <Hlr>[]
-          : List.from(json.decode(source)['data'] ?? json.decode(source))
+          : List.from(json.decode(source)['items'] ?? json.decode(source))
               .map((j) => Hlr.fromMap(j))
               .toList();
 }

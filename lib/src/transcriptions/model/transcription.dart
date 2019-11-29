@@ -43,19 +43,15 @@ class Transcription {
 
   /// Construct a [Transcription] object from a [Map].
   factory Transcription.fromMap(Map<String, dynamic> map) {
-    if (map['data'] == null ?? false) {
-      return null;
-    } else {
-      final Map<String, dynamic> data = map['data'];
-      return Transcription(
-          id: data['id'],
-          recordingId: data['recordingId'],
-          error: data['error'],
-          createdAt: parseDate(data['createdAt']),
-          updatedAt: parseDate(data['updatedAt']),
-          links: Map<String, Uri>.from(
-              map['_links'].map((key, uri) => {key: Uri.parse(uri)})));
-    }
+    final Map data = map['data'] == null ? map : map['data'][0];
+    return Transcription(
+        id: data['id'],
+        recordingId: data['recordingId'],
+        error: data['error'],
+        createdAt: parseDate(data['createdAt']),
+        updatedAt: parseDate(data['updatedAt']),
+        links: Map<String, Uri>.from(
+            map['_links'].map((key, uri) => MapEntry(key, Uri.parse(uri)))));
   }
 
   /// Get a json [String] representing the [Transcription].
@@ -81,6 +77,6 @@ class Transcription {
                   json.decode(source)['pagination']['totalCount'] == 0)
           ? <Transcription>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
-              .map((j) => Transcription.fromJson(j))
+              .map((j) => Transcription.fromMap(j))
               .toList();
 }

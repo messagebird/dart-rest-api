@@ -1,16 +1,17 @@
 import 'model/verify.dart';
+import 'model/verify_response.dart';
 
 /// Verify service interface.
 abstract class VerifyService {
   /// Send a verification code.
-  Future<Verify> create(Verify verify);
+  Future<VerifyResponse> create(Verify verify);
 
   /// Get verification code details.
-  Future<Verify> read(String id);
+  Future<VerifyResponse> read(String id);
 
   /// Removes a verification code.
   Future<void> remove(String id);
 
   /// Verify a verification code.
-  Future<Verify> verify(String id, String token);
+  Future<VerifyResponse> verify(String id, String token);
 }

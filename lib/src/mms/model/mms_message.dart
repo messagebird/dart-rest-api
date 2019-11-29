@@ -115,6 +115,6 @@ class MmsMessage {
                   json.decode(source)['pagination']['totalCount'] == 0)
           ? <MmsMessage>[]
           : List.from(json.decode(source)['data'] ?? json.decode(source))
-              .map((j) => MmsMessage.fromJson(j))
+              .map((j) => MmsMessage.fromMap(j))
               .toList();
 }

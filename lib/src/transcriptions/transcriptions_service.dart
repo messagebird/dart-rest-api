@@ -1,4 +1,4 @@
-import 'dart:io' show File;
+import 'dart:typed_data';
 
 import 'model/transcription.dart';
 
@@ -8,13 +8,10 @@ abstract class TranscriptionsService {
   Future<Transcription> create(
       String callId, String legId, String recordingId, String language);
 
-  /// Downloads an existing transcription.
-  Future<File> download(
+  /// Downloads an existing transcription. Returns an [Uint8List] to write into
+  /// a [dart:io/File] using method `writeAsBytes`.
+  Future<Uint8List> download(
       String callId, String legId, String recordingId, String transcriptionId);
-
-  /// List transcriptions.
-  Future<List<Transcription>> list(
-      String callId, String legId, String recordingId);
 
   /// View an existing transcription.
   Future<Transcription> read(

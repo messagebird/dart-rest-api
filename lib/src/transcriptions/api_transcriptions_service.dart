@@ -1,6 +1,7 @@
-import 'dart:io' show File;
+import 'dart:typed_data';
 
 import 'package:messagebird_dart/src/general/model/base_service.dart';
+
 import 'model/transcription.dart';
 import 'transcriptions_service.dart';
 
@@ -21,20 +22,11 @@ class ApiTranscriptionsService extends BaseService
               Future.value(Transcription.fromJson(response.body)));
 
   @override
-  Future<File> download(String callId, String legId, String recordingId,
+  Future<Uint8List> download(String callId, String legId, String recordingId,
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId.txt',
               hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(
-              response == null ? null : File.fromRawPath(response.bodyBytes)));
-
-  @override
-  Future<List<Transcription>> list(
-          String callId, String legId, String recordingId) =>
-      get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions',
-              hostname: BaseService.voiceEndpoint)
-          .then((response) =>
-              Future.value(Transcription.fromJsonList(response.body)));
+          .then((response) => Future.value(response?.bodyBytes));
 
   @override
   Future<Transcription> read(String callId, String legId, String recordingId,

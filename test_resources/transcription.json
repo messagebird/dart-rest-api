@@ -1,0 +1,15 @@
+{
+    "data": [
+        {
+            "id": "87c377ce-1629-48b6-ad01-4b4fd069c53c",
+            "recordingId": "123da3f9-ddd3-4267-ab01-71cf55df31df",
+            "error": null,
+            "createdAt": "2017-06-20T10:03:14Z",
+            "updatedAt": "2017-06-20T10:03:14Z"
+        }
+    ],
+    "_links": {
+        "self": "/calls/096d3500-0f6e-4c0f-89a1-41934458ee69/legs/124906d6-b745-435e-aabc-8005dbc5ccf3/recordings/07fda3f9-ddd3-4267-ab01-71cf55df31df/transcriptions/87c377ce-1629-48b6-ad01-4b4fd069c53c",
+        "file": "/calls/096d3500-0f6e-4c0f-89a1-41934458ee69/legs/124906d6-b745-435e-aabc-8005dbc5ccf3/recordings/07fda3f9-ddd3-4267-ab01-71cf55df31df/transcriptions/87c377ce-1629-48b6-ad01-4b4fd069c53c.txt"
+    }
+}

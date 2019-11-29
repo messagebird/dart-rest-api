@@ -15,7 +15,7 @@ void main() {
     setUp(() {
       credentials =
           json.decode(File('test_resources/keys.json').readAsStringSync());
-      mmsService = ApiMmsService(credentials['test']);
+      mmsService = ApiMmsService(credentials['live']);
     });
 
     test('should send a message', () async {
@@ -30,8 +30,8 @@ void main() {
     });
 
     test('should read a message', () async {
-      //final MmsMessage mmsMessage = await mmsService.read(id);
-      //expect(mmsMessage.id, equals(id));
+      final MmsMessage mmsMessage = await mmsService.read(id);
+      expect(mmsMessage.id, equals(id));
     });
   });
 }

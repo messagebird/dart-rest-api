@@ -53,30 +53,26 @@ class Recording {
 
   /// Construct a [Recording] object from a [Map].
   factory Recording.fromMap(Map<String, dynamic> map) {
-    if (map['data'] == null ?? false) {
-      return null;
-    } else {
-      final Map<String, dynamic> data = map['data'];
-      return Recording(
-          id: data['id'],
-          format: data['format'],
-          type: RecordingType.values.firstWhere(
-              (type) =>
-                  type.toString() ==
-                  'RecordingType.${data['type']}'.replaceAll(' ', '_'),
-              orElse: () => null),
-          legId: data['legId'],
-          status: RecordingStatus.values.firstWhere(
-              (status) =>
-                  status.toString() ==
-                  'RecordingStatus.${data['status']}'.replaceAll(' ', '_'),
-              orElse: () => null),
-          duration: int.tryParse(data['duration'].toString()),
-          createdAt: parseDate(data['createdAt']),
-          updatedAt: parseDate(data['updatedAt']),
-          links: Map<String, Uri>.from(
-              map['_links'].map((key, uri) => {key: Uri.parse(uri)})));
-    }
+    final Map data = map['data'] == null ? map : map['data'][0];
+    return Recording(
+        id: data['id'],
+        format: data['format'],
+        type: RecordingType.values.firstWhere(
+            (type) =>
+                type.toString() ==
+                'RecordingType.${data['type']}'.replaceAll(' ', '_'),
+            orElse: () => null),
+        legId: data['legId'],
+        status: RecordingStatus.values.firstWhere(
+            (status) =>
+                status.toString() ==
+                'RecordingStatus.${data['status']}'.replaceAll(' ', '_'),
+            orElse: () => null),
+        duration: int.tryParse(data['duration'].toString()),
+        createdAt: parseDate(data['createdAt']),
+        updatedAt: parseDate(data['updatedAt']),
+        links: Map<String, Uri>.from(
+            map['_links'].map((key, uri) => MapEntry(key, Uri.parse(uri)))));
   }
 
   /// Get a json [String] representing the [Recording].
@@ -104,8 +100,8 @@ class Recording {
               json.decode(source).containsKey('pagination') &&
                   json.decode(source)['pagination']['totalCount'] == 0)
           ? <Recording>[]
-          : List.from(json.decode(source)['data'] ?? json.decode(source))
-              .map((j) => Recording.fromJson(j))
+          : List.from(json.decode(source)['data'])
+              .map((j) => Recording.fromMap(j))
               .toList();
 }
 

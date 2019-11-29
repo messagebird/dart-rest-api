@@ -25,14 +25,13 @@ void main() {
     });
 
     test('should list HLRs', () async {
-      //final List<Hlr> hlrs = await hlrService.list();
-      //expect(hlrs, isNotEmpty);
+      final List<Hlr> hlrs = await hlrService.list();
+      expect(hlrs, isNotEmpty);
     });
 
     test('should remove an HLR', () async {
-      //await hlrService.remove(id);
-      //expect(await hlrService.read(id), isNull);
-      //});
+      await hlrService.remove(id);
+      expect(await hlrService.read(id), isNull);
     });
   });
 }
