@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:messagebird_dart/src/callflows/model/callflow.dart';
-import 'package:messagebird_dart/src/callflows/model/step.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {

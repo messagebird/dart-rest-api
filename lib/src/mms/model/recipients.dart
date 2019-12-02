@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/util.dart';
+import '../../util.dart';
 
 /// Class encapsulating a [RecipientItem].
 class RecipientItem {
@@ -31,7 +31,7 @@ class RecipientItem {
   factory RecipientItem.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : RecipientItem(
-          recipient: int.tryParse(map['recipient'].toString()),
+          recipient: parseInt(map['recipient']),
           status: RecipientItemStatus.values.firstWhere(
               (status) =>
                   status.toString() ==

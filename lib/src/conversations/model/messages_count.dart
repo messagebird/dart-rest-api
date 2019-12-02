@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../util.dart';
+
 /// Class encapsulating a [MessagesCount] object.
 class MessagesCount {
   /// A link to the endpoint to retrieve messages of this conversation.
@@ -31,7 +33,7 @@ class MessagesCount {
       ? null
       : MessagesCount(
           href: map['href'],
-          totalCount: int.tryParse(map['totalCount'].toString()),
+          totalCount: parseInt(map['totalCount']),
           lastMessageId: map['lastMessageId'],
         );
 

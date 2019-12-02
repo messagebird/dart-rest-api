@@ -1,11 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/callflows/model/callflow.dart';
-import 'package:messagebird_dart/src/calls/model/call.dart';
-import 'package:messagebird_dart/src/calls/model/leg.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -20,51 +16,57 @@ void main() {
       credentials =
           json.decode(File('test_resources/keys.json').readAsStringSync());
       callsService = ApiCallsService(credentials['live']);
-      call = Call.fromJson(File('test_resources/call.json').readAsStringSync());
+      call = Call.fromJson(File('test_resources/call.json')
+          .readAsStringSync()
+          .replaceAll('31612345678', credentials['msisdn'].toString()));
       callflow = Callflow.fromJson(
           File('test_resources/callflow.json').readAsStringSync());
     });
 
     test('should create a call', () async {
-      final Call createdCall = await callsService.create(call, callflow);
-      id = createdCall.id;
-      expect(createdCall.source, equals(call.source));
+      await callsService.create(call, callflow).then((createdCall) {
+        id = createdCall.id;
+        expect(createdCall.source, equals(call.source));
+      });
     });
 
-    test('should list calls', () async {
-      expect(await callsService.list(), isNotEmpty);
+    test('should list calls', () {
+      callsService.list().then((list) {
+        expect(list, isNotEmpty);
+      });
     });
 
-    test('should get a call', () async {
-      expect((await callsService.read(id)).id, isNotNull);
+    test('should get a call', () {
+      callsService.read(id).then((readCall) {
+        expect(readCall.id, isNotNull);
+        expect(readCall.source, equals(call.source));
+      });
     });
 
-    test('should get legs from a call', () async {
-      expect(await callsService.listLegs(id), isList);
+    test('should get legs from a call', () {
+      callsService.listLegs(id).then((list) {
+        expect(list, isList);
+      });
     });
 
-    test('should read a leg from a call', () async {
-      final List<Leg> legs = await callsService.listLegs(id);
-      final Leg readLeg = await callsService.readLeg(id, legs[0].id);
-      expect(legs[0].id, equals(readLeg.id));
+    test('should read a leg from a call', () {
+      callsService.listLegs(id).then((legs) {
+        callsService.readLeg(id, legs[0].id).then((readLeg) {
+          expect(legs[0].id, equals(readLeg.id));
+        });
+      });
     });
 
-    test('should update a call', () async {
+    test('should update a call', () {
       // Not testable.
     });
 
     test('should delete a call', () async {
       await callsService.remove(id);
-
-      Call call;
-      final Timer timer = Timer(const Duration(seconds: 5), () => null);
-      while (call == null ||
-          call.status == CallStatus.starting ||
-          timer.isActive) {
-        call = await callsService.read(id);
-      }
-
-      expect(call.status, equals(CallStatus.ended));
+      sleep(const Duration(seconds: 1)); // Allow a second for the call to end
+      await callsService.read(id).then((readCall) {
+        expect(readCall.status, equals(CallStatus.ended));
+      });
     });
   });
 }

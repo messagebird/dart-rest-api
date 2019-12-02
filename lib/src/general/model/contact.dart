@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../util.dart';
+import '../../util.dart';
 import 'groups.dart';
 import 'messages.dart';
 

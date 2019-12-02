@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/callflows/model/callflow.dart';
-import 'package:messagebird_dart/src/callflows/model/step.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -26,30 +24,45 @@ void main() {
       ]);
     });
 
-    test('should list callflows', () async {
-      expect(await callflowsService.list(), isNotEmpty);
+    test('should list callflows', () {
+      callflowsService.list().then((list) {
+        expect(list, isNotEmpty);
+      });
     });
 
-    test('should create a callflow', () async {
-      final Callflow createdCallflow = await callflowsService.create(callflow);
-      id = createdCallflow.id;
-      expect(createdCallflow.title, equals(callflow.title));
-      expect(createdCallflow.record, equals(callflow.record));
-      expect(createdCallflow.steps[0].action, equals(callflow.steps[0].action));
+    test('should create a callflow', () {
+      callflowsService.create(callflow).then((createdCallflow) {
+        id = createdCallflow.id;
+        expect(createdCallflow.title, equals(callflow.title));
+        expect(createdCallflow.record, equals(callflow.record));
+        expect(
+            createdCallflow.steps[0].action, equals(callflow.steps[0].action));
+      });
     });
 
-    test('should get a callflow', () async {
-      expect(await callflowsService.read(id), isNotNull);
+    test('should get a callflow', () {
+      callflowsService.read(id).then((readCallflow) {
+        expect(readCallflow.title, equals(callflow.title));
+        expect(readCallflow.record, equals(callflow.record));
+        expect(readCallflow.steps[0].action, equals(callflow.steps[0].action));
+      });
     });
 
-    test('should update a callflow', () async {
-      await callflowsService.update(Callflow(id: id, title: 'Test'));
-      expect((await callflowsService.read(id)).title, 'Test');
+    test('should update a callflow', () {
+      callflowsService
+          .update(Callflow(id: id, title: 'Test'))
+          .then((updatedCallflow) {
+        callflowsService.read(id).then((readCallflow) {
+          expect(readCallflow.title, 'Test');
+        });
+      });
     });
 
-    test('should delete a callflow', () async {
-      await callflowsService.remove(id);
-      expect(await callflowsService.read(id), isNull);
+    test('should delete a callflow', () {
+      callflowsService.remove(id);
+      callflowsService.read(id).then((callflow) {
+        expect(callflow, isNull);
+      });
     });
   });
 }

@@ -1,0 +1,8 @@
+{
+    "body": "This is a voice message!",
+    "recipients": [
+        31612345678
+    ],
+    "originator": "+3197010240808",
+    "repeat": 2
+}

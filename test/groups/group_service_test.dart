@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/general/model/contact.dart';
-import 'package:messagebird_dart/src/groups/model/group.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -20,48 +18,55 @@ void main() {
       groupsService = ApiGroupsService(credentials['test']);
     });
 
-    test('should create a group', () async {
-      final Group group =
-          await groupsService.create(const Group(name: 'Testgroup'));
-      expect(group.name, equals('Testgroup'));
-      expect(group.id, isNotNull);
-      id = group.id;
+    test('should create a group', () {
+      groupsService.create(const Group(name: 'Testgroup')).then((group) {
+        expect(group.name, equals('Testgroup'));
+        expect(group.id, isNotNull);
+        id = group.id;
+      });
     });
 
-    test('should view a group', () async {
-      final Group group = await groupsService.read(id);
-      expect(group.name, equals('Testgroup'));
-      expect(group.id, id);
+    test('should view a group', () {
+      groupsService.read(id).then((group) {
+        expect(group.name, equals('Testgroup'));
+        expect(group.id, id);
+      });
     });
 
-    test('should add a contact to a group', () async {
-      await groupsService.addContacts(id, [contactId]);
-      final Group group = await groupsService.read(id);
-      expect(group.contacts.totalCount, equals(1));
+    test('should add a contact to a group', () {
+      groupsService.addContacts(id, [contactId]);
+      groupsService.read(id).then((group) {
+        expect(group.contacts.totalCount, equals(1));
+      });
     });
 
-    test('should get members of a group', () async {
-      final List<Contact> contacts = await groupsService.listContacts(id);
-      expect(contacts, isNotEmpty);
-      expect(contacts.length, equals(1));
-      expect(contacts[0].id, equals(contactId));
+    test('should get members of a group', () {
+      groupsService.listContacts(id).then((contacts) {
+        expect(contacts, isNotEmpty);
+        expect(contacts.length, equals(1));
+        expect(contacts[0].id, equals(contactId));
+      });
     });
 
-    test('should remove a contact from a group', () async {
-      await groupsService.removeContact(id, contactId);
-      final Group group = await groupsService.read(id);
-      expect(group.contacts.totalCount, equals(0));
+    test('should remove a contact from a group', () {
+      groupsService.removeContact(id, contactId);
+      groupsService.read(id).then((group) {
+        expect(group.contacts.totalCount, isZero);
+      });
     });
 
-    test('should update a group', () async {
-      await groupsService.update(id, group: const Group(name: 'Hello world!'));
-      final Group group = await groupsService.read(id);
-      expect(group.name, equals('Hello world!'));
+    test('should update a group', () {
+      groupsService.update(id, group: const Group(name: 'Hello world!'));
+      groupsService.read(id).then((group) {
+        expect(group.name, equals('Hello world!'));
+      });
     });
 
-    test('should remove a group', () async {
-      await groupsService.remove(id);
-      expect(await groupsService.read(id), isNull);
+    test('should remove a group', () {
+      groupsService.remove(id);
+      groupsService.read(id).then((group) {
+        expect(group, isNull);
+      });
     });
   });
 }

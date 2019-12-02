@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../util.dart';
+
 /// Class encapsulating a [Contacts] object.
 class Contacts {
   /// The total count of messages sent to contact.
@@ -24,7 +26,7 @@ class Contacts {
   factory Contacts.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Contacts(
-          totalCount: int.tryParse(map['totalCount'].toString()),
+          totalCount: parseInt(map['totalCount']),
           href: map['href'],
         );
 

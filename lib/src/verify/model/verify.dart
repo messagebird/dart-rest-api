@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/voice_messages/model/voice_message.dart';
+import '../../util.dart';
+import '../../voice_messages/model/voice_message.dart';
 
 /// Class encapsulating a [Verify] object.
 class Verify {
@@ -79,8 +80,8 @@ class Verify {
               (datacoding) =>
                   datacoding.toString() == 'Datacoding.${map['datacoding']}',
               orElse: () => Datacoding.plain),
-          timout: int.tryParse(map['timout'].toString()),
-          tokenLength: int.tryParse(map['tokenLength']),
+          timout: parseInt(map['timout']),
+          tokenLength: parseInt(map['tokenLength']),
           voice: Voice.values.firstWhere(
               (voice) => voice.toString() == 'Voice.${map['voice']}',
               orElse: () => null),

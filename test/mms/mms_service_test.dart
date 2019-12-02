@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/mms/model/mms_message.dart';
-import 'package:messagebird_dart/src/mms/model/recipients.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -18,20 +16,24 @@ void main() {
       mmsService = ApiMmsService(credentials['live']);
     });
 
-    test('should send a message', () async {
-      final MmsMessage mmsMessage = await mmsService.create(MmsMessage(
-          originator: 'Drillster',
-          recipients: Recipients(
-              totalCount: 1,
-              items: [const RecipientItem(recipient: 31617692626)]),
-          body: 'Hello world!'));
-      expect(mmsMessage.createdDatetime.day, equals(DateTime.now().day));
-      id = mmsMessage.id;
+    test('should send a message', () {
+      mmsService
+          .create(MmsMessage(
+              originator: 'Drillster',
+              recipients: Recipients(
+                  totalCount: 1,
+                  items: [RecipientItem(recipient: credentials['msisdn'])]),
+              body: 'Hello world!'))
+          .then((mmsMessage) {
+        expect(mmsMessage.createdDatetime.day, equals(DateTime.now().day));
+        id = mmsMessage.id;
+      });
     });
 
-    test('should read a message', () async {
-      final MmsMessage mmsMessage = await mmsService.read(id);
-      expect(mmsMessage.id, equals(id));
+    test('should read a message', () {
+      mmsService.read(id).then((mmsMessage) {
+        expect(mmsMessage.id, equals(id));
+      });
     });
   });
 }

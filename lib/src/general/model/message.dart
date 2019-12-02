@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../util.dart';
+import '../../util.dart';
 import 'content.dart';
 
 /// Class encapsulating a [Message] object.

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/util.dart';
-import 'package:messagebird_dart/src/mms/model/recipients.dart';
+import '../../util.dart';
 
 /// Enumeration of [VoiceMessage] language options.
 enum Language {
@@ -142,8 +141,8 @@ enum Language {
   zh_hk
 }
 
-/// Enumeration of [VoiceMessage] ifMachine options. What to do when a machine
-/// picks up the phone?
+/// Enumeration of [VoiceMessage] ifMachine options. What to do when a
+/// machine picks up the phone?
 enum MachineOption {
   /// Do not check, just play the message.
   // ignore: constant_identifier_names
@@ -213,8 +212,8 @@ class VoiceMessage {
   /// (Y-m-d\TH:i:sP)
   final DateTime createdDatetime;
 
-  /// Recipient information.
-  final Recipients recipients;
+  /// Integer [List] of recipients msisdns.
+  final Object recipients;
 
   /// Constructor.
   VoiceMessage({
@@ -256,16 +255,16 @@ class VoiceMessage {
           voice: Voice.values.firstWhere(
               (voice) => voice.toString() == 'Voice.${map['voice']}',
               orElse: () => null),
-          repeat: int.tryParse(map['repeat'].toString()),
+          repeat: parseInt(map['repeat']),
           ifMachine: MachineOption.values.firstWhere(
               (option) =>
                   option.toString() ==
                   'MachineOption.${map['ifMachine']}'.replaceAll('_', ''),
               orElse: () => null),
-          machineTimeout: int.tryParse(map['machineTimeout'].toString()),
+          machineTimeout: parseInt(map['machineTimeout']),
           scheduledDatetime: parseDate(map['scheduledDatetime']),
           createdDatetime: parseDate(map['createdDatetime']),
-          recipients: Recipients.fromMap(map['recipients']),
+          recipients: List<int>.from(map['recipients']),
         );
 
   /// Get a json [String] representing the [VoiceMessage].
@@ -278,16 +277,16 @@ class VoiceMessage {
         'reference': reference,
         'originator': originator,
         'body': body,
-        'language': language
-            ?.toString()
-            ?.replaceAll('Language.', '')
-            ?.replaceAll('_', '-'),
+        'language': language?.toString()?.replaceAll('Language.', ''),
         'voice': voice?.toString()?.replaceAll('Voice.', ''),
         'repeat': repeat,
-        'ifMachine': ifMachine?.toString()?.replaceAll('MachineOption.', ''),
+        'ifMachine': ifMachine
+            ?.toString()
+            ?.replaceAll('MachineOption.', '')
+            ?.replaceAll('_', ''),
         'machineTimeout': machineTimeout,
         'scheduledDatetime': scheduledDatetime?.toString(),
         'createdDatetime': createdDatetime?.toString(),
-        'recipients': recipients.toMap(),
+        'recipients': recipients,
       };
 }

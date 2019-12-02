@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
 
 import 'model/transcription.dart';
 import 'transcriptions_service.dart';

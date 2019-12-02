@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/util.dart';
+import '../../util.dart';
 
 /// Class encapsulating an [Hlr] (Home Location Registering) object.
 class Hlr {

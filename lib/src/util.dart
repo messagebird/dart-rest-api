@@ -19,3 +19,15 @@ DateTime parseDate(Object date) {
 
   return DateTime.parse(string);
 }
+
+/// Try to parse an [int] out of an [input]. Returns null if this does not
+/// succeed.
+int parseInt(Object input) => input == null
+    ? null
+    : input.runtimeType == int ? input : int.tryParse(input);
+
+/// Try to parse a [double] out of an [input]. Returns null if this does not
+/// succeed.
+double parseDouble(Object input) => input == null
+    ? null
+    : input.runtimeType == double ? input : double.tryParse(input);

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:messagebird_dart/src/transcriptions/model/transcription.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {

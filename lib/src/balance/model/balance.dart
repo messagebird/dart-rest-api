@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../util.dart';
+
 /// Class encapsulating a [Balance] object.
 class Balance {
   /// The payment method. See [Payment] for allowed values.
@@ -33,7 +35,7 @@ class Balance {
               (payment) => payment.toString() == 'Payment.${map['payment']}',
               orElse: () => null),
           type: map['type'],
-          amount: double.tryParse(map['amount'].toString()),
+          amount: parseDouble(map['amount'].toString()),
         );
 }
 

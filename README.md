@@ -19,7 +19,7 @@ dependencies:
 ## Usage
 First initialize the library in your code.
 ```dart
-import package:messagebird-dart/messagebird-dart.dart
+import package:messagebird/messagebird.dart
 ```
 
 Then, send API request using the following approach.

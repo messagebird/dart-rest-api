@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../util.dart';
+
 /// Class encapsulating a [Groups] object.
 class Groups {
   /// The total count of groups that contact belongs to.
@@ -24,7 +26,7 @@ class Groups {
   factory Groups.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Groups(
-          totalCount: int.tryParse(map['totalCount'].toString()),
+          totalCount: parseInt(map['totalCount']),
           href: map['href'],
         );
 

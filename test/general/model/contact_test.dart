@@ -1,19 +1,24 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/src/general/model/contact.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Contact', () {
     Contact contact;
+    int msisdn;
 
     setUp(() {
-      contact = Contact.fromJson(
-          File('test_resources/contact.json').readAsStringSync());
+      msisdn = json.decode(
+          File('test_resources/keys.json').readAsStringSync())['msisdn'];
+      contact = Contact.fromJson(File('test_resources/contact.json')
+          .readAsStringSync()
+          .replaceAll('31612345678', msisdn.toString()));
     });
 
     test('should deserialize from json', () {
-      expect(contact.msisdn, equals('31617692626'));
+      expect(contact.msisdn, equals(msisdn.toString()));
       expect(contact.firstName, equals('Luc'));
       expect(contact.lastName, equals('van der Zandt'));
       expect(
@@ -31,7 +36,7 @@ void main() {
     test('should serialize to json', () {
       final Map<String, dynamic> serialized = contact.toMap();
 
-      expect(serialized['msisdn'], equals('31617692626'));
+      expect(serialized['msisdn'], equals(msisdn.toString()));
       expect(serialized['firstName'], equals('Luc'));
       expect(serialized['lastName'], equals('van der Zandt'));
       expect(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../hlr/model/hlr.dart';
+import '../../util.dart';
 
 /// Class encapsulating a [Lookup] object.
 class Lookup {
@@ -49,8 +50,8 @@ class Lookup {
       : Lookup(
           href: map['href'],
           countryCode: map['countryCode'],
-          countryPrefix: int.tryParse(map['countryPrefix'].toString()),
-          phoneNumber: int.tryParse(map['phoneNumber'].toString()),
+          countryPrefix: parseInt(map['countryPrefix']),
+          phoneNumber: parseInt(map['phoneNumber']),
           type: LookupType.values.firstWhere(
               (status) =>
                   status.toString() ==

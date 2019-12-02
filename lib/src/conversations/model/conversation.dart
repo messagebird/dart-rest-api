@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/model/contact.dart';
-import 'package:messagebird_dart/src/general/util.dart';
+import '../../general/model/contact.dart';
+import '../../util.dart';
 
 import 'channel.dart';
 import 'messages_count.dart';

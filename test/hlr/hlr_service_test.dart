@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/hlr/model/hlr.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,24 +13,29 @@ void main() {
     setUp(() {
       credentials =
           json.decode(File('test_resources/keys.json').readAsStringSync());
-      hlrService = ApiHlrService(credentials['live']);
+      hlrService = ApiHlrService(credentials['live']
+          .replaceAll('31612345678', credentials['msisdn'].toString()));
     });
 
-    test('should create an HLR', () async {
-      final Hlr hlr = await hlrService.create(31617692626);
-      expect(hlr.id, isNotNull);
-      expect(hlr.status, isIn([HlrStatus.sent, HlrStatus.active]));
-      id = hlr.id;
+    test('should create an HLR', () {
+      hlrService.create(credentials['msisdn']).then((hlr) {
+        expect(hlr.id, isNotNull);
+        expect(hlr.status, isIn([HlrStatus.sent, HlrStatus.active]));
+        id = hlr.id;
+      });
     });
 
-    test('should list HLRs', () async {
-      final List<Hlr> hlrs = await hlrService.list();
-      expect(hlrs, isNotEmpty);
+    test('should list HLRs', () {
+      hlrService.list().then((list) {
+        expect(list, isNotEmpty);
+      });
     });
 
-    test('should remove an HLR', () async {
-      await hlrService.remove(id);
-      expect(await hlrService.read(id), isNull);
+    test('should remove an HLR', () {
+      hlrService.remove(id);
+      hlrService.read(id).then((hlr) {
+        expect(hlr, isNull);
+      });
     });
   });
 }

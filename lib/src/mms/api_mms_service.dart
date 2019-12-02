@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
 import 'mms_service.dart';
 import 'model/mms_message.dart';
 

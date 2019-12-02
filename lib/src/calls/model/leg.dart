@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/util.dart';
+import '../../util.dart';
 
 /// Class encapsulating a [Leg] object, the connection between the caller and
 /// the receiver.
@@ -88,9 +88,9 @@ class Leg {
               (direction) =>
                   direction.toString() == 'LegDirection.${map['direction']}',
               orElse: () => null),
-          cost: double.tryParse(map['cost'].toString()),
+          cost: parseDouble(map['cost'].toString()),
           currency: map['currency'],
-          duration: int.tryParse(map['duration'].toString()),
+          duration: parseInt(map['duration'].toString()),
           createdAt: parseDate(map['createdAt']),
           updatedAt: parseDate(map['updatedAt']),
           answeredAt: parseDate(map['answeredAt']),

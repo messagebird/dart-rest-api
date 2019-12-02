@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/model/content.dart';
-import 'package:messagebird_dart/src/general/model/message.dart';
+import '../../general/model/content.dart';
+import '../../general/model/message.dart';
 
 import 'fallback.dart';
 

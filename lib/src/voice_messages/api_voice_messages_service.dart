@@ -1,5 +1,6 @@
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
 import 'model/voice_message.dart';
+import 'model/voice_message_response.dart';
 import 'voice_messages_service.dart';
 
 /// API implementation of voice messages service.
@@ -11,11 +12,13 @@ class ApiVoiceMessagesService extends BaseService
       : super(accessKey, timeout: timeout, features: features);
 
   @override
-  Future<VoiceMessage> create(VoiceMessage message) => post('/voicemessages')
-      .then((response) => Future.value(VoiceMessage.fromJson(response.body)));
+  Future<VoiceMessageResponse> create(VoiceMessage message) =>
+      post('/voicemessages', body: message.toMap()).then((response) =>
+          Future.value(VoiceMessageResponse.fromJson(response.body)));
 
   @override
-  Future<VoiceMessage> read(String id) =>
-      get('/voicemessages/$id').then((response) => Future.value(
-          response == null ? null : VoiceMessage.fromJson(response.body)));
+  Future<VoiceMessageResponse> read(String id) =>
+      get('/voicemessages/$id').then((response) => Future.value(response == null
+          ? null
+          : VoiceMessageResponse.fromJson(response.body)));
 }

@@ -1,8 +1,7 @@
-import 'package:messagebird_dart/src/general/model/contact.dart';
-import 'package:messagebird_dart/src/general/model/groups.dart';
-import 'package:messagebird_dart/src/general/model/messages.dart';
-
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
+import '../general/model/contact.dart';
+import '../general/model/groups.dart';
+import '../general/model/messages.dart';
 import 'contacts_service.dart';
 
 /// API implementation of [ContactsService].

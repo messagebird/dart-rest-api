@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/general/model/contact.dart';
+import '../general/model/contact.dart';
 
 import 'model/group.dart';
 

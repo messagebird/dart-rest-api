@@ -1,6 +1,5 @@
-import 'package:messagebird_dart/src/hlr/model/hlr.dart';
-
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
+import '../hlr/model/hlr.dart';
 import 'lookup_service.dart';
 import 'model/lookup.dart';
 
@@ -18,16 +17,16 @@ class ApiLookupService extends BaseService implements LookupService {
               response == null ? null : Lookup.fromJson(response.body)));
 
   @override
-  Future<Hlr> requestHlr(int phoneNumber,
-          {String reference, String countryCode}) =>
-      post('/lookup/$phoneNumber/hlr',
-              body: {'countryCode': countryCode, 'reference': reference})
-          .then((response) => Future.value(Hlr.fromJson(response.body)));
-
-  @override
   Future<Hlr> readHlr(int phoneNumber, {String countryCode}) => get(
           '/lookup/$phoneNumber/hlr',
           body: countryCode == null ? {} : {'countryCode': countryCode})
       .then((response) =>
           Future.value(response == null ? null : Hlr.fromJson(response.body)));
+
+  @override
+  Future<Hlr> requestHlr(int phoneNumber,
+          {String reference, String countryCode}) =>
+      post('/lookup/$phoneNumber/hlr',
+              body: {'countryCode': countryCode, 'reference': reference})
+          .then((response) => Future.value(Hlr.fromJson(response.body)));
 }

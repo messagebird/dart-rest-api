@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/callflows/model/callflow.dart';
+import '../callflows/model/callflow.dart';
 
 import 'model/call.dart';
 import 'model/leg.dart';

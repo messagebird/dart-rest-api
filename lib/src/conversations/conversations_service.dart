@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/general/model/message.dart';
+import '../general/model/message.dart';
 
 import 'model/conversation.dart';
 import 'model/conversation_message.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:messagebird_dart/src/general/util.dart';
+import '../../util.dart';
 
 /// Class encapsulating a [Recording].
 class Recording {
@@ -68,7 +68,7 @@ class Recording {
                 status.toString() ==
                 'RecordingStatus.${data['status']}'.replaceAll(' ', '_'),
             orElse: () => null),
-        duration: int.tryParse(data['duration'].toString()),
+        duration: parseInt(data['duration']),
         createdAt: parseDate(data['createdAt']),
         updatedAt: parseDate(data['updatedAt']),
         links: Map<String, Uri>.from(

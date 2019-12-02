@@ -1,3 +1,8 @@
+## 1.0.0
+- Completed models
+- Completed tests
+- Renamed package
+
 ## 0.5.0
 - Added model for conversations
 - Added model for groups

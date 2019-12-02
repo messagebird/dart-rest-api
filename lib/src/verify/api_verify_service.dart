@@ -1,4 +1,4 @@
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
 
 import 'model/verify.dart';
 import 'model/verify_response.dart';

@@ -1,6 +1,5 @@
-import 'package:messagebird_dart/src/general/model/message.dart';
-
-import 'package:messagebird_dart/src/general/model/base_service.dart';
+import '../general/model/base_service.dart';
+import '../general/model/message.dart';
 import 'conversations_service.dart';
 import 'model/conversation.dart';
 import 'model/conversation_message.dart';

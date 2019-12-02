@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird_dart/messagebird_dart.dart';
-import 'package:messagebird_dart/src/conversations/model/conversation_message.dart';
-import 'package:messagebird_dart/src/general/model/content.dart';
-import 'package:messagebird_dart/src/general/model/message.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -27,30 +24,36 @@ void main() {
       // Not available for WhatsApp or Telegram, skipping
     });
 
-    test('should get conversations on our account', () async {
-      expect(await conversationsService.list(), isNotEmpty);
+    test('should get conversations on our account', () {
+      conversationsService.list().then((list) {
+        expect(list, isNotEmpty);
+      });
     });
 
-    test('should reply to a conversation', () async {
-      final Message message = await conversationsService.reply(
-          conversationId,
-          const ConversationMessage(
-              type: MessageType.text,
-              content: TextContent('Hello world!'),
-              channelId: 'b6e314222822441a907aa03ef3d425f9'));
-      expect(
-          message.status,
-          isIn([
-            MessageStatus.pending,
-            MessageStatus.delivered,
-            MessageStatus.received,
-            MessageStatus.read
-          ]));
+    test('should reply to a conversation', () {
+      conversationsService
+          .reply(
+              conversationId,
+              const ConversationMessage(
+                  type: MessageType.text,
+                  content: TextContent('Hello world!'),
+                  channelId: 'b6e314222822441a907aa03ef3d425f9'))
+          .then((message) {
+        expect(
+            message.status,
+            isIn([
+              MessageStatus.pending,
+              MessageStatus.delivered,
+              MessageStatus.received,
+              MessageStatus.read
+            ]));
+      });
     });
 
-    test('should list messages in a conversation', () async {
-      expect(
-          await conversationsService.listMessages(conversationId), isNotEmpty);
+    test('should list messages in a conversation', () {
+      conversationsService.listMessages(conversationId).then((list) {
+        expect(list, isNotEmpty);
+      });
     });
 
     test('should archive a conversation', () async {

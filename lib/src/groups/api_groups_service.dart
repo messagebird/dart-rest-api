@@ -1,5 +1,5 @@
-import 'package:messagebird_dart/src/general/model/base_service.dart';
-import 'package:messagebird_dart/src/general/model/contact.dart';
+import '../general/model/base_service.dart';
+import '../general/model/contact.dart';
 import 'groups_service.dart';
 import 'model/group.dart';
 

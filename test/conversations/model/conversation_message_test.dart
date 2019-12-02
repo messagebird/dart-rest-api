@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:messagebird_dart/src/conversations/model/conversation_message.dart';
-import 'package:messagebird_dart/src/general/model/content.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {

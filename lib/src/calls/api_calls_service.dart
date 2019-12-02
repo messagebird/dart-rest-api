@@ -1,7 +1,7 @@
-import 'package:messagebird_dart/src/callflows/model/callflow.dart';
-import 'package:messagebird_dart/src/calls/model/leg.dart';
-import 'package:messagebird_dart/src/general/model/base_service.dart';
-import 'package:messagebird_dart/src/webhooks/model/webhook.dart';
+import '../callflows/model/callflow.dart';
+import '../calls/model/leg.dart';
+import '../general/model/base_service.dart';
+import '../webhooks/model/webhook.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
 

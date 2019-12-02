@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../util.dart';
+import '../../util.dart';
 import 'email.dart';
 import 'message.dart';
 
@@ -87,7 +87,7 @@ class Currency {
       ? null
       : Currency(
           currencyCode: map['currencyCode'],
-          amount: double.tryParse(map['amount'].toString()),
+          amount: parseDouble(map['amount']),
         );
 
   /// Get a json [String] representing the [Currency] object.
@@ -319,8 +319,8 @@ class Location {
   factory Location.fromMap(Map<String, dynamic> map) => map == null
       ? null
       : Location(
-          latitude: double.tryParse(map['latitude'].toString()),
-          longitude: double.tryParse(map['longitude'].toString()),
+          latitude: parseDouble(map['latitude']),
+          longitude: parseDouble(map['longitude']),
         );
 
   /// Get a json [String] representing the [Location].

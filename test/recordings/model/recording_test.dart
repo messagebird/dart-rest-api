@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:messagebird_dart/src/general/util.dart';
-import 'package:messagebird_dart/src/recordings/model/recording.dart';
+import 'package:messagebird/messagebird.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -15,8 +14,8 @@ void main() {
     test('should deserialize from json', () {
       expect(recording.id, equals('3b4ac358-9467-4f7a-a6c8-6157ad181123'));
       expect(recording.duration, equals(7));
-      expect(
-          recording.createdAt, equals(parseDate('2017-05-17 11:42:57.000Z')));
+      expect(recording.createdAt,
+          equals(DateTime.parse('2017-05-17 11:42:57.000Z')));
       expect(
           recording.links['file'],
           equals(Uri.parse(
