@@ -8,7 +8,7 @@ This repository contains an unofficial Dart client for MessageBird's REST API. D
 ## Installation
 Add the following code to your `pubspec.yaml` file:
 
-```
+```yaml
 dependencies:
   messagebird-dart:
     git:
@@ -17,16 +17,18 @@ dependencies:
 ```
 
 ## Usage
-First initialize the library in your code.
-```dart
-import package:messagebird/messagebird.dart
-```
+First initialize the library in your code. Then, an API from the `messagebird` package can be accessed by initializing a service with your API key.
 
-Then, send API request using the following approach.
+## Example
+See `example/example.dart`
+
 ```dart
-// Example: get balance
-final BalanceService balanceService = ApiBalanceService(/*YOUR_KEY_HERE*/);
-balanceService.read().then((balance) => print('My balance is ${balance.amount}'));
+import 'package:messagebird/balance.dart'
+
+void main() {
+  final BalanceService balanceService = ApiBalanceService('YOUR_KEY_HERE');
+  balanceService.read().then((balance) => print('My balance is ${balance.amount}'));
+}
 ```
 
 ## Conversations Whatsapp Sandbox
@@ -34,6 +36,15 @@ To use the whatsapp sandbox you need to add `"ENABLE_CONVERSATIONSAPI_WHATSAPP_S
 
 ## Tests
 This repository includes unit tests, located in the `test` directory. To run them, execute `pub run test` in the command line. Covered are, per service, service tests and json (de)serialization tests of data classes.
+
+Before running the tests, create a `keys.json` file in `test_resources/` with the following content:
+```json
+{
+    "test": "YOUR_API_TEST_KEY",
+    "live": "YOUR_API_LIVE_KEY",
+    "msisdn": /* The MSISDN you want to test with (as an integer) */
+}
+```
 
 ## License
 The MessageBird REST API for Dart is licensed under [The BSD 2-Clause License](http://opensource.org/licenses/BSD-2-Clause). Copyright (c) 2019, Drillster B.V. 

@@ -2,7 +2,13 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Call] object.
+/// A [Call] describes a voice call.
+///
+/// A call is made to a number. A call has legs which are incoming or outgoing
+/// voice connections. An incoming leg is created when somebody calls a number.
+/// Outgoing legs are created when a call is transferred.
+///
+/// This is an object representing a voice call at MessageBird.com.
 class Call {
   /// The unique ID of the [Call].
   final String id;
@@ -89,7 +95,7 @@ class Call {
               .toList();
 }
 
-/// Enumeration of [CallStatus] statusses.
+/// Enumeration of [Call] statusses.
 enum CallStatus {
   /// [Call] is queued.
   queued,

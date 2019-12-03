@@ -2,10 +2,10 @@ import 'model/callflow.dart';
 
 /// Callflows service interface.
 abstract class CallflowsService {
-  /// Creates a new [Callflow], parameters are manditory.
+  /// Create a new [Callflow], parameters are manditory.
   Future<Callflow> create(Callflow callflow);
 
-  /// Lists existing [Callflow] objects.
+  /// List all existing [Callflow] objects.
   Future<List<Callflow>> list({int page, int perpage});
 
   /// Get a [Callflow].
@@ -16,6 +16,6 @@ abstract class CallflowsService {
   /// API returns an empty response for successful deletes.
   Future<void> remove(String id);
 
-  /// Updates an existing [Callflow]. callflow.id is required.
+  /// Updates an existing [Callflow]. [callflow].id is required.
   Future<Callflow> update(Callflow callflow);
 }

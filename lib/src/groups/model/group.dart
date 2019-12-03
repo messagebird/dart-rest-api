@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import '../../util.dart';
-
 import 'contacts.dart';
 
-/// Class encapsulating a [Group] object.
+/// This object represents a contact group at MessageBird.com.
 class Group {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.

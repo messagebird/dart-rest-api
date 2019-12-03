@@ -3,7 +3,8 @@ import 'dart:convert';
 import '../../util.dart';
 import '../../voice_messages/model/voice_message.dart';
 
-/// Class encapsulating a [Verify] object.
+/// This object represents a One-Time Password, or verification token, at
+/// MessageBird.com
 class Verify {
   /// The telephone number that you want to verify. Required.
   final int recipient;

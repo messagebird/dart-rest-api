@@ -2,7 +2,11 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Recording].
+/// A [Recording] describes a voice recording of a leg. You can initiate a
+/// recording of a leg by having a step in your callflow with the record action
+/// set.
+///
+/// This is an object representing a [Recording].
 class Recording {
   /// The unique ID of the recording.
   final String id;

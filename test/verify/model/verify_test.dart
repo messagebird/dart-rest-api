@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:messagebird/messagebird.dart';
+import 'package:messagebird/verify.dart';
+import 'package:messagebird/voice_messaging.dart';
 import 'package:test/test.dart';
 
 void main() {

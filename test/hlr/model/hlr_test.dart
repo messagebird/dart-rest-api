@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:messagebird/messagebird.dart';
+import 'package:messagebird/hlr.dart';
 import 'package:test/test.dart';
 
 void main() {

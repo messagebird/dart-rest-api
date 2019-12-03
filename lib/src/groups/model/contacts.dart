@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Contacts] object.
+/// This object represents a contact at MessageBird.com.
 class Contacts {
   /// The total count of messages sent to contact.
   final int totalCount;

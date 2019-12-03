@@ -17,11 +17,19 @@ class ApiConversationsService extends BaseService
   String getEndpoint() => BaseService.conversationsEndpoint;
 
   @override
-  Future<List<Conversation>> list({int limit, int offset}) => get(
-          '/v1/conversations',
+  Future<List<Conversation>> list(
+          {int limit,
+          int offset,
+          List<String> ids,
+          ConversationStatus status}) =>
+      get('/v1/conversations',
           hostname: BaseService.conversationsEndpoint,
-          body: {'limit': limit, 'offset': offset})
-      .then(
+          body: {
+            'limit': limit,
+            'offset': offset,
+            'ids': ids?.join(','),
+            'status': status.toString().replaceAll('ConversationStatus.', '')
+          }).then(
           (response) => Future.value(Conversation.fromJsonList(response.body)));
 
   @override

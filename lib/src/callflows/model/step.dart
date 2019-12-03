@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-/// Class encapsulating a [Step] object.
+/// This is an object representing a step from a voice call flow at
+/// MessageBird.com
 class Step {
   /// The unique (within the call flow) identifier of the step.
   final String id;
@@ -21,8 +22,8 @@ class Step {
   });
 
   /// Construct a [Step] object from a json [String].
-  factory Step.fromJson(String source) => Step.fromMap(
-      (json.decode(source)['data'] != null)
+  factory Step.fromJson(String source) =>
+      Step.fromMap((json.decode(source)['data'] != null)
           ? json.decode(source)['data'][0]
           : json.decode(source));
 

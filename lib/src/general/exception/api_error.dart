@@ -1,5 +1,5 @@
 /// Class encapsulating an API error.
-class ApiError {
+class ApiError extends Error {
   /// The API error code.
   final int code;
 

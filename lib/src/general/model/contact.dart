@@ -5,6 +5,8 @@ import 'groups.dart';
 import 'messages.dart';
 
 /// Class encapsulating a [Contact] object.
+///
+/// A contact is a representation of an end-user you are communicating with.
 class Contact {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.

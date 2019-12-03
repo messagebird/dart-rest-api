@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:messagebird/messagebird.dart';
+import 'package:messagebird/mms.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:messagebird/messagebird.dart';
+import 'package:messagebird/balance.dart';
 import 'package:test/test.dart';
 
 void main() {

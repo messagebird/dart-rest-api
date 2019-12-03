@@ -5,8 +5,14 @@ import 'dart:io' show File, Platform;
 import 'package:http/http.dart' show Response, Client, BaseClient;
 import 'package:yaml/yaml.dart';
 
+import '../exception/api_error.dart';
+import '../exception/api_not_found.dart';
+import '../exception/bad_request.dart';
 import '../exception/communication_problem.dart';
-import 'api_error.dart';
+import '../exception/insufficient_funds.dart';
+import '../exception/missing_params.dart';
+import '../exception/not_allowed.dart';
+import '../exception/server_exception.dart';
 
 /// Base service.
 abstract class BaseService {
@@ -187,11 +193,31 @@ abstract class BaseService {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       final ApiError apiError =
           ApiError.fromMap(json.decode(response.body)['errors'][0]);
-      if (apiError.code != 20 && apiError.code != 13) {
-        throw Exception('API error (code ${apiError.code}): '
-            '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
-      } else {
-        return null;
+      switch (apiError.code) {
+        case 2:
+          throw NotAllowed(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 9:
+          throw MissingParams(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 21:
+          throw BadRequest(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 25:
+          throw InsufficientFunds(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 98:
+          throw ApiNotFound(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 99:
+          throw ServerException(
+              '${apiError.message ?? apiError.description ?? 'NO_MESSAGE'}');
+        case 20: // No content found. Intentional fallthrough.
+        case 13:
+          return null; // No content found, undocumented in MessageBird API.
+        default:
+          throw CommunicationProblem(
+              apiError.message ?? apiError.description ?? 'NO_MESSAGE');
       }
     }
     return response;

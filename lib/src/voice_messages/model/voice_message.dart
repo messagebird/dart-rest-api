@@ -141,7 +141,7 @@ enum Language {
   zh_hk
 }
 
-/// Enumeration of [VoiceMessage] ifMachine options. What to do when a
+/// Enumeration of [VoiceMessage] `ifMachine` options. What to do when a
 /// machine picks up the phone?
 enum MachineOption {
   /// Do not check, just play the message.
@@ -164,7 +164,7 @@ enum Voice {
   female
 }
 
-/// Class encapsulating a [VoiceMessage].
+/// This object represents a voice message at MessageBird.com
 class VoiceMessage {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating an [Hlr] (Home Location Registering) object.
+/// This object represents a HLR (Home Location Registering) at MessageBird.com
 class Hlr {
   /// A unique random ID which is created on the MessageBird platform and is
   /// returned upon creation of the object.

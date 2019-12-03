@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Balance] object.
+/// This object represents your balance at MessageBird.com.
 class Balance {
   /// The payment method. See [Payment] for allowed values.
   final Payment payment;

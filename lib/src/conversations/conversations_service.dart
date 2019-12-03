@@ -11,10 +11,13 @@ abstract class ConversationsService {
 
   /// Retrieve all conversations for this account. By default,
   /// conversations are sorted by their lastReceivedDatetime field so that
-  /// conversations with new messages appear first.
-  Future<List<Conversation>> list({int limit, int offset});
+  /// conversations with new messages appear first. No parameters are required;
+  /// however, filters and pagination can be provided through the
+  /// optional query parameters.
+  Future<List<Conversation>> list(
+      {int limit, int offset, List<String> ids, ConversationStatus status});
 
-  /// List the messages in a conversation.
+  /// Retrieve all the messages from the conversation with the provided [id].
   Future<List<ConversationMessage>> listMessages(String id,
       {int limit, int offset});
 

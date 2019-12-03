@@ -2,7 +2,6 @@ import '../hlr/model/hlr.dart';
 import 'model/lookup.dart';
 
 /// Lookup service interface.
-/// ignore: one_member_abstracts
 abstract class LookupService {
   /// Perform a new lookup for the specified number. MessageBird returns a
   /// Lookup object with each request.

@@ -15,7 +15,7 @@ abstract class GroupsService {
   /// supplied.
   Future<void> removeContact(String groupId, String contactId);
 
-  /// Create a new Group. Parameters are optional.
+  /// Create a new [Group]. Parameters are optional.
   Future<Group> create(Group group);
 
   /// List existing groups. Pagination is optional. If a [limit] is set, an

@@ -1,5 +1,4 @@
 import '../general/model/base_service.dart';
-
 import 'balance_service.dart';
 import 'model/balance.dart';
 

@@ -1,6 +1,17 @@
 import 'dart:convert';
 
 /// Class encapsulating a [Fallback] object.
+///
+/// The Fallback parameter allows you to configure a message to be sent over a
+/// secondary channel if the original message failed or could not be sent within
+/// a defined time window.
+///
+/// For example, when sending a WhatsApp message to a customer, you can
+/// configure a fallback so that if the customer is not a WhatsApp user or
+/// doesn't have a mobile data connection, the message is resent over SMS.
+/// You can define the time at which the fallback message should be sent if it
+/// wasn't successful over the primary channel; if you don't set a time, the
+/// fallback will automatically trigger after 1 minute.
 class Fallback {
   /// The ID that identifies the channel over which the message should be sent.
   final String from;

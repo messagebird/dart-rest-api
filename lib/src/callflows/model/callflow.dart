@@ -1,10 +1,16 @@
 import 'dart:convert';
 
 import '../../util.dart';
-
 import 'step.dart';
 
-/// Class encapsulating a [Callflow] object.
+/// A [Callflow] describes the flow of operations (steps) to be executed when
+/// handling an incoming call. Call flows can be assigned to multiple numbers.
+///  A number in this context is a purchased number that can be called on the
+/// traditional phone network. Each object in the steps array in a call flow
+/// describes an operation that executes during a call, e.g. transferring a call
+/// or playing back an audio file. The call flow must not exceed 32KB.
+///
+/// This is an object representing a voice call flow at MessageBird.com.
 class Callflow {
   /// The unique ID of the [Callflow].
   final String id;

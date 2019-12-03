@@ -2,8 +2,16 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Leg] object, the connection between the caller and
-/// the receiver.
+/// A [Leg] describes a leg object (inbound or outbound) that belongs to a call.
+/// At least one leg exists per call.
+///
+/// Inbound legs are being created when an incoming call to a Number is being
+/// initiated.
+///
+/// Outbound legs are created when a call is transferred or when a call is being
+/// originated from the API.
+///
+/// This is an object representing a leg at MessageBird.com.
 class Leg {
   /// The unique ID of the leg.
   final String id;

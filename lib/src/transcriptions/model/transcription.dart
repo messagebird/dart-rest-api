@@ -2,7 +2,14 @@ import 'dart:convert';
 
 import '../../util.dart';
 
-/// Class encapsulating a [Transcription].
+/// A transcription is a textual representation of a recording as text.
+/// You can request an automated transcription for a recording by doing a `POST`
+/// request to the API.
+///
+/// MessageBird supports several languages: `de-DE`, `en-AU`, `en-UK`, `en-US`,
+/// `es-ES`, `es-LA`, `fr-FR`, `it-IT`, `nl-NL`, `pt-BR`.
+///
+/// This is an object representing a [Transcription].
 class Transcription {
   /// The unique ID of the transcription.
   final String id;

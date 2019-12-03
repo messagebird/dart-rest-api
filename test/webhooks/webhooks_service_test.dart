@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:messagebird/messagebird.dart';
+import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
 void main() {
