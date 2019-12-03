@@ -1,10 +1,13 @@
 import '../callflows/model/callflow.dart';
-
+import '../webhooks/webhooks_service.dart';
 import 'model/call.dart';
 import 'model/leg.dart';
 
 /// Calls service interface.
 abstract class CallsService {
+  /// Reference to the webhooks on this service.
+  WebhooksService webhooks;
+
   /// Create a [Call].
   Future<Call> create(Call call, Callflow callflow);
 

@@ -1,15 +1,21 @@
 import '../callflows/model/callflow.dart';
 import '../calls/model/leg.dart';
 import '../general/model/base_service.dart';
+import '../webhooks/api_webhooks_service.dart';
 import '../webhooks/model/webhook.dart';
+import '../webhooks/webhooks_service.dart';
 import 'calls_service.dart';
 import 'model/call.dart';
 
 /// API implementation of [CallsService].
 class ApiCallsService extends BaseService implements CallsService {
+  @override
+  WebhooksService webhooks;
+
   /// Constructor.
   ApiCallsService(String accessKey, {int timeout, List<String> features})
-      : super(accessKey, timeout: timeout, features: features);
+      : webhooks = ApiWebhooksService(accessKey, BaseService.voiceEndpoint),
+        super(accessKey, timeout: timeout, features: features);
 
   @override
   Future<Call> create(Call call, Callflow callflow, {Webhook webhook}) =>
@@ -26,13 +32,14 @@ class ApiCallsService extends BaseService implements CallsService {
           .then((response) => Future.value(Call.fromJsonList(response.body)));
 
   @override
+  Future<List<Leg>> listLegs(String callId) =>
+      get('/calls/$callId/legs', hostname: BaseService.voiceEndpoint)
+          .then((response) => Future.value(Leg.fromJsonList(response.body)));
+
+  @override
   Future<Call> read(String id) =>
       get('/calls/$id', hostname: BaseService.voiceEndpoint).then((response) =>
           Future.value(response == null ? null : Call.fromJson(response.body)));
-
-  @override
-  Future<void> remove(String id) =>
-      delete('/calls/$id', hostname: BaseService.voiceEndpoint);
 
   @override
   Future<Leg> readLeg(String callId, String legId) => get(
@@ -42,7 +49,6 @@ class ApiCallsService extends BaseService implements CallsService {
           Future.value(response == null ? null : Leg.fromJson(response.body)));
 
   @override
-  Future<List<Leg>> listLegs(String callId) =>
-      get('/calls/$callId/legs', hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(Leg.fromJsonList(response.body)));
+  Future<void> remove(String id) =>
+      delete('/calls/$id', hostname: BaseService.voiceEndpoint);
 }

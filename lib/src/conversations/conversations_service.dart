@@ -1,11 +1,15 @@
-import '../general/model/message.dart';
+import 'package:messagebird/src/webhooks/webhooks_service.dart';
 
+import '../general/model/message.dart';
 import 'model/conversation.dart';
 import 'model/conversation_message.dart';
 import 'model/message_response.dart';
 
 /// Conversations service interface.
 abstract class ConversationsService {
+  /// Enables notifications to be delivered to another server.
+  WebhooksService webhooks;
+
   /// Get the API endpoint.
   String getEndpoint();
 
