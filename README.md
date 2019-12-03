@@ -20,7 +20,7 @@ dependencies:
 First initialize the library in your code. Then, an API from the `messagebird` package can be accessed by initializing a service with your API key.
 
 ## Example
-See `example/example.dart`
+See `example/main.dart`
 
 ```dart
 import 'package:messagebird/balance.dart'
