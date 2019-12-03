@@ -30,8 +30,3 @@ export 'src/recordings/recordings_service.dart';
 export 'src/transcriptions/api_transcriptions_service.dart';
 export 'src/transcriptions/model/transcription.dart';
 export 'src/transcriptions/transcriptions_service.dart';
-
-// Webhooks
-export 'src/webhooks/api_webhooks_service.dart';
-export 'src/webhooks/model/webhook.dart';
-export 'src/webhooks/webhooks_service.dart';

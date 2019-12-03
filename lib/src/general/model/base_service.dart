@@ -20,7 +20,7 @@ abstract class BaseService {
   static const voiceEndpoint = 'voice.messagebird.com';
 
   /// The endpoint for conversations.
-  static String conversationsEndpoint = 'conversations.messagebird.com';
+  static String conversationsEndpoint = 'conversations.messagebird.com/v1';
 
   final BaseClient _client = Client();
   final String _accessKey;

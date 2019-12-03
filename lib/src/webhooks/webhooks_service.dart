@@ -2,6 +2,9 @@ import 'model/webhook.dart';
 
 /// Webhooks service interface.
 abstract class WebhooksService {
+  /// The webhook API endpoint.
+  String endpoint;
+
   /// Creates a new webhook.
   Future<Webhook> create(Webhook webhook);
 

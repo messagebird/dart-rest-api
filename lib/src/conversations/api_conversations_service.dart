@@ -1,5 +1,7 @@
 import '../general/model/base_service.dart';
 import '../general/model/message.dart';
+import '../webhooks/api_webhooks_service.dart';
+import '../webhooks/webhooks_service.dart';
 import 'conversations_service.dart';
 import 'model/conversation.dart';
 import 'model/conversation_message.dart';
@@ -8,10 +10,15 @@ import 'model/message_response.dart';
 /// API implementation of [ConversationsService].
 class ApiConversationsService extends BaseService
     implements ConversationsService {
+  @override
+  WebhooksService webhooks;
+
   /// Constructor.
   ApiConversationsService(String accessKey,
       {int timeout, List<String> features})
-      : super(accessKey, timeout: timeout, features: features);
+      : webhooks =
+            ApiWebhooksService(accessKey, BaseService.conversationsEndpoint),
+        super(accessKey, timeout: timeout, features: features);
 
   @override
   String getEndpoint() => BaseService.conversationsEndpoint;
@@ -22,20 +29,18 @@ class ApiConversationsService extends BaseService
           int offset,
           List<String> ids,
           ConversationStatus status}) =>
-      get('/v1/conversations',
-          hostname: BaseService.conversationsEndpoint,
-          body: {
-            'limit': limit,
-            'offset': offset,
-            'ids': ids?.join(','),
-            'status': status.toString().replaceAll('ConversationStatus.', '')
-          }).then(
+      get('/conversations', hostname: BaseService.conversationsEndpoint, body: {
+        'limit': limit,
+        'offset': offset,
+        'ids': ids?.join(','),
+        'status': status?.toString()?.replaceAll('ConversationStatus.', '')
+      }).then(
           (response) => Future.value(Conversation.fromJsonList(response.body)));
 
   @override
   Future<List<ConversationMessage>> listMessages(String id,
           {int limit, int offset}) =>
-      get('/v1/conversations/$id/messages',
+      get('/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: {'limit': limit, 'offset': offset})
           .then((response) =>
@@ -43,33 +48,33 @@ class ApiConversationsService extends BaseService
 
   @override
   Future<Conversation> read(String id) =>
-      get('/v1/conversations/$id', hostname: BaseService.conversationsEndpoint)
+      get('/conversations/$id', hostname: BaseService.conversationsEndpoint)
           .then((response) => Future.value(
               response == null ? null : Conversation.fromJson(response.body)));
 
   @override
   Future<ConversationMessage> readMessage(String id) =>
-      get('/v1/messages/$id', hostname: BaseService.conversationsEndpoint).then(
+      get('/messages/$id', hostname: BaseService.conversationsEndpoint).then(
           (response) => Future.value(response == null
               ? null
               : ConversationMessage.fromJson(response.body)));
 
   @override
   Future<Message> reply(String id, Message message) =>
-      post('/v1/conversations/$id/messages',
+      post('/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: message.toMap())
           .then((response) => Future.value(Message.fromJson(response.body)));
 
   @override
-  Future<MessageResponse> send(ConversationMessage message) => post('/v1/send',
+  Future<MessageResponse> send(ConversationMessage message) => post('/send',
           hostname: BaseService.conversationsEndpoint, body: message.toMap())
       .then(
           (response) => Future.value(MessageResponse.fromJson(response.body)));
 
   @override
   Future<Conversation> start(ConversationMessage message) => post(
-          '/v1/conversations/start',
+          '/conversations/start',
           hostname: BaseService.conversationsEndpoint,
           body: message.toMap())
       .then((response) => Future.value(Conversation.fromJson(response.body)));
@@ -79,7 +84,7 @@ class ApiConversationsService extends BaseService
     final Map<String, dynamic> json = {
       'status': status.toString().replaceAll('ConversationStatus.', '')
     };
-    return patch('/v1/conversations/$id',
+    return patch('/conversations/$id',
             hostname: BaseService.conversationsEndpoint, body: json)
         .then((response) => Future.value(Conversation.fromJson(response.body)));
   }

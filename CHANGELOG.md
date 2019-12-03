@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+## 1.2.0
+- Moved webhooks to both Conversation API and Voice Calling API
+
+>>>>>>> dev
 ## 1.1.0
 - Dart package layout refactorings
 

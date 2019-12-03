@@ -2,23 +2,24 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:messagebird/voice_calling.dart';
+import 'package:messagebird/conversations.dart';
+import 'package:messagebird/webhooks.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('WebhooksService', () {
     Map credentials;
     String id;
-    WebhooksService webhooksService;
+    ConversationsService conversationsService;
 
     setUp(() {
       credentials =
           json.decode(File('test_resources/keys.json').readAsStringSync());
-      webhooksService = ApiWebhooksService(credentials['live']);
+      conversationsService = ApiConversationsService(credentials['live']);
     });
 
     test('should create a webhook', () {
-      webhooksService
+      conversationsService.webhooks
           .create(Webhook(
               events: ['message.created', 'message.updated'],
               channelId: '619747f69cf940a98fb443140ce9aed2',
@@ -33,7 +34,7 @@ void main() {
     });
 
     test('should read a webhook', () {
-      webhooksService.read(id).then((webhook) {
+      conversationsService.webhooks.read(id).then((webhook) {
         expect(webhook.id, equals(id));
         expect(webhook.events, equals(['message.created', 'message.updated']));
         expect(webhook.channelId, equals('619747f69cf940a98fb443140ce9aed2'));
@@ -42,7 +43,7 @@ void main() {
     });
 
     test('should list webhooks', () {
-      webhooksService.list().then((webhooks) {
+      conversationsService.webhooks.list().then((webhooks) {
         expect(webhooks, isNotEmpty);
         if (webhooks.length == 1) {
           expect(webhooks[0].id, equals(id));
@@ -58,18 +59,18 @@ void main() {
     });
 
     test('should update a webhook', () {
-      webhooksService
+      conversationsService.webhooks
           .update(Webhook(id: id, url: 'https://secondexample.com/webhook'))
           .then((updatedWebhook) {
-        webhooksService.read(id).then((readWebhook) {
+        conversationsService.webhooks.read(id).then((readWebhook) {
           expect(readWebhook.url, equals(updatedWebhook.url));
         });
       });
     });
 
     test('should delete a webhook', () {
-      webhooksService.remove(id);
-      webhooksService.read(id).then((webhook) {
+      conversationsService.webhooks.remove(id);
+      conversationsService.webhooks.read(id).then((webhook) {
         expect(webhook, isNull);
       });
     });
