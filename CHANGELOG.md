@@ -1,3 +1,6 @@
+## 1.1.0
+- Dart package layout refactorings
+
 ## 1.0.0
 - Completed models
 - Completed tests
