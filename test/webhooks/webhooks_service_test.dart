@@ -21,12 +21,18 @@ void main() {
     test('should create a webhook', () {
       conversationsService.webhooks
           .create(Webhook(
-              events: ['message.created', 'message.updated'],
+              events: [
+            WebhookEvent.message_created,
+            WebhookEvent.conversation_updated
+          ],
               channelId: '619747f69cf940a98fb443140ce9aed2',
               url: 'https://example.com/webhook'))
           .then((webhook) {
         expect(webhook.id, isNotNull);
-        expect(webhook.events, equals(['message.created', 'message.updated']));
+        expect(
+            webhook.events,
+            equals(
+                [WebhookEvent.message_created, WebhookEvent.message_updated]));
         expect(webhook.channelId, equals('619747f69cf940a98fb443140ce9aed2'));
         expect(webhook.url, equals('https://example.com/webhook'));
         id = webhook.id;
@@ -36,7 +42,10 @@ void main() {
     test('should read a webhook', () {
       conversationsService.webhooks.read(id).then((webhook) {
         expect(webhook.id, equals(id));
-        expect(webhook.events, equals(['message.created', 'message.updated']));
+        expect(
+            webhook.events,
+            equals(
+                [WebhookEvent.message_created, WebhookEvent.message_updated]));
         expect(webhook.channelId, equals('619747f69cf940a98fb443140ce9aed2'));
         expect(webhook.url, equals('https://example.com/webhook'));
       });
@@ -47,8 +56,12 @@ void main() {
         expect(webhooks, isNotEmpty);
         if (webhooks.length == 1) {
           expect(webhooks[0].id, equals(id));
-          expect(webhooks[0].events,
-              equals(['message.created', 'message.updated']));
+          expect(
+              webhooks[0].events,
+              equals([
+                WebhookEvent.message_created,
+                WebhookEvent.message_updated
+              ]));
           expect(webhooks[0].channelId,
               equals('619747f69cf940a98fb443140ce9aed2'));
           expect(webhooks[0].url, equals('https://example.com/webhook'));
