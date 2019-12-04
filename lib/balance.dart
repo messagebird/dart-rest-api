@@ -9,7 +9,6 @@
 /// access key that is used as the API Authorization framework. Request and
 /// response payloads are formatted as JSON—although we provide a GET
 /// alternative for requests—using UTF-8 encoding and URL encoded values.
-// ignore: library_names
 library balance;
 
 export 'src/balance/api_balance_service.dart';

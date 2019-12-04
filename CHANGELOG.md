@@ -1,3 +1,6 @@
+## 1.2.1
+- Changes in API documentation
+
 ## 1.2.0
 - Moved webhooks to both Conversation API and Voice Calling API
 

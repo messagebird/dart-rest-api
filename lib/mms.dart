@@ -1,4 +1,4 @@
-/// MessageBird's MMS API enables you to send and receive MMS messages that
+/// [MessageBird's MMS API](https://developers.messagebird.com/api/mms-messaging/) enables you to send and receive MMS messages that
 /// include multimedia content to and from a selected group of countries.
 /// Currently, you can only send MMS within the US and Canada.
 ///

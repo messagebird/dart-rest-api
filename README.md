@@ -1,5 +1,5 @@
 # MessageBird REST API library for Dart
-This repository contains an unofficial Dart client for MessageBird's REST API. Documentation can be found at: https://developers.messagebird.com.
+This repository provides an unofficial Dart client for MessageBird's REST API. Documentation can be found at: https://developers.messagebird.com.
 
 ## Requirements
 - [Sign up](https://www.messagebird.com/en/signup) for a free MessageBird account
@@ -10,10 +10,10 @@ Add the following code to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  messagebird-dart:
+  messagebird:
     git:
       url: https://git.dev.drillster.com/drillster/messagebird-dart.git
-      version: ^1.0.0
+      version: ^1.2.0
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ void main() {
 ```
 
 ## Conversations Whatsapp Sandbox
-To use the whatsapp sandbox you need to add `"ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX"` to the list of features you want enabled (named parameter `features` in the constructor of any service).
+To use the whatsapp sandbox you need to add `"ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX"` to the list of features you want enabled in `ApiConversationService` (named parameter `features` in the constructor).
 
 ## Tests
 This repository includes unit tests, located in the `test` directory. To run them, execute `pub run test` in the command line. Covered are, per service, service tests and json (de)serialization tests of data classes.

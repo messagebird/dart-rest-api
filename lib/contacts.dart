@@ -7,7 +7,6 @@
 /// The Contacts API uses `HTTP verbs` and a `RESTful` endpoint structure with
 ///  an access key that is used as the API Authorization. Request and response
 /// payloads are formatted as JSON using UTF-8 encoding and URL encoded values.
-// ignore: library_names
 library contacts;
 
 export 'src/contacts/api_contacts_service.dart';

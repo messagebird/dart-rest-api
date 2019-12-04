@@ -1,4 +1,5 @@
 /// This library contains the exceptions.
+///
 /// {@category Utilities}
 library exceptions;
 
