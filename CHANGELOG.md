@@ -1,3 +1,6 @@
+## 1.2.2
+- Webhook now uses a WebhookEvent enumeration, instead of a string value for an event
+
 ## 1.2.1
 - Changes in API documentation
 

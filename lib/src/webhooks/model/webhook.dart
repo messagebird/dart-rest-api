@@ -16,7 +16,7 @@ class Webhook {
 
   /// A list of event name strings from the list of available events that
   /// trigger this webhook.
-  final List<String> events;
+  final List<WebhookEvent> events;
 
   /// The unique identifier for a MessageBird channel that this webhook will
   /// subcribe to events for.
@@ -55,7 +55,13 @@ class Webhook {
       ? null
       : Webhook(
           id: map['id'],
-          events: List<String>.from(map['events']),
+          events: List<WebhookEvent>.from(List.from(map['events']).map(
+            (event) => WebhookEvent.values.firstWhere(
+                (e) =>
+                    e.toString() ==
+                    'WebhookEvent.${event.toString().replaceAll('.', '_')}',
+                orElse: () => null),
+          )),
           channelId: map['channelId'],
           url: map['url'],
           status: WebhookStatus.values.firstWhere((status) =>
@@ -70,7 +76,12 @@ class Webhook {
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
         'id': id,
-        'events': events,
+        'events': events == null
+            ? null
+            : List<String>.from(events?.map((event) => event
+                .toString()
+                .replaceAll('WebhookEvent.', '')
+                .replaceAll('_', '.'))),
         'channelId': channelId,
         'url': url,
         'status': status?.toString()?.replaceAll('WebhookStatus.', ''),
@@ -96,4 +107,24 @@ enum WebhookStatus {
 
   /// [Webhook] is disabled.
   disabled
+}
+
+/// Enumeration of [Webhook] events.
+enum WebhookEvent {
+  /// A new conversation has been created.
+  // ignore: constant_identifier_names
+  conversation_created,
+
+  /// A conversation has been updated with a new status.
+  // ignore: constant_identifier_names
+  conversation_updated,
+
+  /// A new message has been created. Triggered for both sent and received
+  /// messages.
+  // ignore: constant_identifier_names
+  message_created,
+
+  /// A message has been updated with a new status.
+  // ignore: constant_identifier_names
+  message_updated,
 }

@@ -14,7 +14,7 @@ void main() {
     test('should deserialize from json', () {
       expect(webhook.id, equals('985ae50937a94c64b392531ea87a0263'));
       expect(webhook.status, equals(WebhookStatus.enabled));
-      expect(webhook.events.length, equals(2));
+      expect(webhook.events[1], equals(WebhookEvent.message_updated));
       expect(webhook.updatedDatetime, isNull);
     });
 
