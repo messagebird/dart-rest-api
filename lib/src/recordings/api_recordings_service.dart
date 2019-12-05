@@ -22,15 +22,17 @@ class ApiRecordingsService extends BaseService implements RecordingsService {
           {int limit, int offset}) =>
       get('/calls/$callId/legs/$legId/recordings',
               hostname: BaseService.voiceEndpoint)
-          .then((response) =>
-              Future.value(Recording.fromJsonList(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Recording.fromJsonList(response.body)));
 
   @override
   Future<Recording> read(String callId, String legId, String recordingId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId',
               hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(
-              response == null ? null : Recording.fromJson(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Recording.fromJson(response.body)));
 
   @override
   Future<void> remove(String callId, String legId, String recordingId) =>

@@ -18,8 +18,9 @@ class ApiTranscriptionsService extends BaseService
           String callId, String legId, String recordingId, String language) =>
       post('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions',
               hostname: BaseService.voiceEndpoint, body: {'language': language})
-          .then((response) =>
-              Future.value(Transcription.fromJson(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Transcription.fromJson(response.body)));
 
   @override
   Future<Uint8List> download(String callId, String legId, String recordingId,
@@ -33,6 +34,7 @@ class ApiTranscriptionsService extends BaseService
           String transcriptionId) =>
       get('/calls/$callId/legs/$legId/recordings/$recordingId/transcriptions/$transcriptionId',
               hostname: BaseService.voiceEndpoint)
-          .then((response) => Future.value(
-              response == null ? null : Transcription.fromJson(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Transcription.fromJson(response.body)));
 }

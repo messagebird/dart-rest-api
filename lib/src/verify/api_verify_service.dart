@@ -12,8 +12,10 @@ class ApiVerifyService extends BaseService implements VerifyService {
 
   @override
   Future<VerifyResponse> create(Verify verify) =>
-      post('/verify', body: verify.toMap()).then(
-          (response) => Future.value(VerifyResponse.fromJson(response.body)));
+      post('/verify', body: verify.toMap()).then((response) => Future.value(
+          response?.body == null
+              ? null
+              : VerifyResponse.fromJson(response.body)));
 
   @override
   Future<VerifyResponse> read(String id) =>
@@ -25,6 +27,8 @@ class ApiVerifyService extends BaseService implements VerifyService {
 
   @override
   Future<VerifyResponse> verify(String id, String token) =>
-      get('/verify/$id', body: {'token': token}).then(
-          (response) => Future.value(VerifyResponse.fromJson(response.body)));
+      get('/verify/$id', body: {'token': token}).then((response) =>
+          Future.value(response?.body == null
+              ? null
+              : VerifyResponse.fromJson(response.body)));
 }

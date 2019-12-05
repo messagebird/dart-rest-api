@@ -12,35 +12,41 @@ class ApiContactsService extends BaseService implements ContactsService {
 
   @override
   Future<Contact> create(Contact contact) =>
-      post('/contacts', body: contact.toMap())
-          .then((response) => Future.value(Contact.fromJson(response.body)));
+      post('/contacts', body: contact.toMap()).then((response) => Future.value(
+          response?.body == null ? null : Contact.fromJson(response.body)));
 
   @override
-  Future<List<Contact>> list({int limit, int offset}) =>
-      get('/contacts', body: {'limit': limit, 'offset': offset}).then(
-          (response) => Future.value(Contact.fromJsonList(response.body)));
+  Future<List<Contact>> list({int limit, int offset}) => get('/contacts',
+          body: {'limit': limit, 'offset': offset})
+      .then((response) => Future.value(
+          response?.body == null ? null : Contact.fromJsonList(response.body)));
 
   @override
   Future<Groups> listGroups(String contactId, {int limit, int offset}) =>
       get('/contacts/$contactId/groups',
               body: {'limit': limit, 'offset': offset})
-          .then((response) => Future.value(Groups.fromJson(response.body)));
+          .then((response) => Future.value(
+              response?.body == null ? null : Groups.fromJson(response.body)));
 
   @override
   Future<Messages> listMessages(String contactId, {int limit, int offset}) =>
-      get('/contacts/$contactId/messages',
-              body: {'limit': limit, 'offset': offset})
-          .then((response) => Future.value(Messages.fromJson(response.body)));
+      get('/contacts/$contactId/messages', body: {
+        'limit': limit,
+        'offset': offset
+      }).then((response) => Future.value(
+          response?.body == null ? null : Messages.fromJson(response.body)));
 
   @override
-  Future<Contact> read(String id) => get('/contacts/$id').then((response) =>
-      Future.value(response == null ? null : Contact.fromJson(response.body)));
+  Future<Contact> read(String id) =>
+      get('/contacts/$id').then((response) => Future.value(
+          response?.body == null ? null : Contact.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/contacts/$id');
 
   @override
   Future<Contact> update(Contact contact) =>
-      patch('/contacts/${contact.id}', body: contact.toMap())
-          .then((response) => Future.value(Contact.fromJson(response.body)));
+      patch('/contacts/${contact.id}', body: contact.toMap()).then((response) =>
+          Future.value(
+              response?.body == null ? null : Contact.fromJson(response.body)));
 }

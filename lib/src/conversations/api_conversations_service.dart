@@ -34,8 +34,9 @@ class ApiConversationsService extends BaseService
         'offset': offset,
         'ids': ids?.join(','),
         'status': status?.toString()?.replaceAll('ConversationStatus.', '')
-      }).then(
-          (response) => Future.value(Conversation.fromJsonList(response.body)));
+      }).then((response) => Future.value(response?.body == null
+          ? null
+          : Conversation.fromJsonList(response.body)));
 
   @override
   Future<List<ConversationMessage>> listMessages(String id,
@@ -43,14 +44,16 @@ class ApiConversationsService extends BaseService
       get('/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: {'limit': limit, 'offset': offset})
-          .then((response) =>
-              Future.value(ConversationMessage.fromJsonList(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : ConversationMessage.fromJsonList(response.body)));
 
   @override
   Future<Conversation> read(String id) =>
       get('/conversations/$id', hostname: BaseService.conversationsEndpoint)
-          .then((response) => Future.value(
-              response == null ? null : Conversation.fromJson(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Conversation.fromJson(response.body)));
 
   @override
   Future<ConversationMessage> readMessage(String id) =>
@@ -64,20 +67,24 @@ class ApiConversationsService extends BaseService
       post('/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: message.toMap())
-          .then((response) => Future.value(Message.fromJson(response.body)));
+          .then((response) => Future.value(
+              response?.body == null ? null : Message.fromJson(response.body)));
 
   @override
   Future<MessageResponse> send(ConversationMessage message) => post('/send',
           hostname: BaseService.conversationsEndpoint, body: message.toMap())
-      .then(
-          (response) => Future.value(MessageResponse.fromJson(response.body)));
+      .then((response) => Future.value(response?.body == null
+          ? null
+          : MessageResponse.fromJson(response.body)));
 
   @override
-  Future<Conversation> start(ConversationMessage message) => post(
-          '/conversations/start',
-          hostname: BaseService.conversationsEndpoint,
-          body: message.toMap())
-      .then((response) => Future.value(Conversation.fromJson(response.body)));
+  Future<Conversation> start(ConversationMessage message) =>
+      post('/conversations/start',
+              hostname: BaseService.conversationsEndpoint,
+              body: message.toMap())
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : Conversation.fromJson(response.body)));
 
   @override
   Future<Conversation> update(String id, ConversationStatus status) {
@@ -86,6 +93,8 @@ class ApiConversationsService extends BaseService
     };
     return patch('/conversations/$id',
             hostname: BaseService.conversationsEndpoint, body: json)
-        .then((response) => Future.value(Conversation.fromJson(response.body)));
+        .then((response) => Future.value(response?.body == null
+            ? null
+            : Conversation.fromJson(response.body)));
   }
 }
