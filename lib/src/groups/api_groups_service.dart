@@ -11,8 +11,8 @@ class ApiGroupsService extends BaseService implements GroupsService {
 
   @override
   Future<List<Contact>> listContacts(String groupId) =>
-      get('/groups/$groupId/contacts').then(
-          (response) => Future.value(Contact.fromJsonList(response.body)));
+      get('/groups/$groupId/contacts').then((response) => Future.value(
+          response?.body == null ? null : Contact.fromJsonList(response.body)));
 
   @override
   Future<void> addContacts(String groupId, List<String> contactIds) =>
@@ -23,23 +23,26 @@ class ApiGroupsService extends BaseService implements GroupsService {
       delete('/groups/$groupId/contacts/$contactId');
 
   @override
-  Future<Group> create(Group group) => post('/groups', body: group.toMap())
-      .then((response) => Future.value(Group.fromJson(response.body)));
+  Future<Group> create(Group group) =>
+      post('/groups', body: group.toMap()).then((response) => Future.value(
+          response?.body == null ? null : Group.fromJson(response.body)));
 
   @override
-  Future<List<Group>> list({int limit, int offset}) =>
-      get('/groups', body: {'limit': limit, 'offset': offset})
-          .then((response) => Future.value(Group.fromJsonList(response.body)));
+  Future<List<Group>> list({int limit, int offset}) => get('/groups',
+          body: {'limit': limit, 'offset': offset})
+      .then((response) => Future.value(
+          response?.body == null ? null : Group.fromJsonList(response.body)));
 
   @override
-  Future<Group> read(String id) => get('/groups/$id').then((response) =>
-      Future.value(response == null ? null : Group.fromJson(response.body)));
+  Future<Group> read(String id) =>
+      get('/groups/$id').then((response) => Future.value(
+          response?.body == null ? null : Group.fromJson(response.body)));
 
   @override
   Future<void> remove(String id) => delete('/groups/$id');
 
   @override
   Future<Group> update(String id, {Group group}) =>
-      patch('/groups/$id', body: group.toMap())
-          .then((response) => Future.value(Group.fromJson(response.body)));
+      patch('/groups/$id', body: group.toMap()).then((response) => Future.value(
+          response?.body == null ? null : Group.fromJson(response.body)));
 }
