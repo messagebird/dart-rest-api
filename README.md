@@ -23,11 +23,16 @@ First initialize the library in your code. Then, an API from the `messagebird` p
 See `example/main.dart`
 
 ```dart
-import 'package:messagebird/balance.dart'
+import 'dart:io';
+
+import 'package:messagebird/balance.dart';
 
 void main() {
   final BalanceService balanceService = ApiBalanceService('YOUR_KEY_HERE');
-  balanceService.read().then((balance) => print('My balance is ${balance.amount}'));
+  balanceService.read().then((balance) {
+    stdout.write('My balance is ${balance.amount}');
+    exit(0);
+  });
 }
 ```
 
