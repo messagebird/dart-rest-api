@@ -42,10 +42,12 @@ Before running the tests, create a `keys.json` file in `test_resources/` with th
 {
     "test": "YOUR_API_TEST_KEY",
     "live": "YOUR_API_LIVE_KEY",
-    "msisdn": /* The MSISDN you want to test with (as an integer) */
+    "msisdn": "YOUR_MSISDN"
 }
 ```
 
+Please note: when running the tests, your MessageBird account will be charged a small amount to test sending calls and messages.
+
 ## License
-The MessageBird REST API for Dart is licensed under [The BSD 2-Clause License](http://opensource.org/licenses/BSD-2-Clause). Copyright (c) 2019, Drillster B.V. 
+The MessageBird REST API for Dart is licensed under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause). Copyright (c) 2019, Drillster B.V. 
 The MessageBird platform and MessageBird trademark are property of MessageBird B.V.
