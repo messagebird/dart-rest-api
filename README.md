@@ -12,7 +12,7 @@ Add the following code to your `pubspec.yaml` file:
 dependencies:
   messagebird:
     git:
-      url: https://git.dev.drillster.com/drillster/messagebird-dart.git
+      url: https://github.com/lucvanderzandt/messagebird-dart.git
       version: ^1.2.0
 ```
 
