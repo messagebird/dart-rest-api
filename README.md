@@ -34,6 +34,9 @@ void main() {
 ## Conversations Whatsapp Sandbox
 To use the whatsapp sandbox you need to add `"ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX"` to the list of features you want enabled in `ApiConversationService` (named parameter `features` in the constructor).
 
+## Generate documentation
+Documentation for this repository can be generated using the `dartdoc` command. After running the command, the documentation files can be found in `doc/api`. More information about dartdoc can be found in the official dartdoc [documentation](https://dart.dev/tools/dartdoc).
+
 ## Tests
 This repository includes unit tests, located in the `test` directory. To run them, execute `pub run test` in the command line. Covered are, per service, service tests and json (de)serialization tests of data classes.
 
@@ -46,7 +49,7 @@ Before running the tests, create a `keys.json` file in `test_resources/` with th
 }
 ```
 
-Please note: when running the tests, your MessageBird account will be charged a small amount to test sending calls and messages.
+**Please note**: when running the tests, your MessageBird account will be charged a small amount to test sending calls and messages.
 
 ## License
 The MessageBird REST API for Dart is licensed under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause). Copyright (c) 2019, Drillster B.V. 
