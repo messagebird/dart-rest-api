@@ -1,5 +1,5 @@
 # MessageBird REST API library for Dart
-This repository provides an unofficial Dart client for MessageBird's REST API. Documentation can be found at: https://developers.messagebird.com.
+This repository provides a Dart client for MessageBird's REST API. Documentation can be found at: https://developers.messagebird.com.
 
 ## Requirements
 - [Sign up](https://www.messagebird.com/en/signup) for a free MessageBird account
@@ -12,7 +12,7 @@ Add the following code to your `pubspec.yaml` file:
 dependencies:
   messagebird:
     git:
-      url: https://github.com/lucvanderzandt/messagebird-dart.git
+      url: https://github.com/messagebird/dart-rest-api.git
       version: ^1.2.0
 ```
 
