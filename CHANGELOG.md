@@ -1,4 +1,7 @@
 # Changelog
+## 1.3.1
+- Git tag fixed
+
 ## 1.3.0
 - The properties of the ConversationMessage object, returned by Conversations API functions `listMessages`, `readMessage` and `reply`, have now been aligned with the Message object
 
