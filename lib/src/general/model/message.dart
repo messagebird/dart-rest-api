@@ -100,12 +100,11 @@ class Message {
             direction: MessageDirection.values.firstWhere(
                 (direction) =>
                     direction.toString() ==
-                    'MessageDirection.${map['direction'].toString()}',
+                    'MessageDirection.${map['direction']}',
                 orElse: () => null),
             status: MessageStatus.values.firstWhere(
                 (status) =>
-                    status.toString() ==
-                    'MessageStatus.${map['status'].toString()}',
+                    status.toString() == 'MessageStatus.${map['status']}',
                 orElse: () => null),
             type: type,
             content: Content.fromMap(type, map['content']),
@@ -126,6 +125,7 @@ class Message {
         'to': to,
         'from': from,
         'direction': direction?.toString()?.replaceAll('MessageDirection.', ''),
+        'status': status?.toString()?.replaceAll('MessageStatus.', ''),
         'type': type?.toString()?.replaceAll('MessageType.', ''),
         'content': content.toMap(),
         'createdDatetime': createdDatetime?.toString(),

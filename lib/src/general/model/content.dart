@@ -13,7 +13,7 @@ class AudioContent extends Content {
   const AudioContent(this.audio);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'audio': audio.toMap()};
@@ -91,7 +91,7 @@ class Currency {
         );
 
   /// Get a json [String] representing the [Currency] object.
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
@@ -109,7 +109,7 @@ class FileContent extends Content {
   const FileContent(this.file);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'file': file.toMap()};
@@ -160,7 +160,7 @@ class HSMContent extends Content {
                   (parameter) => HSMLocalizableParameters.fromMap(parameter))));
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {
@@ -206,7 +206,7 @@ class HSMLanguage {
         );
 
   /// Get a json [String] representing the [HSMLanguage].
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
@@ -289,7 +289,7 @@ class ImageContent extends Content {
   const ImageContent(this.image);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'image': image.toMap()};
@@ -324,7 +324,7 @@ class Location {
         );
 
   /// Get a json [String] representing the [Location].
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   /// Convert this object to a [Map]
   Map<String, dynamic> toMap() => {
@@ -342,7 +342,7 @@ class LocationContent extends Content {
   const LocationContent(this.location);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'location': location.toMap()};
@@ -377,7 +377,7 @@ class Media {
         );
 
   /// Get a json [String] representing the [Media].
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   /// Convert this object to a [Map].
   Map<String, dynamic> toMap() => {
@@ -395,7 +395,7 @@ class TextContent extends Content {
   const TextContent(this.text);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'text': text};
@@ -410,7 +410,7 @@ class VideoContent extends Content {
   const VideoContent(this.video);
 
   @override
-  String toJson() => json.encode(toMap);
+  String toJson() => json.encode(toMap());
 
   @override
   Map<String, dynamic> toMap() => {'video': video.toMap()};

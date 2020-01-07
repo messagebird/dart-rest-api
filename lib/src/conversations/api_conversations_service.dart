@@ -63,12 +63,13 @@ class ApiConversationsService extends BaseService
               : ConversationMessage.fromJson(response.body)));
 
   @override
-  Future<Message> reply(String id, Message message) =>
+  Future<ConversationMessage> reply(String id, Message message) =>
       post('/conversations/$id/messages',
               hostname: BaseService.conversationsEndpoint,
               body: message.toMap())
-          .then((response) => Future.value(
-              response?.body == null ? null : Message.fromJson(response.body)));
+          .then((response) => Future.value(response?.body == null
+              ? null
+              : ConversationMessage.fromJson(response.body)));
 
   @override
   Future<MessageResponse> send(ConversationMessage message) => post('/send',
