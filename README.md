@@ -13,7 +13,7 @@ dependencies:
   messagebird:
     git:
       url: https://github.com/messagebird/dart-rest-api.git
-      version: ^1.2.0
+      version: ^1.3.0
 ```
 
 ## Usage

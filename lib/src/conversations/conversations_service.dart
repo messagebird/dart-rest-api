@@ -22,14 +22,13 @@ abstract class ConversationsService {
       {int limit, int offset, List<String> ids, ConversationStatus status});
 
   /// Retrieve all the messages from the conversation with the provided [id].
-  Future<List<ConversationMessage>> listMessages(String id,
-      {int limit, int offset});
+  Future<List<Message>> listMessages(String id, {int limit, int offset});
 
   /// Retrieve a single conversation.
   Future<Conversation> read(String id);
 
   /// View a message.
-  Future<ConversationMessage> readMessage(String id);
+  Future<Message> readMessage(String id);
 
   /// Add a new message to an existing conversation and sends it to the
   /// contact that you're in conversation with.

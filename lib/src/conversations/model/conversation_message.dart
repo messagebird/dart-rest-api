@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:messagebird/src/util.dart';
+
 import '../../general/model/content.dart';
 import '../../general/model/message.dart';
 
@@ -20,21 +22,35 @@ class ConversationMessage extends Message {
 
   /// Constructor.
   const ConversationMessage(
-      {MessageType type,
-      Content content,
+      {String id,
+      String conversationId,
+      String channelId,
+      String platform,
       String to,
       String from,
-      String channelId,
+      MessageDirection direction,
+      MessageStatus status,
+      MessageType type,
+      Content content,
+      DateTime createdDatetime,
+      DateTime updatedDatetime,
       Map<String, dynamic> source,
       this.reportUrl,
       this.eventType,
       this.fallback})
       : super(
-            type: type,
-            content: content,
+            id: id,
+            conversationId: conversationId,
+            channelId: channelId,
+            platform: platform,
             to: to,
             from: from,
-            channelId: channelId,
+            direction: direction,
+            status: status,
+            type: type,
+            content: content,
+            createdDatetime: createdDatetime,
+            updatedDatetime: updatedDatetime,
             source: source);
 
   /// Construct a [ConversationMessage] object from a json [String].
@@ -52,13 +68,27 @@ class ConversationMessage extends Message {
     return map == null
         ? null
         : ConversationMessage(
+            id: map['id'],
+            conversationId: map['conversationId'],
+            channelId: map['channelId'],
+            platform: map['platform'],
+            from: map['from'],
+            to: map['to'],
+            direction: MessageDirection.values.firstWhere(
+                (direction) =>
+                    direction.toString() ==
+                    'MessageDirection.${map['direction']}',
+                orElse: () => null),
+            status: MessageStatus.values.firstWhere(
+                (status) =>
+                    status.toString() == 'MessageStatus.${map['status']}',
+                orElse: () => null),
             type: type,
             content: map['content'] == null
                 ? null
                 : Content.fromMap(type, map['content']),
-            from: map['from'],
-            to: map['to'],
-            channelId: map['channelId'],
+            createdDatetime: parseDate(map['createdDatetime']),
+            updatedDatetime: parseDate(map['updatedDatetime']),
             source: map['source'],
             reportUrl: map['reportUrl'],
             eventType: map['eventType'],
@@ -74,11 +104,18 @@ class ConversationMessage extends Message {
   /// Get a json object representing the [ConversationMessage]
   @override
   Map<String, dynamic> toMap() => {
-        'type': type?.toString()?.replaceAll('MessageType.', ''),
-        'content': content?.toMap(),
-        'from': from,
-        'to': to,
+        'id': id,
+        'conversationId': conversationId,
         'channelId': channelId,
+        'platform': platform,
+        'to': to,
+        'from': from,
+        'direction': direction?.toString()?.replaceAll('MessageDirection.', ''),
+        'status': status?.toString()?.replaceAll('MessageStatus.', ''),
+        'type': type?.toString()?.replaceAll('MessageType.', ''),
+        'content': content.toMap(),
+        'createdDatetime': createdDatetime?.toString(),
+        'updatedDatetime': updatedDatetime?.toString(),
         'source': source,
         'reportUrl': reportUrl,
         'eventType': eventType,
