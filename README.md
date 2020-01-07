@@ -57,5 +57,4 @@ Before running the tests, create a `keys.json` file in `test_resources/` with th
 **Please note**: when running the tests, your MessageBird account will be charged a small amount to test sending calls and messages.
 
 ## License
-The MessageBird REST API for Dart is licensed under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause). Copyright (c) 2019, Drillster B.V. 
-The MessageBird platform and MessageBird trademark are property of MessageBird B.V.
+The MessageBird REST API for Dart is licensed under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause). Copyright (c) 2019, MessageBird B.V. 
