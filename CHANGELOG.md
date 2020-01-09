@@ -1,4 +1,7 @@
 # Changelog
+## 1.3.2
+- Bump version for release
+
 ## 1.3.1
 - Git tag fixed
 
