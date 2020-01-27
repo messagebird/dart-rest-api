@@ -33,7 +33,7 @@ abstract class BaseService {
       : _timeout = (timeout == null) ? 5000 : timeout {
     if (features?.contains('ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
         false) {
-      conversationsEndpoint = 'whatsapp-sandbox.messagebird.com';
+      conversationsEndpoint = 'whatsapp-sandbox.messagebird.com/v1';
     }
   }
 
