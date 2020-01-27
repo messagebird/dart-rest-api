@@ -164,6 +164,7 @@ abstract class BaseService {
     }
     headers.addAll({
       'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'User-Agent':
           'MessageBird/ApiClient/${_pubspec['version']} Dart/${Platform.version.split(' ')[0]}'
     });
@@ -221,7 +222,8 @@ abstract class BaseService {
           return null; // No content found, undocumented in MessageBird API.
         default:
           throw CommunicationProblem(
-              apiError.message ?? apiError.description ?? 'NO_MESSAGE');
+              'Request returned statuscode ${response.statusCode} with:'
+              '${apiError.message ?? apiError.description ?? 'no message'}');
       }
     }
     return response;

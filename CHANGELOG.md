@@ -2,7 +2,8 @@
 ## 1.3.3
 - Update dependencies
 - Typo in whatsapp sandbox feature string fixed
-- Fixed whatsapp sandbox endpoint
+- Whatsapp sandbox endpoint fixed
+- Request headers fixed
 
 ## 1.3.2
 - Bump version for release
