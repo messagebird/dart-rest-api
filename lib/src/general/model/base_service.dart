@@ -191,8 +191,12 @@ abstract class BaseService {
 
   Response _handleResponse(Response response) {
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      final ApiError apiError =
-          ApiError.fromMap(json.decode(response.body)['errors'][0]);
+      ApiError apiError;
+      try {
+        apiError = ApiError.fromMap(json.decode(response.body)['errors'][0]);
+      } catch (error) {
+        apiError = ApiError();
+      }
       switch (apiError.code) {
         case 2:
           throw NotAllowed(
