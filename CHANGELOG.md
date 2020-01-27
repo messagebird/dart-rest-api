@@ -1,6 +1,7 @@
 # Changelog
 ## 1.3.3
 - Update dependencies
+- Typo in whatsapp sandbox feature string fixed
 
 ## 1.3.2
 - Bump version for release

@@ -31,7 +31,7 @@ abstract class BaseService {
   /// Constructor.
   BaseService(this._accessKey, {int timeout, List<String> features})
       : _timeout = (timeout == null) ? 5000 : timeout {
-    if (features?.contains('ENDABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
+    if (features?.contains('ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
         false) {
       conversationsEndpoint = 'whatsapp-sandbox.messagebird.com';
     }
