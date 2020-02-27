@@ -31,9 +31,9 @@ abstract class BaseService {
   /// Constructor.
   BaseService(this._accessKey, {int timeout, List<String> features})
       : _timeout = (timeout == null) ? 5000 : timeout {
-    if (features?.contains('ENDABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
+    if (features?.contains('ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX') ??
         false) {
-      conversationsEndpoint = 'whatsapp-sandbox.messagebird.com';
+      conversationsEndpoint = 'whatsapp-sandbox.messagebird.com/v1';
     }
   }
 
@@ -164,6 +164,7 @@ abstract class BaseService {
     }
     headers.addAll({
       'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'User-Agent':
           'MessageBird/ApiClient/${_pubspec['version']} Dart/${Platform.version.split(' ')[0]}'
     });
@@ -191,8 +192,12 @@ abstract class BaseService {
 
   Response _handleResponse(Response response) {
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      final ApiError apiError =
-          ApiError.fromMap(json.decode(response.body)['errors'][0]);
+      ApiError apiError;
+      try {
+        apiError = ApiError.fromMap(json.decode(response.body)['errors'][0]);
+      } catch (error) {
+        apiError = ApiError();
+      }
       switch (apiError.code) {
         case 2:
           throw NotAllowed(
@@ -217,7 +222,8 @@ abstract class BaseService {
           return null; // No content found, undocumented in MessageBird API.
         default:
           throw CommunicationProblem(
-              apiError.message ?? apiError.description ?? 'NO_MESSAGE');
+              'Request returned statuscode ${response.statusCode} with:'
+              '${apiError.message ?? apiError.description ?? 'no message'}');
       }
     }
     return response;

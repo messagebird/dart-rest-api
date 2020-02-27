@@ -1,4 +1,14 @@
 # Changelog
+## 1.3.4
+- http dependency downgraded to ^0.11.0 to enhance compatibility
+- yaml dependency downgraded to ^2.0.0 to enhance compatibility
+
+## 1.3.3
+- Update dependencies
+- Typo in whatsapp sandbox feature string fixed
+- Whatsapp sandbox endpoint fixed
+- Request headers fixed
+
 ## 1.3.2
 - Bump version for release
 
