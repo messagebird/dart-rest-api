@@ -172,20 +172,19 @@ abstract class BaseService {
   }
 
   String _getUrl(String path, {String hostname}) {
-    String newHostname;
     if (path == null) {
       throw ArgumentError('Argument "path" cannot be null');
     }
-    if (hostname != null) {
-      newHostname =
-          (!hostname.startsWith('https://') && !hostname.startsWith('http://'))
-              ? 'https://$hostname'
-              : hostname;
-      if (newHostname.endsWith('/')) {
-        newHostname = newHostname.substring(0, newHostname.length - 1);
-      }
-    } else {
-      newHostname = 'https://rest.messagebird.com';
+    if (hostname == null) {
+      var defaultHostname = 'https://rest.messagebird.com';
+      return defaultHostname + path;
+    }
+    var newHostname =
+        (!hostname.startsWith('https://') && !hostname.startsWith('http://'))
+            ? 'https://$hostname'
+            : hostname;
+    if (newHostname.endsWith('/')) {
+      newHostname = newHostname.substring(0, newHostname.length - 1);
     }
     return newHostname + path;
   }
