@@ -21,6 +21,7 @@ abstract class BaseService {
 
   /// The endpoint for conversations.
   static String conversationsEndpoint = 'conversations.messagebird.com/v1';
+  static String numbersEndpoint = 'numbers.messagebird.com/v1';
 
   final BaseClient _client = Client();
   final String _accessKey;
