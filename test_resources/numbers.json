@@ -1,0 +1,21 @@
+{
+    "count": 1,
+    "items": [
+        {
+            "country": "NL",
+            "features": [
+                "sms",
+                "voice"
+            ],
+            "locality": "Texel",
+            "number": "31612345670",
+            "region": "Texel",
+            "status": "active",
+            "tags": [],
+            "type": "mobile"
+        }
+    ],
+    "limit": 20,
+    "offset": 0,
+    "totalCount": 1
+}
