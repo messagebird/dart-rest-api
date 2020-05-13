@@ -19,10 +19,10 @@ void main() {
       expect(numbers.items[0].region, equals('Texel'));
       expect(numbers.items[0].locality, equals('Texel'));
       expect(numbers.items[0].features.length, equals(2));
-      expect(numbers.items[0].features[0], equals('sms'));
-      expect(numbers.items[0].features[1], equals('voice'));
+      expect(numbers.items[0].features[0], equals(Feature.sms));
+      expect(numbers.items[0].features[1], equals(Feature.voice));
       expect(numbers.items[0].tags.length, equals(0));
-      expect(numbers.items[0].type, equals('mobile'));
+      expect(numbers.items[0].type, equals(PhoneNumberType.mobile));
       expect(numbers.items[0].status, equals('active'));
     });
   });

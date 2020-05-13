@@ -15,13 +15,13 @@ class PhoneNumber {
   final String locality;
 
   /// The list of features of a phone number. Possible values: `sms`, `voice`, `mms`.
-  final List<String> features;
+  final List<Feature> features;
 
   /// The list of tags added to the phone number.
   final List<String> tags;
 
   /// The type of a phone number. Possible values: `landline`, `mobile`, `premium_rate`.
-  final String type;
+  final PhoneNumberType type;
 
   /// The status of a phone number.
   final String status;
@@ -50,9 +50,23 @@ class PhoneNumber {
           country: map['country'],
           region: map['region'],
           locality: map['locality'],
-          features: List<String>.from(map['features']),
+          features: List.from(map['features'])
+              .map<Feature>((feature) => Feature.values.firstWhere(
+                  (featureEnum) =>
+                      featureEnum.toString() == 'Feature.${feature}'))
+              .toList(),
           tags: List<String>.from(map['tags']),
-          type: map['type'],
+          type: PhoneNumberType.values.firstWhere(
+              (phoneNumberType) =>
+                  phoneNumberType.toString() ==
+                  'PhoneNumberType.${map['type']}',
+              orElse: () => null),
           status: map['status'],
         );
 }
+
+/// Enumeration of possible features.
+enum Feature { sms, voice, mms }
+
+/// Enumeration of possible types.
+enum PhoneNumberType { landline, mobile, premium_rate }

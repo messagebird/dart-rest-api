@@ -14,10 +14,10 @@ void main() {
       expect(phoneNumber.region, equals('Texel'));
       expect(phoneNumber.locality, equals('Texel'));
       expect(phoneNumber.features.length, equals(2));
-      expect(phoneNumber.features[0], equals('sms'));
-      expect(phoneNumber.features[1], equals('voice'));
+      expect(phoneNumber.features[0], equals(Feature.sms));
+      expect(phoneNumber.features[1], equals(Feature.voice));
       expect(phoneNumber.tags.length, equals(0));
-      expect(phoneNumber.type, equals('mobile'));
+      expect(phoneNumber.type, equals(PhoneNumberType.mobile));
       expect(phoneNumber.status, equals('active'));
     });
   });
