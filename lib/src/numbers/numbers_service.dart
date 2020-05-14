@@ -21,4 +21,11 @@ abstract class NumbersService {
   /// Update certain attributes of your purchased phone numbers. Note: at the moment,
   /// we only support updating `tags` that can be used to group or label numbers.
   Future<PhoneNumber> update(String number, List<String> tags);
+
+  /// Release this phone number from your account. You will no longer have access to
+  /// this phone number and MessageBird will no longer receive calls or SMS/MMS messages
+  /// on this number. You will stop being billed the monthly phone number fee and the
+  /// phone number will eventually be recycled and potentially given to another customer,
+  /// so use with care.
+  Future<void> remove(String number);
 }

@@ -48,4 +48,8 @@ class ApiNumbersService extends BaseService implements NumbersService {
             'tags': tags,
           }).then((response) => Future.value(
           response?.body == null ? null : PhoneNumber.fromJson(response.body)));
+
+  @override
+  Future<void> remove(String number) =>
+      delete('phone-numbers/${number}', hostname: BaseService.numbersEndpoint);
 }
