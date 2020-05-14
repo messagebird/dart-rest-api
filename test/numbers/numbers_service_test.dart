@@ -39,5 +39,16 @@ void main() {
         expect(phoneNumber, isA<PhoneNumber>());
       });
     });
+
+    test('should return valid properties for update endpoint', () {
+      final String number = '31612345670';
+      final List<String> tags = ['tag1'];
+
+      numbersService.update(number, tags).then((phoneNumber) {
+        expect(phoneNumber.number, equals(number));
+        expect(phoneNumber.tags, equals(tags));
+        expect(phoneNumber, isA<PhoneNumber>());
+      });
+    });
   });
 }

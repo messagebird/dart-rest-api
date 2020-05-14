@@ -17,4 +17,8 @@ abstract class NumbersService {
 
   /// Retrieve a specific phone number from your inventory of purchased numbers.
   Future<PhoneNumber> read(String number);
+
+  /// Update certain attributes of your purchased phone numbers. Note: at the moment,
+  /// we only support updating `tags` that can be used to group or label numbers.
+  Future<PhoneNumber> update(String number, List<String> tags);
 }

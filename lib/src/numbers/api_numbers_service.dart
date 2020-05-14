@@ -39,4 +39,13 @@ class ApiNumbersService extends BaseService implements NumbersService {
           hostname: BaseService.numbersEndpoint)
       .then((response) => Future.value(
           response?.body == null ? null : PhoneNumber.fromJson(response.body)));
+
+  @override
+  Future<PhoneNumber> update(String number, List<String> tags) =>
+      patch('/phone-numbers/${number}',
+          hostname: BaseService.numbersEndpoint,
+          body: {
+            'tags': tags,
+          }).then((response) => Future.value(
+          response?.body == null ? null : PhoneNumber.fromJson(response.body)));
 }
