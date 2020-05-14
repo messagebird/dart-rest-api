@@ -1,6 +1,7 @@
 import '../general/model/base_service.dart';
 import 'numbers_service.dart';
 import 'model/numbers.dart';
+import 'model/phone_number.dart';
 
 /// API implementation of [NumbersService]
 class ApiNumbersService extends BaseService implements NumbersService {
@@ -32,4 +33,10 @@ class ApiNumbersService extends BaseService implements NumbersService {
         'type': type,
       }).then((response) => Future.value(
           response?.body == null ? null : Numbers.fromJson(response.body)));
+
+  @override
+  Future<PhoneNumber> read(String number) => get('/phone-numbers/${number}',
+          hostname: BaseService.numbersEndpoint)
+      .then((response) => Future.value(
+          response?.body == null ? null : PhoneNumber.fromJson(response.body)));
 }

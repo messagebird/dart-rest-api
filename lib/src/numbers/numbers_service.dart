@@ -1,4 +1,5 @@
 import 'model/numbers.dart';
+import 'model/phone_number.dart';
 
 /// Numbers service interface
 abstract class NumbersService {
@@ -13,4 +14,7 @@ abstract class NumbersService {
       String region,
       String locality,
       String type});
+
+  /// Retrieve a specific phone number from your inventory of purchased numbers.
+  Future<PhoneNumber> read(String number);
 }

@@ -21,13 +21,22 @@ void main() {
       });
     });
 
-    test('should return valid properties ', () {
+    test('should return valid properties for list endpoint', () {
       numbersService.list().then((numbers) {
         expect(numbers.offset, isA<int>());
         expect(numbers.limit, isA<int>());
         expect(numbers.count, isA<int>());
         expect(numbers.totalCount, isA<int>());
         expect(numbers.items, isA<List<PhoneNumber>>());
+      });
+    });
+
+    test('should return valid properties for read endpoint', () {
+      final String number = '31612345670';
+
+      numbersService.read(number).then((phoneNumber) {
+        expect(phoneNumber.number, equals(number));
+        expect(phoneNumber, isA<PhoneNumber>());
       });
     });
   });
