@@ -1,0 +1,15 @@
+{
+    "country": "NL",
+    "createdAt": "2019-04-25T14:04:04Z",
+    "features": [
+        "sms",
+        "voice"
+    ],
+    "locality": "Haarlem",
+    "number": "31971234567",
+    "region": "Haarlem",
+    "renewalAt": "2019-05-25T00:00:00Z",
+    "status": "active",
+    "tags": [],
+    "type": "landline"
+}

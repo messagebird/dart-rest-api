@@ -2,6 +2,7 @@ import '../general/model/base_service.dart';
 import 'numbers_service.dart';
 import 'model/numbers.dart';
 import 'model/phone_number.dart';
+import 'model/recently_purchased_phone_number.dart';
 
 /// API implementation of [NumbersService]
 class ApiNumbersService extends BaseService implements NumbersService {
@@ -52,4 +53,15 @@ class ApiNumbersService extends BaseService implements NumbersService {
   @override
   Future<void> remove(String number) =>
       delete('phone-numbers/${number}', hostname: BaseService.numbersEndpoint);
+
+  @override
+  Future<RecentlyPurchasedPhoneNumber> create(
+          String number, String countryCode, int billingIntervalMonths) =>
+      post('/phone-numbers', hostname: BaseService.numbersEndpoint, body: {
+        'number': number,
+        'countryCode': countryCode,
+        'billingIntervalMonths': billingIntervalMonths,
+      }).then((response) => Future.value(response?.body == null
+          ? null
+          : RecentlyPurchasedPhoneNumber.fromJson(response.body)));
 }

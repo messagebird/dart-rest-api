@@ -11,3 +11,4 @@ export 'src/numbers/api_numbers_service.dart';
 export 'src/numbers/numbers_service.dart';
 export 'src/numbers/model/numbers.dart';
 export 'src/numbers/model/phone_number.dart';
+export 'src/numbers/model/recently_purchased_phone_number.dart';

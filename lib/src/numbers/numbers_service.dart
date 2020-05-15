@@ -1,5 +1,6 @@
 import 'model/numbers.dart';
 import 'model/phone_number.dart';
+import 'model/recently_purchased_phone_number.dart';
 
 /// Numbers service interface
 abstract class NumbersService {
@@ -28,4 +29,8 @@ abstract class NumbersService {
   /// phone number will eventually be recycled and potentially given to another customer,
   /// so use with care.
   Future<void> remove(String number);
+
+  /// Purchase a phone number.
+  Future<RecentlyPurchasedPhoneNumber> create(
+      String number, String countryCode, int billingIntervalMonths);
 }
