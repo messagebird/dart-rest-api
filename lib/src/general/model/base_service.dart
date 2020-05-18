@@ -151,8 +151,15 @@ abstract class BaseService {
     final List<String> nvps = [];
     parameters.forEach((k, v) {
       if (v != null) {
-        nvps.add('${Uri.encodeComponent(k.toString())}='
-            '${Uri.encodeComponent(v.toString())}');
+        if (v is List) {
+          for (final listItem in v) {
+            nvps.add('${Uri.encodeComponent(k.toString())}='
+                '${Uri.encodeComponent(listItem.toString())}');
+          }
+        } else {
+          nvps.add('${Uri.encodeComponent(k.toString())}='
+              '${Uri.encodeComponent(v.toString())}');
+        }
       }
     });
     return (nvps.isEmpty) ? '' : '?${nvps.join('&')}';

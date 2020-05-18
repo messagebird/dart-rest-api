@@ -33,4 +33,16 @@ abstract class NumbersService {
   /// Purchase a phone number.
   Future<RecentlyPurchasedPhoneNumber> create(
       String number, String countryCode, int billingIntervalMonths);
+
+  /// Search for local, toll-free and mobile phone numbers that are available for you
+  /// to purchase. You can search for phone numbers by country that match a pattern,
+  /// are of a certain type or are in a specific region.
+  Future<Numbers> search(
+    String countryCode, {
+    String number,
+    List<String> features,
+    String type,
+    int limit,
+    String searchPattern,
+  });
 }
