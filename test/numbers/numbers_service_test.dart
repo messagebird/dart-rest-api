@@ -50,5 +50,17 @@ void main() {
         expect(phoneNumber, isA<PhoneNumber>());
       });
     });
+    test('should return valid properties for search endpoint', () {
+      numbersService
+          .search('NL',
+              number: '23',
+              features: ['sms', 'voice'],
+              type: 'mobile',
+              limit: 5)
+          .then((numbers) {
+        expect(numbers.limit, equals(5));
+        expect(numbers, isA<Numbers>());
+      });
+    });
   });
 }

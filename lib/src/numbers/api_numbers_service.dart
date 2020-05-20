@@ -26,8 +26,8 @@ class ApiNumbersService extends BaseService implements NumbersService {
       get('/phone-numbers', hostname: BaseService.numbersEndpoint, body: {
         'limit': limit,
         'offset': offset,
-        'features': features?.join(','),
-        'tags': tags?.join(','),
+        'features': features,
+        'tags': tags,
         'number': number,
         'region': region,
         'locality': locality,
@@ -64,4 +64,22 @@ class ApiNumbersService extends BaseService implements NumbersService {
       }).then((response) => Future.value(response?.body == null
           ? null
           : RecentlyPurchasedPhoneNumber.fromJson(response.body)));
+
+  @override
+  Future<Numbers> search(String countryCode,
+          {String number,
+          List<String> features,
+          String type,
+          int limit,
+          String searchPattern}) =>
+      get('/available-phone-numbers/${countryCode}',
+          hostname: BaseService.numbersEndpoint,
+          body: {
+            'number': number,
+            'features': features,
+            'type': type,
+            'limit': limit,
+            'search_pattern': searchPattern,
+          }).then((response) => Future.value(
+          response?.body == null ? null : Numbers.fromJson(response.body)));
 }

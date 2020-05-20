@@ -55,7 +55,7 @@ class PhoneNumber {
                   (featureEnum) =>
                       featureEnum.toString() == 'Feature.${feature}'))
               .toList(),
-          tags: List<String>.from(map['tags']),
+          tags: map['tags'] == null ? null : List<String>.from(map['tags']),
           type: PhoneNumberType.values.firstWhere(
               (phoneNumberType) =>
                   phoneNumberType.toString() ==
