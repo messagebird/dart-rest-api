@@ -9,12 +9,6 @@ class Credentials {
     final testKey = envV['API_TEST_KEY'];
     final liveKey = envV['API_LIVE_KEY'];
     final msisdn = envV['MSISDN'] == null ? null : int.tryParse(envV['MSISDN']);
-
-    if (testKey == null || liveKey == null) {
-      throw ArgumentError('No API keys found in environment variables. '
-          'Check your setup.');
-    }
-
     return Credentials(testKey, liveKey, MSISDN: msisdn);
   }
 
