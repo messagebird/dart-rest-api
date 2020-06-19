@@ -6,18 +6,23 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('ContactsService', () {
-    Credentials credentials;
     String id;
     ContactsService contactsService;
     Contact contact;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       contactsService = ApiContactsService(credentials.API_LIVE_KEY);
-      contact = Contact.fromJson(File('test_resources/contact.json')
-          .readAsStringSync()
-          .replaceAll('31612345678', credentials.MSISDN.toString()));
+
+      final contactSource =
+          File('test_resources/contact.json').readAsStringSync();
+      if (credentials.hasMSISDN) {
+        contactSource.replaceAll('31612345678', credentials.MSISDN.toString());
+      }
+
+      contact = Contact.fromJson(contactSource);
     });
 
     test('should create a contact', () {
@@ -69,5 +74,5 @@ void main() {
         expect(readContact, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('MmsService', () {
-    Credentials credentials;
     String id;
     MmsService mmsService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       mmsService = ApiMmsService(credentials.API_LIVE_KEY);
     });
 
@@ -35,5 +35,5 @@ void main() {
         expect(mmsMessage.id, equals(id));
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

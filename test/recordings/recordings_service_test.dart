@@ -6,12 +6,12 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('RecordingsService', () {
-    Credentials credentials;
     RecordingsService recordingsService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       recordingsService = ApiRecordingsService(credentials.API_LIVE_KEY);
     });
 
@@ -42,5 +42,5 @@ void main() {
     test('should delete a recording', () {
       // Will not be implemented in a unit test.
     });
-  });
+  }, skip: !credentials.arePresent);
 }

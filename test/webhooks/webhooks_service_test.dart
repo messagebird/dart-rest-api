@@ -8,13 +8,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('WebhooksService', () {
-    Credentials credentials;
     String id;
     ConversationsService conversationsService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       conversationsService = ApiConversationsService(credentials.API_LIVE_KEY);
     });
 
@@ -87,5 +87,5 @@ void main() {
         expect(webhook, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

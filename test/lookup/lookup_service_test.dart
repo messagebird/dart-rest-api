@@ -6,12 +6,12 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('LookupService', () {
-    Credentials credentials;
     LookupService lookupService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       lookupService = ApiLookupService(credentials.API_TEST_KEY);
     });
 
@@ -33,5 +33,5 @@ void main() {
         expect(hlr.id, isNotNull);
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

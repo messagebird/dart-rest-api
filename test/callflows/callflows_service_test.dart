@@ -6,14 +6,14 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('CallflowService', () {
-    Credentials credentials;
     CallflowsService callflowsService;
     Callflow callflow;
     String id;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       callflowsService = ApiCallflowsService(credentials.API_LIVE_KEY);
       callflow = const Callflow(title: 'Say message', record: true, steps: [
         Step(action: StepAction.say, options: {
@@ -64,5 +64,5 @@ void main() {
         expect(callflow, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

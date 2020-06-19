@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:messagebird/verify.dart';
 import 'package:messagebird/voice_messaging.dart';
 import 'package:test/test.dart';
+
+import '../../credentials.dart';
 
 void main() {
   group('Verify', () {
@@ -10,8 +11,7 @@ void main() {
     int msisdn;
 
     setUp(() {
-      msisdn = json.decode(
-          File('test_resources/keys.json').readAsStringSync())['msisdn'];
+      msisdn = Credentials.from(Platform.environment).MSISDN;
       verify = Verify.fromJson(File('test_resources/verify.json')
           .readAsStringSync()
           .replaceAll('31612345678', msisdn.toString()));

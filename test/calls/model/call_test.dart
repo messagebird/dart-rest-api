@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_calling.dart';
@@ -10,8 +9,6 @@ void main() {
     int msisdn;
 
     setUp(() {
-      msisdn = json.decode(
-          File('test_resources/keys.json').readAsStringSync())['msisdn'];
       call = Call.fromJson(File('test_resources/call.json')
           .readAsStringSync()
           .replaceAll('31612345678', msisdn.toString()));

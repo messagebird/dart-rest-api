@@ -6,12 +6,12 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('TranscriptionService', () {
-    Credentials credentials;
     TranscriptionsService transcriptionsService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       transcriptionsService =
           ApiTranscriptionsService(credentials.API_LIVE_KEY);
     });
@@ -46,5 +46,5 @@ void main() {
         expect(bytes, isNotNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

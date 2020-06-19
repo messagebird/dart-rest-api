@@ -1,20 +1,21 @@
 import 'dart:io';
 
+import 'package:messagebird/exceptions.dart';
 import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('CallsService', () {
-    Credentials credentials;
     String id;
     CallsService callsService;
     Call call;
     Callflow callflow;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       callsService = ApiCallsService(credentials.API_LIVE_KEY);
       call = Call.fromJson(File('test_resources/call.json')
           .readAsStringSync()
@@ -30,28 +31,28 @@ void main() {
       });
     });
 
-    test('should list calls', () {
-      callsService.list().then((list) {
+    test('should list calls', () async {
+      await callsService.list().then((list) {
         expect(list, isNotEmpty);
       });
     });
 
-    test('should get a call', () {
-      callsService.read(id).then((readCall) {
+    test('should get a call', () async {
+      await callsService.read(id).then((readCall) {
         expect(readCall.id, isNotNull);
         expect(readCall.source, equals(call.source));
       });
     });
 
-    test('should get legs from a call', () {
-      callsService.listLegs(id).then((list) {
+    test('should get legs from a call', () async {
+      await callsService.listLegs(id).then((list) {
         expect(list, isList);
       });
     });
 
-    test('should read a leg from a call', () {
-      callsService.listLegs(id).then((legs) {
-        callsService.readLeg(id, legs[0].id).then((readLeg) {
+    test('should read a leg from a call', () async {
+      await callsService.listLegs(id).then((legs) async {
+        await callsService.readLeg(id, legs[0].id).then((readLeg) {
           expect(legs[0].id, equals(readLeg.id));
         });
       });
@@ -62,11 +63,14 @@ void main() {
     });
 
     test('should delete a call', () async {
-      await callsService.remove(id);
-      sleep(const Duration(seconds: 1)); // Allow a second for the call to end
-      await callsService.read(id).then((readCall) {
-        expect(readCall.status, equals(CallStatus.ended));
+      await callsService.remove(id).catchError((error) {
+        if (error is ApiError) {
+          fail('The service replied with code ${error.code}:'
+              '${error.description}');
+        } else {
+          fail('The service failed with an ${error.runtimeType}');
+        }
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

@@ -6,12 +6,12 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('NumbersService', () {
-    Credentials credentials;
     NumbersService numbersService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       numbersService = ApiNumbersService(credentials.API_TEST_KEY);
     });
 
@@ -62,5 +62,5 @@ void main() {
         expect(numbers, isA<Numbers>());
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

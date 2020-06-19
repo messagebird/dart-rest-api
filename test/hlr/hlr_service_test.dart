@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('HlrService', () {
-    Credentials credentials;
     String id;
     HlrService hlrService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       hlrService = ApiHlrService(credentials.API_LIVE_KEY);
     });
 
@@ -36,5 +36,5 @@ void main() {
         expect(hlr, isNull);
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

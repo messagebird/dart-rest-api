@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('ConversationService', () {
-    Credentials credentials;
     ConversationsService conversationsService;
     const String conversationId = '8194ecfd1c3f4260b4e1680cb04f551f';
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       conversationsService = ApiConversationsService(credentials.API_LIVE_KEY);
     });
 
@@ -59,5 +59,5 @@ void main() {
     test('should archive a conversation', () async {
       // Not implemented.
     });
-  });
+  }, skip: !credentials.arePresent);
 }

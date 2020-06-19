@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('VerifyService', () {
-    Credentials credentials;
     String id;
     VerifyService verifyService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       verifyService = ApiVerifyService(credentials.API_LIVE_KEY);
     });
 
@@ -44,5 +44,5 @@ void main() {
         expect(response.status, equals(VerifyStatus.deleted));
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

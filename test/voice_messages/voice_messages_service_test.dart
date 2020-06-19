@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('VoiceMessagesService', () {
-    Credentials credentials;
     String id;
     VoiceMessagesService voiceMessagesService;
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       voiceMessagesService = ApiVoiceMessagesService(credentials.API_LIVE_KEY);
     });
 
@@ -36,5 +36,5 @@ void main() {
         expect(response.voice, equals(Voice.female)); // Default
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

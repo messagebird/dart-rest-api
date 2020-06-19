@@ -6,15 +6,15 @@ import 'package:test/test.dart';
 import '../credentials.dart';
 
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('GroupService', () {
-    Credentials credentials;
     String id;
     GroupsService groupsService;
     // John Doe contact
     const String contactId = 'ed105b2ba26446f9ab0ce213457e99bc';
 
     setUp(() {
-      credentials = Credentials.from(Platform.environment);
       groupsService = ApiGroupsService(credentials.API_TEST_KEY);
     });
 
@@ -68,5 +68,5 @@ void main() {
         expect(group, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }
