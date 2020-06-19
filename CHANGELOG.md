@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+- Use environment variables for the MB access keys for running the tests
+- Skip tests if environment variables aren't present
+- Code cleanup
+
 ## 1.3.5
 
 - Use environment variables for the MB access keys for running the tests
