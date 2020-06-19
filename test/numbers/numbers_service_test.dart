@@ -1,18 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/numbers.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('NumbersService', () {
-    Map credentials;
+    Credentials credentials;
     NumbersService numbersService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      numbersService = ApiNumbersService(credentials['test']);
+      credentials = Credentials.from(Platform.environment);
+      numbersService = ApiNumbersService(credentials.API_TEST_KEY);
     });
 
     test('should get numbers object', () {
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('should return valid properties for read endpoint', () {
-      final String number = '31612345670';
+      const String number = '31612345670';
 
       numbersService.read(number).then((phoneNumber) {
         expect(phoneNumber.number, equals(number));
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('should return valid properties for update endpoint', () {
-      final String number = '31612345670';
+      const String number = '31612345670';
       final List<String> tags = ['tag1'];
 
       numbersService.update(number, tags).then((phoneNumber) {

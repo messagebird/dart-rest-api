@@ -21,6 +21,8 @@ abstract class BaseService {
 
   /// The endpoint for conversations.
   static String conversationsEndpoint = 'conversations.messagebird.com/v1';
+
+  /// The endpoint for numbers.
   static String numbersEndpoint = 'numbers.messagebird.com/v1';
 
   final BaseClient _client = Client();
@@ -184,8 +186,7 @@ abstract class BaseService {
       throw ArgumentError('Argument "path" cannot be null');
     }
     if (hostname == null) {
-      var defaultHostname = 'https://rest.messagebird.com';
-      return defaultHostname + path;
+      return 'https://rest.messagebird.com${path.startsWith('/') ? '' : '/'}$path';
     }
     var newHostname =
         (!hostname.startsWith('https://') && !hostname.startsWith('http://'))

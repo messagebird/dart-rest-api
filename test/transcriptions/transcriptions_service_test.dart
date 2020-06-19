@@ -1,18 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('TranscriptionService', () {
-    Map credentials;
+    Credentials credentials;
     TranscriptionsService transcriptionsService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      transcriptionsService = ApiTranscriptionsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      transcriptionsService =
+          ApiTranscriptionsService(credentials.API_LIVE_KEY);
     });
 
     test('should create a transcription', () {

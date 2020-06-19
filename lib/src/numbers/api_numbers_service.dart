@@ -1,8 +1,8 @@
 import '../general/model/base_service.dart';
-import 'numbers_service.dart';
 import 'model/numbers.dart';
 import 'model/phone_number.dart';
 import 'model/recently_purchased_phone_number.dart';
+import 'numbers_service.dart';
 
 /// API implementation of [NumbersService]
 class ApiNumbersService extends BaseService implements NumbersService {
@@ -36,14 +36,14 @@ class ApiNumbersService extends BaseService implements NumbersService {
           response?.body == null ? null : Numbers.fromJson(response.body)));
 
   @override
-  Future<PhoneNumber> read(String number) => get('/phone-numbers/${number}',
+  Future<PhoneNumber> read(String number) => get('/phone-numbers/$number',
           hostname: BaseService.numbersEndpoint)
       .then((response) => Future.value(
           response?.body == null ? null : PhoneNumber.fromJson(response.body)));
 
   @override
   Future<PhoneNumber> update(String number, List<String> tags) =>
-      patch('/phone-numbers/${number}',
+      patch('/phone-numbers/$number',
           hostname: BaseService.numbersEndpoint,
           body: {
             'tags': tags,
@@ -52,7 +52,7 @@ class ApiNumbersService extends BaseService implements NumbersService {
 
   @override
   Future<void> remove(String number) =>
-      delete('phone-numbers/${number}', hostname: BaseService.numbersEndpoint);
+      delete('phone-numbers/$number', hostname: BaseService.numbersEndpoint);
 
   @override
   Future<RecentlyPurchasedPhoneNumber> create(
@@ -72,7 +72,7 @@ class ApiNumbersService extends BaseService implements NumbersService {
           String type,
           int limit,
           String searchPattern}) =>
-      get('/available-phone-numbers/${countryCode}',
+      get('/available-phone-numbers/$countryCode',
           hostname: BaseService.numbersEndpoint,
           body: {
             'number': number,

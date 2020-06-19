@@ -1,19 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/conversations.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('ConversationService', () {
-    Map credentials;
+    Credentials credentials;
     ConversationsService conversationsService;
     const String conversationId = '8194ecfd1c3f4260b4e1680cb04f551f';
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      conversationsService = ApiConversationsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      conversationsService = ApiConversationsService(credentials.API_LIVE_KEY);
     });
 
     test('should get endpoint', () {

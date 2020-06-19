@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -6,16 +5,17 @@ import 'package:messagebird/conversations.dart';
 import 'package:messagebird/webhooks.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('WebhooksService', () {
-    Map credentials;
+    Credentials credentials;
     String id;
     ConversationsService conversationsService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      conversationsService = ApiConversationsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      conversationsService = ApiConversationsService(credentials.API_LIVE_KEY);
     });
 
     test('should create a webhook', () {

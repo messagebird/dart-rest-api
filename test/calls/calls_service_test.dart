@@ -1,24 +1,24 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('CallsService', () {
-    Map credentials;
+    Credentials credentials;
     String id;
     CallsService callsService;
     Call call;
     Callflow callflow;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      callsService = ApiCallsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      callsService = ApiCallsService(credentials.API_LIVE_KEY);
       call = Call.fromJson(File('test_resources/call.json')
           .readAsStringSync()
-          .replaceAll('31612345678', credentials['msisdn'].toString()));
+          .replaceAll('31612345678', credentials.MSISDN.toString()));
       callflow = Callflow.fromJson(
           File('test_resources/callflow.json').readAsStringSync());
     });

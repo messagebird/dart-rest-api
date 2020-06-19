@@ -1,18 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/balance.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('BalanceService', () {
-    Map credentials;
+    Credentials credentials;
     BalanceService balanceService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      balanceService = ApiBalanceService(credentials['test']);
+      credentials = Credentials.from(Platform.environment);
+      balanceService = ApiBalanceService(credentials.API_TEST_KEY);
     });
 
     test('should get balance object', () {

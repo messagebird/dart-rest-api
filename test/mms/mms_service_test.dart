@@ -1,19 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/mms.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('MmsService', () {
-    Map credentials;
+    Credentials credentials;
     String id;
     MmsService mmsService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      mmsService = ApiMmsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      mmsService = ApiMmsService(credentials.API_LIVE_KEY);
     });
 
     test('should send a message', () {
@@ -22,7 +22,7 @@ void main() {
               originator: 'Drillster',
               recipients: Recipients(
                   totalCount: 1,
-                  items: [RecipientItem(recipient: credentials['msisdn'])]),
+                  items: [RecipientItem(recipient: credentials.MSISDN)]),
               body: 'Hello world!'))
           .then((mmsMessage) {
         expect(mmsMessage.createdDatetime.day, equals(DateTime.now().day));

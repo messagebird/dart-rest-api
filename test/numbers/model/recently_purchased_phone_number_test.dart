@@ -17,7 +17,7 @@ void main() {
       expect(phoneNumber.features.length, equals(2));
       expect(phoneNumber.features[0], equals(Feature.sms));
       expect(phoneNumber.features[1], equals(Feature.voice));
-      expect(phoneNumber.locality, equals("Haarlem"));
+      expect(phoneNumber.locality, equals('Haarlem'));
       expect(phoneNumber.number, equals('31971234567'));
       expect(phoneNumber.region, equals('Haarlem'));
       expect(phoneNumber.renewalAt,

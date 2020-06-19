@@ -1,23 +1,23 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/contacts.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
   group('ContactsService', () {
-    Map credentials;
+    Credentials credentials;
     String id;
     ContactsService contactsService;
     Contact contact;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      contactsService = ApiContactsService(credentials['live']);
+      credentials = Credentials.from(Platform.environment);
+      contactsService = ApiContactsService(credentials.API_LIVE_KEY);
       contact = Contact.fromJson(File('test_resources/contact.json')
           .readAsStringSync()
-          .replaceAll('31612345678', credentials['msisdn'].toString()));
+          .replaceAll('31612345678', credentials.MSISDN.toString()));
     });
 
     test('should create a contact', () {
