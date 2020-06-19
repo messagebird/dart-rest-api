@@ -1,6 +1,9 @@
 name: Dart CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -15,3 +18,7 @@ jobs:
         run: pub get
       - name: Run tests
         run: pub run test
+        env:
+          API_TEST_KEY: ${{ secrets.API_TEST_KEY }}
+          API_LIVE_KEY: ${{ secrets.API_LIVE_KEY }}
+          MSISDN: ${{ secrets.MSISDN }}
