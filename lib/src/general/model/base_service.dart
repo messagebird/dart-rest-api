@@ -21,6 +21,7 @@ abstract class BaseService {
 
   /// The endpoint for conversations.
   static String conversationsEndpoint = 'conversations.messagebird.com/v1';
+  static String numbersEndpoint = 'numbers.messagebird.com/v1';
 
   final BaseClient _client = Client();
   final String _accessKey;
@@ -150,8 +151,15 @@ abstract class BaseService {
     final List<String> nvps = [];
     parameters.forEach((k, v) {
       if (v != null) {
-        nvps.add('${Uri.encodeComponent(k.toString())}='
-            '${Uri.encodeComponent(v.toString())}');
+        if (v is List) {
+          for (final listItem in v) {
+            nvps.add('${Uri.encodeComponent(k.toString())}='
+                '${Uri.encodeComponent(listItem.toString())}');
+          }
+        } else {
+          nvps.add('${Uri.encodeComponent(k.toString())}='
+              '${Uri.encodeComponent(v.toString())}');
+        }
       }
     });
     return (nvps.isEmpty) ? '' : '?${nvps.join('&')}';
@@ -172,20 +180,19 @@ abstract class BaseService {
   }
 
   String _getUrl(String path, {String hostname}) {
-    String newHostname;
     if (path == null) {
       throw ArgumentError('Argument "path" cannot be null');
     }
-    if (hostname != null) {
-      newHostname =
-          (!hostname.startsWith('https://') && !hostname.startsWith('http://'))
-              ? 'https://$hostname'
-              : hostname;
-      if (newHostname.endsWith('/')) {
-        newHostname = newHostname.substring(0, newHostname.length - 1);
-      }
-    } else {
-      newHostname = 'https://rest.messagebird.com';
+    if (hostname == null) {
+      var defaultHostname = 'https://rest.messagebird.com';
+      return defaultHostname + path;
+    }
+    var newHostname =
+        (!hostname.startsWith('https://') && !hostname.startsWith('http://'))
+            ? 'https://$hostname'
+            : hostname;
+    if (newHostname.endsWith('/')) {
+      newHostname = newHostname.substring(0, newHostname.length - 1);
     }
     return newHostname + path;
   }
