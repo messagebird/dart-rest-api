@@ -6,9 +6,9 @@ class Credentials {
   const Credentials(this.API_TEST_KEY, this.API_LIVE_KEY, {this.MSISDN});
 
   factory Credentials.from(Map<String, dynamic> envV) {
-    final testKey = envV['API_TEST_KEY'].toString();
-    final liveKey = envV['API_LIVE_KEY'].toString();
-    final msisdn = int.tryParse(envV['MSISDN']);
+    final testKey = envV['API_TEST_KEY'];
+    final liveKey = envV['API_LIVE_KEY'];
+    final msisdn = envV['MSISDN'] == null ? null : int.tryParse(envV['MSISDN']);
 
     if (testKey == null || liveKey == null) {
       throw ArgumentError('No API keys found in environment variables. '
