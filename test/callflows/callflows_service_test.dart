@@ -14,7 +14,7 @@ void main() {
     String id;
 
     setUp(() {
-      callflowsService = ApiCallflowsService(credentials.API_LIVE_KEY);
+      callflowsService = ApiCallflowsService(credentials.API_TEST_KEY);
       callflow = const Callflow(title: 'Say message', record: true, steps: [
         Step(action: StepAction.say, options: {
           StepOption.payload: 'This is a journey into sound. Good bye!',
