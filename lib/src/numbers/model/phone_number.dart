@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 /// This object represents a phone number.
+// ignore_for_file: public_member_api_docs
 class PhoneNumber {
   /// The number of a phone number eg. 31612345670.
   final String number;
@@ -14,13 +15,15 @@ class PhoneNumber {
   /// The locality eg. Texel.
   final String locality;
 
-  /// The list of features of a phone number. Possible values: `sms`, `voice`, `mms`.
+  /// The list of features of a phone number. Possible values: `sms`, `voice`,
+  /// `mms`.
   final List<Feature> features;
 
   /// The list of tags added to the phone number.
   final List<String> tags;
 
-  /// The type of a phone number. Possible values: `landline`, `mobile`, `premium_rate`.
+  /// The type of a phone number. Possible values: `landline`, `mobile`,
+  /// `premium_rate`.
   final PhoneNumberType type;
 
   /// The status of a phone number.
@@ -53,7 +56,7 @@ class PhoneNumber {
           features: List.from(map['features'])
               .map<Feature>((feature) => Feature.values.firstWhere(
                   (featureEnum) =>
-                      featureEnum.toString() == 'Feature.${feature}'))
+                      featureEnum.toString() == 'Feature.$feature'))
               .toList(),
           tags: map['tags'] == null ? null : List<String>.from(map['tags']),
           type: PhoneNumberType.values.firstWhere(
@@ -69,4 +72,9 @@ class PhoneNumber {
 enum Feature { sms, voice, mms }
 
 /// Enumeration of possible types.
-enum PhoneNumberType { landline, mobile, premium_rate }
+enum PhoneNumberType {
+  landline,
+  mobile,
+  //ignore: constant_identifier_names
+  premium_rate
+}

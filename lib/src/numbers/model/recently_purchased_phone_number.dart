@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'phone_number.dart';
 import '../../util.dart';
+import 'phone_number.dart';
 
 /// This object represents a recently purchased phone number.
 class RecentlyPurchasedPhoneNumber extends PhoneNumber {
@@ -43,7 +43,7 @@ class RecentlyPurchasedPhoneNumber extends PhoneNumber {
       return null;
     }
 
-    PhoneNumber phoneNumber = PhoneNumber.fromMap(map);
+    final phoneNumber = PhoneNumber.fromMap(map);
 
     return RecentlyPurchasedPhoneNumber(
       phoneNumber.number,

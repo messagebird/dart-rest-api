@@ -16,7 +16,8 @@ class Numbers {
   /// The number of phone numbers you own in total.
   final int totalCount;
 
-  /// A list of phone numbers in the response, each of them is a [PhoneNumber] object
+  /// A list of phone numbers in the response, each of them is a [PhoneNumber]
+  /// object
   final List<PhoneNumber> items;
 
   /// Constructor.

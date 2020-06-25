@@ -16,7 +16,7 @@ dependencies:
   messagebird:
     git:
       url: https://github.com/messagebird/dart-rest-api.git
-      version: ^1.3.0
+      version: ^1.4.0
 ```
 
 ## Usage
@@ -55,11 +55,22 @@ This repository includes unit tests, located in the `test` directory. To run the
 
 Before running the tests, make sure you have the following environment variables in your system:
 
+```yaml
+"API_TEST_KEY": "YOUR_API_TEST_KEY", # E.g., OLeojj9349380288IKl93gcp3
+"API_LIVE_KEY": "YOUR_API_LIVE_KEY", # E.g., OLeojj9349380288IKl93gcp3
+"MSISDN": "YOUR_MSISDN" # E.g., 31612345678
 ```
-"API_TEST_KEY": "YOUR_API_TEST_KEY",
-"API_LIVE_KEY": "YOUR_API_LIVE_KEY",
-"MSISDN": "YOUR_MSISDN"
-```
+
+The MSISDN must be in the format: `CC + NDC or NPA + SN` in which:
+
+| Abbr. | Meaning                   | Example  |
+| ----- | ------------------------- | -------- |
+| CC    | Country Code              | 31       |
+| NDC   | National Destination Code | 6        |
+| NPA   | Number Planning Area      | 334      |
+| SN    | Subscriber Number         | 12345678 |
+
+For more info, please see the [Wikipedia page](https://en.wikipedia.org/wiki/MSISDN) on MSISDNs.
 
 **Please note**: when running the tests, your MessageBird account will be charged a small amount to test sending calls and messages.
 
