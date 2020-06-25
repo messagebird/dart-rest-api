@@ -1,9 +1,5 @@
 # Changelog
 
-## 1.4.0
-
-- Fixed automatic version bump
-
 ## 1.3.5
 
 - Use environment variables for the MB access keys for running the tests
