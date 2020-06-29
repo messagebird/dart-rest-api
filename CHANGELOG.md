@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+- Numbers API added (thanks @HCoban)
+- API keys for library tests added
+- Added build configuration to automatically tag releases (you'll still have to update the changelog)
+
 ## 1.3.5
 
 - Use environment variables for the MB access keys for running the tests
