@@ -1,20 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('CallflowService', () {
-    Map credentials;
     CallflowsService callflowsService;
     Callflow callflow;
     String id;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      callflowsService = ApiCallflowsService(credentials['live']);
+      callflowsService = ApiCallflowsService(credentials.API_TEST_KEY);
       callflow = const Callflow(title: 'Say message', record: true, steps: [
         Step(action: StepAction.say, options: {
           StepOption.payload: 'This is a journey into sound. Good bye!',
@@ -64,5 +64,5 @@ void main() {
         expect(callflow, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

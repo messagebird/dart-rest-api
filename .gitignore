@@ -10,9 +10,6 @@ build/
 # Directory created by dartdoc
 doc/api/
 
-# MessageBird credentials
-test_resources/keys.json
-
 # VScode directory
 .vscode
 

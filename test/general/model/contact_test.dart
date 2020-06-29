@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/contacts.dart';
 import 'package:test/test.dart';
+
+import '../../credentials.dart';
 
 void main() {
   group('Contact', () {
@@ -10,8 +11,7 @@ void main() {
     int msisdn;
 
     setUp(() {
-      msisdn = json.decode(
-          File('test_resources/keys.json').readAsStringSync())['msisdn'];
+      msisdn = Credentials.from(Platform.environment).MSISDN;
       contact = Contact.fromJson(File('test_resources/contact.json')
           .readAsStringSync()
           .replaceAll('31612345678', msisdn.toString()));

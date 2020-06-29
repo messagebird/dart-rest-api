@@ -1,21 +1,21 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/groups.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('GroupService', () {
-    Map credentials;
     String id;
     GroupsService groupsService;
     // John Doe contact
     const String contactId = 'ed105b2ba26446f9ab0ce213457e99bc';
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      groupsService = ApiGroupsService(credentials['test']);
+      groupsService = ApiGroupsService(credentials.API_TEST_KEY);
     });
 
     test('should create a group', () {
@@ -68,5 +68,5 @@ void main() {
         expect(group, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

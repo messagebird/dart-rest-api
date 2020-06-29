@@ -1,24 +1,23 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/hlr.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('HlrService', () {
-    Map credentials;
     String id;
     HlrService hlrService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      hlrService = ApiHlrService(credentials['live']
-          .replaceAll('31612345678', credentials['msisdn'].toString()));
+      hlrService = ApiHlrService(credentials.API_LIVE_KEY);
     });
 
     test('should create an HLR', () {
-      hlrService.create(credentials['msisdn']).then((hlr) {
+      hlrService.create(credentials.MSISDN).then((hlr) {
         expect(hlr.id, isNotNull);
         expect(hlr.status, isIn([HlrStatus.sent, HlrStatus.active]));
         id = hlr.id;
@@ -37,5 +36,5 @@ void main() {
         expect(hlr, isNull);
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

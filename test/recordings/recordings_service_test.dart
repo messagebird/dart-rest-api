@@ -1,18 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_calling.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('RecordingsService', () {
-    Map credentials;
     RecordingsService recordingsService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      recordingsService = ApiRecordingsService(credentials['live']);
+      recordingsService = ApiRecordingsService(credentials.API_LIVE_KEY);
     });
 
     test('should read a recording', () {
@@ -42,5 +42,5 @@ void main() {
     test('should delete a recording', () {
       // Will not be implemented in a unit test.
     });
-  });
+  }, skip: !credentials.arePresent);
 }

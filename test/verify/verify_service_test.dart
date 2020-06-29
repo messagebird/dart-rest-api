@@ -1,25 +1,25 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/verify.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('VerifyService', () {
-    Map credentials;
     String id;
     VerifyService verifyService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      verifyService = ApiVerifyService(credentials['live']);
+      verifyService = ApiVerifyService(credentials.API_LIVE_KEY);
     });
 
     test('should request a verify', () {
       verifyService
           .create(
-              Verify(recipient: credentials['msisdn'], originator: 'Drillster'))
+              Verify(recipient: credentials.MSISDN, originator: 'Drillster'))
           .then((response) {
         expect(response.id, isNotNull);
         expect(response.status, equals(VerifyStatus.sent));
@@ -44,5 +44,5 @@ void main() {
         expect(response.status, equals(VerifyStatus.deleted));
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }

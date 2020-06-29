@@ -1,23 +1,28 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/contacts.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('ContactsService', () {
-    Map credentials;
     String id;
     ContactsService contactsService;
     Contact contact;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      contactsService = ApiContactsService(credentials['live']);
-      contact = Contact.fromJson(File('test_resources/contact.json')
-          .readAsStringSync()
-          .replaceAll('31612345678', credentials['msisdn'].toString()));
+      contactsService = ApiContactsService(credentials.API_LIVE_KEY);
+
+      final contactSource =
+          File('test_resources/contact.json').readAsStringSync();
+      if (credentials.hasMSISDN) {
+        contactSource.replaceAll('31612345678', credentials.MSISDN.toString());
+      }
+
+      contact = Contact.fromJson(contactSource);
     });
 
     test('should create a contact', () {
@@ -69,5 +74,5 @@ void main() {
         expect(readContact, isNull);
       });
     });
-  });
+  }, skip: !credentials.arePresent);
 }

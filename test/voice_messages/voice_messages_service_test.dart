@@ -1,26 +1,26 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:messagebird/voice_messaging.dart';
 import 'package:test/test.dart';
 
+import '../credentials.dart';
+
 void main() {
+  final Credentials credentials = Credentials.from(Platform.environment);
+
   group('VoiceMessagesService', () {
-    Map credentials;
     String id;
     VoiceMessagesService voiceMessagesService;
 
     setUp(() {
-      credentials =
-          json.decode(File('test_resources/keys.json').readAsStringSync());
-      voiceMessagesService = ApiVoiceMessagesService(credentials['live']);
+      voiceMessagesService = ApiVoiceMessagesService(credentials.API_LIVE_KEY);
     });
 
     test('should send a voice message', () {
       voiceMessagesService
           .create(VoiceMessage(
               body: 'Hello world from a voice message!',
-              recipients: [credentials['msisdn']]))
+              recipients: [credentials.MSISDN]))
           .then((response) {
         expect(response.id, isNotNull);
         expect(response.body, equals('Hello world from a voice message!'));
@@ -36,5 +36,5 @@ void main() {
         expect(response.voice, equals(Voice.female)); // Default
       });
     });
-  });
+  }, skip: !credentials.hasMSISDN || !credentials.arePresent);
 }
