@@ -17,15 +17,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Install dependencies
         run: pub get
+
       - name: Run tests
         run: pub run test
         env:
           API_TEST_KEY: ${{ secrets.API_TEST_KEY }}
           API_LIVE_KEY: ${{ secrets.API_LIVE_KEY }}
           MSISDN: ${{ secrets.MSISDN }}
+
       - name: Create new tag
+        id: create_tag
         uses: butlerlogic/action-autotag@stable
         with:
           root: "pubspec.yaml"
