@@ -17,19 +17,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Install dependencies
         run: pub get
+
       - name: Run tests
         run: pub run test
         env:
           API_TEST_KEY: ${{ secrets.API_TEST_KEY }}
           API_LIVE_KEY: ${{ secrets.API_LIVE_KEY }}
           MSISDN: ${{ secrets.MSISDN }}
+
       - name: Create new tag
-          uses: butlerlogic/action-autotag@stable
-          with:
-            root: "pubspec.yaml"
-            regex_pattern: "version: (([0-9]+).([0-9]+).([0-9]+))"
-            commit_message_template: "- {{message}} ({{author}})"
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create_tag
+        uses: butlerlogic/action-autotag@stable
+        with:
+          root: "pubspec.yaml"
+          regex_pattern: "version: (([0-9]+).([0-9]+).([0-9]+))"
+          commit_message_template: "- {{message}} ({{author}})"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
